@@ -44,6 +44,17 @@ amleht-site/
 - Push to `main` → statichost auto-deploys within ~30 seconds
 - SSL certificates auto-provisioned on first request per domain
 - No CI/CD pipeline needed — statichost handles everything
+- **Statichost subdomain:** amleht-eu.statichost.page
+- **Statichost scheme:** HTTPS (repo must remain public, or add SSH deploy key)
+- **Working directory:** repo root (leave blank in statichost settings)
+
+## DNS (GoDaddy)
+All five domains use identical records:
+- `A @ → 95.217.26.94`
+- `AAAA @ → 2a01:4f9:c01f:8002::`
+- `CNAME www → amleht-eu.statichost.page`
+
+amleht.eu is the primary domain in statichost; the other four are configured as redirect domains.
 
 ## Standards
 - All commits should be descriptive and conventional
