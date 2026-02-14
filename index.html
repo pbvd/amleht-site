@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>amleht | EU — EU Sovereign Multi-Agent Infrastructure Intelligence</title>
+<meta name="description" content="amleht.eu — EU Sovereign Multi-Agent Infrastructure Intelligence for European Financial Institutions">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23003399'/%3E%3Ctext x='32' y='46' font-family='sans-serif' font-weight='600' font-size='38' fill='%23FFCC00' text-anchor='middle'%3Ea%3C/text%3E%3C/svg%3E">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: #0a0e1a;
+    overflow: hidden;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  /* ====================================
+     MOVING AURORA BACKGROUND
+     Uses multiple layered elements that
+     drift and morph independently
+     ==================================== */
+
+  .aurora-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #1a2d4d 0%, #1e3352 50%, #1a2844 100%);
+  }
+
+  /* Each aurora layer is an absolutely positioned element
+     that moves independently — like real aurora curtains */
+
+  .aurora-layer {
+    position: absolute;
+    top: -20%;
+    left: -20%;
+    width: 140%;
+    height: 140%;
+    opacity: 0.85;
+    filter: blur(60px);
+    will-change: transform;
+  }
+
+  .aurora-fi {
+    background: radial-gradient(ellipse 50% 70% at 30% 40%, rgba(0,53,128,0.95) 0%, transparent 70%);
+    animation: drift-1 18s ease-in-out infinite alternate;
+  }
+
+  .aurora-ie {
+    background: radial-gradient(ellipse 40% 60% at 25% 30%, rgba(0,154,73,0.85) 0%, transparent 70%);
+    animation: drift-2 22s ease-in-out infinite alternate;
+  }
+
+  .aurora-nl {
+    background: radial-gradient(ellipse 35% 55% at 45% 65%, rgba(255,108,0,0.8) 0%, transparent 70%);
+    animation: drift-3 20s ease-in-out infinite alternate;
+  }
+
+  .aurora-fr {
+    background: radial-gradient(ellipse 40% 60% at 60% 35%, rgba(206,17,38,0.7) 0%, transparent 70%);
+    animation: drift-4 24s ease-in-out infinite alternate;
+  }
+
+  .aurora-eu {
+    background: radial-gradient(ellipse 45% 65% at 75% 55%, rgba(0,53,128,0.85) 0%, transparent 70%);
+    animation: drift-5 19s ease-in-out infinite alternate;
+  }
+
+  .aurora-gold {
+    background: radial-gradient(ellipse 30% 45% at 85% 25%, rgba(255,204,0,0.65) 0%, transparent 70%);
+    animation: drift-6 21s ease-in-out infinite alternate;
+  }
+
+  /* Each layer drifts on a unique path — the combination
+     creates organic, unpredictable aurora movement */
+
+  @keyframes drift-1 {
+    0%   { transform: translate(0%, 0%) scale(1); }
+    25%  { transform: translate(3%, -2%) scale(1.05); }
+    50%  { transform: translate(-2%, 3%) scale(0.98); }
+    75%  { transform: translate(4%, 1%) scale(1.03); }
+    100% { transform: translate(-1%, -3%) scale(1.02); }
+  }
+
+  @keyframes drift-2 {
+    0%   { transform: translate(0%, 0%) scale(1); }
+    25%  { transform: translate(-4%, 2%) scale(1.04); }
+    50%  { transform: translate(3%, -3%) scale(0.97); }
+    75%  { transform: translate(-2%, 4%) scale(1.06); }
+    100% { transform: translate(2%, -1%) scale(1); }
+  }
+
+  @keyframes drift-3 {
+    0%   { transform: translate(0%, 0%) scale(1); }
+    25%  { transform: translate(2%, 3%) scale(0.96); }
+    50%  { transform: translate(-3%, -2%) scale(1.05); }
+    75%  { transform: translate(1%, -4%) scale(1.02); }
+    100% { transform: translate(-2%, 2%) scale(0.98); }
+  }
+
+  @keyframes drift-4 {
+    0%   { transform: translate(0%, 0%) scale(1); }
+    25%  { transform: translate(-3%, -3%) scale(1.03); }
+    50%  { transform: translate(4%, 2%) scale(0.97); }
+    75%  { transform: translate(-1%, 3%) scale(1.04); }
+    100% { transform: translate(3%, -2%) scale(1.01); }
+  }
+
+  @keyframes drift-5 {
+    0%   { transform: translate(0%, 0%) scale(1); }
+    25%  { transform: translate(3%, 2%) scale(1.02); }
+    50%  { transform: translate(-2%, -3%) scale(1.06); }
+    75%  { transform: translate(-3%, 1%) scale(0.98); }
+    100% { transform: translate(1%, 3%) scale(1.03); }
+  }
+
+  @keyframes drift-6 {
+    0%   { transform: translate(0%, 0%) scale(1); }
+    25%  { transform: translate(-2%, 3%) scale(1.05); }
+    50%  { transform: translate(3%, -1%) scale(0.96); }
+    75%  { transform: translate(2%, -3%) scale(1.04); }
+    100% { transform: translate(-3%, 2%) scale(1); }
+  }
+
+  /* Global brightness breathing layered on top */
+  .aurora-brightness {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    animation: breathe 7s ease-in-out infinite alternate;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  @keyframes breathe {
+    0%   { backdrop-filter: brightness(1) saturate(1); }
+    33%  { backdrop-filter: brightness(1.12) saturate(1.1); }
+    66%  { backdrop-filter: brightness(1.05) saturate(1.05); }
+    100% { backdrop-filter: brightness(0.96) saturate(0.98); }
+  }
+
+  /* Subtle ring */
+  .ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.03);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .ring-1 {
+    width: 480px;
+    height: 480px;
+    animation: ring-pulse 10s ease-in-out infinite alternate;
+  }
+
+  .ring-2 {
+    width: 700px;
+    height: 700px;
+    border-color: rgba(255,255,255,0.015);
+  }
+
+  @keyframes ring-pulse {
+    0%   { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+    50%  { opacity: 1; transform: translate(-50%, -50%) scale(1.02); }
+    100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+  }
+
+  /* ====================================
+     LOGO
+     ==================================== */
+
+  .logo-wrap {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: logo-fadein 1.5s ease-out;
+  }
+
+  @keyframes logo-fadein {
+    0%   { opacity: 0; transform: translateY(12px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  .logo-main {
+    font-weight: 500;
+    font-size: 5.5rem;
+    letter-spacing: 0.04em;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    text-shadow: 0 3px 40px rgba(0,0,0,0.35);
+  }
+
+  .logo-main .sep {
+    width: 2.5px;
+    height: 48px;
+    background: #FFCC00;
+    margin: 0 22px;
+    opacity: 0.85;
+    box-shadow: 0 0 18px rgba(255,204,0,0.35);
+    border-radius: 1px;
+  }
+
+  .logo-main .eu-badge {
+    color: #FFCC00;
+    font-weight: 300;
+    font-size: 2.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-shadow: 0 3px 25px rgba(0,0,0,0.25);
+  }
+
+  .tagline {
+    font-weight: 300;
+    font-size: 0.95rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.38);
+    margin-top: 22px;
+    animation: tagline-fadein 2s ease-out 0.5s both;
+  }
+
+  @keyframes tagline-fadein {
+    0%   { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  /* ====================================
+     COMING SOON — gentle pulse in/out
+     ==================================== */
+
+  .coming-soon {
+    font-weight: 300;
+    font-size: 0.85rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0);
+    margin-top: 48px;
+    animation: coming-soon-pulse 6s ease-in-out infinite, tagline-fadein 3s ease-out 1.5s both;
+  }
+
+  @keyframes coming-soon-pulse {
+    0%   { color: rgba(255,255,255,0); }
+    40%  { color: rgba(255,255,255,0.35); }
+    60%  { color: rgba(255,255,255,0.35); }
+    100% { color: rgba(255,255,255,0); }
+  }
+
+  /* ====================================
+     RESPONSIVE
+     ==================================== */
+
+  @media (max-width: 800px) {
+    .logo-main { font-size: 3rem; }
+    .logo-main .sep { height: 32px; margin: 0 14px; }
+    .logo-main .eu-badge { font-size: 1.6rem; }
+    .tagline { font-size: 0.7rem; letter-spacing: 0.2em; }
+    .coming-soon { font-size: 0.65rem; }
+    .ring-1 { width: 300px; height: 300px; }
+    .ring-2 { width: 450px; height: 450px; }
+  }
+
+  @media (max-width: 480px) {
+    .logo-main { font-size: 2.2rem; }
+    .logo-main .sep { height: 24px; margin: 0 10px; }
+    .logo-main .eu-badge { font-size: 1.2rem; }
+    .tagline { font-size: 0.6rem; letter-spacing: 0.15em; }
+    .coming-soon { font-size: 0.55rem; }
+  }
+</style>
+</head>
+<body>
+  <div class="aurora-container">
+    <!-- Individual aurora colour layers that move independently -->
+    <div class="aurora-layer aurora-fi"></div>
+    <div class="aurora-layer aurora-ie"></div>
+    <div class="aurora-layer aurora-nl"></div>
+    <div class="aurora-layer aurora-fr"></div>
+    <div class="aurora-layer aurora-eu"></div>
+    <div class="aurora-layer aurora-gold"></div>
+
+    <!-- Brightness breathing overlay -->
+    <div class="aurora-brightness"></div>
+
+    <!-- Subtle rings -->
+    <div class="ring ring-1"></div>
+    <div class="ring ring-2"></div>
+
+    <!-- Logo -->
+    <div class="logo-wrap">
+      <div class="logo-main">
+        amleht<span class="sep"></span><span class="eu-badge">EU</span>
+      </div>
+      <div class="tagline">EU Sovereign Multi-Agent Infrastructure Intelligence</div>
+      <div class="coming-soon">Coming Soon</div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs><style>@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500&amp;display=swap');</style></defs>
+  <rect width="64" height="64" rx="14" fill="#003399"/>
+  <text x="32" y="46" font-family="Outfit, sans-serif" font-weight="500" font-size="38" fill="#FFCC00" text-anchor="middle">a</text>
+</svg>

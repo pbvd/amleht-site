@@ -1,0 +1,3 @@
+# statichost.eu configuration for amleht.eu
+# No build process needed — pure static HTML
+public: .
