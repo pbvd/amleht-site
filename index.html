@@ -216,10 +216,10 @@
   .logo-main .sep {
     width: 2.5px;
     height: 48px;
-    background: #FFCC00;
+    background: #003399;
     margin: 0 22px;
-    opacity: 0.85;
-    box-shadow: 0 0 18px rgba(255,204,0,0.35);
+    opacity: 0.9;
+    box-shadow: 0 0 18px rgba(0,51,153,0.5);
     border-radius: 1px;
   }
 
@@ -239,7 +239,7 @@
     text-transform: uppercase;
     color: rgba(255,255,255,0.38);
     margin-top: 22px;
-    animation: tagline-fadein 2s ease-out 0.5s both;
+    animation: tagline-fadein 2s ease-out 3.3s both;
   }
 
   @keyframes tagline-fadein {
@@ -258,7 +258,7 @@
     text-transform: uppercase;
     color: rgba(255,255,255,0);
     margin-top: 48px;
-    animation: coming-soon-pulse 6s ease-in-out infinite, tagline-fadein 3s ease-out 1.5s both;
+    animation: coming-soon-pulse 6s ease-in-out infinite, tagline-fadein 3s ease-out 4s both;
   }
 
   @keyframes coming-soon-pulse {
@@ -311,11 +311,43 @@
     <!-- Logo -->
     <div class="logo-wrap">
       <div class="logo-main">
-        amleht<span class="sep"></span><span class="eu-badge">EU</span>
+        <span class="letter" data-index="0">a</span><span class="letter" data-index="1">m</span><span class="letter" data-index="2">l</span><span class="letter" data-index="3">e</span><span class="letter" data-index="4">h</span><span class="letter" data-index="5">t</span><span class="sep"></span><span class="eu-badge">EU</span>
       </div>
       <div class="tagline">EU Sovereign Multi-Agent Infrastructure Intelligence</div>
       <div class="coming-soon">Coming Soon</div>
     </div>
   </div>
+<script>
+(function() {
+  var colors = ['#003580','#009A49','#FF6C00','#CE1126','#003399','#FFCC00'];
+  var letters = document.querySelectorAll('.letter');
+
+  letters.forEach(function(el, index) {
+    var currentColor = colors[Math.floor(Math.random() * colors.length)];
+    el.style.color = currentColor;
+    el.style.textShadow = '0 0 20px ' + currentColor + '99, 0 3px 40px rgba(0,0,0,0.35)';
+    el.style.transition = 'color 0.12s ease-in-out, text-shadow 0.12s ease-in-out';
+
+    var flickerCount = 8 + Math.floor(Math.random() * 6);
+    var settleDelay = 1200 + index * 350 + Math.random() * 200;
+    var flickerInterval = settleDelay / flickerCount;
+    var count = 0;
+
+    var interval = setInterval(function() {
+      count++;
+      if (count >= flickerCount) {
+        clearInterval(interval);
+        el.style.transition = 'color 0.6s ease-out, text-shadow 0.6s ease-out';
+        el.style.color = '#ffffff';
+        el.style.textShadow = '0 3px 40px rgba(0,0,0,0.35)';
+        return;
+      }
+      var next = colors[Math.floor(Math.random() * colors.length)];
+      el.style.color = next;
+      el.style.textShadow = '0 0 20px ' + next + '99, 0 3px 40px rgba(0,0,0,0.35)';
+    }, flickerInterval);
+  });
+})();
+</script>
 </body>
 </html>
