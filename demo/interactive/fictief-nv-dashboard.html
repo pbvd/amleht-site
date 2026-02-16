@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>amleht | EU - Fictief NV Dashboard</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x1F1EA;&#x1F1FA;</text></svg>">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #050a18; overflow-x: hidden; }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 3px; }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef, useCallback } = React;
+
+
+/* ─────────────────────────────────────────────────────────
+   amleht | EU — Fictief NV Dashboard
+   Standalone demo — no backend required
+   ───────────────────────────────────────────────────────── */
+
+const EU_BLUE = "#003399";
+const EU_GOLD = "#D4A817";
+const NAVY = "#0a0e1a";
+const CARD_BG = "rgba(255,255,255,0.03)";
+const BORDER = "rgba(255,255,255,0.06)";
+const GREEN = "#22c55e";
+const AMBER = "#f59e0b";
+const RED = "#ef4444";
+const IRELAND = "#009A49";
+const FINLAND = "#003580";
+const FONT = "'Inter', 'Segoe UI', system-ui, sans-serif";
+const MONO = "'SF Mono', 'Fira Code', 'Consolas', monospace";
+
+const AGENTS = [
+  { id: "01", name: "Concierge", color: EU_GOLD, status: "active" },
+  { id: "02", name: "Sovereign Cloud", color: IRELAND, status: "active" },
+  { id: "03", name: "Security & Compliance", color: "#8b5cf6", status: "active" },
+  { id: "04", name: "Carbon Footprint", color: "#06b6d4", status: "active" },
+  { id: "05", name: "Network Diagnostics", color: "#f97316", status: "active" },
+  { id: "06", name: "Mainframe Modernisation", color: "#ec4899", status: "active" },
+  { id: "07", name: "DORA Compliance", color: "#14b8a6", status: "active" },
+  { id: "08", name: "Legal & Regulatory", color: "#a78bfa", status: "active" },
+  { id: "09", name: "Cost Optimisation", color: EU_GOLD, status: "active" },
+  { id: "10", name: "SAP RISE Migration", color: "#f43f5e", status: "active" },
+];
+
+const ASSESSMENT_CARDS = [
+  { title: "Sovereignty", subtitle: "CLOUD Act exposure analysis", agent: "02", icon: "🛡️", prompt: "Assess our CLOUD Act exposure across all workloads running on AWS eu-west-1 and Azure West Europe." },
+  { title: "DORA Compliance", subtitle: "Operational resilience gaps", agent: "07", icon: "📋", prompt: "Map our infrastructure against DORA Article 11 requirements for ICT-related incident management." },
+  { title: "Security", subtitle: "DMZ architecture validation", agent: "03", icon: "🔒", prompt: "Validate our DMZ architecture against DORA Article 9 requirements for ICT security." },
+  { title: "Carbon", subtitle: "EU sovereign vs hyperscaler", agent: "04", icon: "🌱", prompt: "Compare carbon footprint: AWS Frankfurt vs Nebius Helsinki for 50TB monthly processing." },
+  { title: "SAP RISE", subtitle: "Migration readiness", agent: "10", icon: "⚙️", prompt: "Assess our SAP ECC 6.0 to S/4HANA migration readiness. We run on IBM z16 with 8TB DB2." },
+  { title: "Cost", subtitle: "Sovereignty cost-benefit", agent: "09", icon: "💰", prompt: "TCO analysis: current AWS/Azure spend vs EU-sovereign alternative on Nebius." },
+];
+
+const RESPONSES = {
+  "02": `SOVEREIGN CLOUD ASSESSMENT — Fictief NV
+
+CLOUD ACT EXPOSURE: HIGH RISK
+
+Both AWS (Amazon.com, Inc.) and Microsoft Azure are US-incorporated entities subject to the CLOUD Act. US law enforcement can compel disclosure of data stored on EU servers without EU judicial oversight.
+
+CURRENT EXPOSURE:
+• AWS eu-west-1 (Ireland): S3, RDS, Lambda — all subject to CLOUD Act via Amazon.com, Inc.
+• Azure West Europe (NL): Cosmos DB, AKS, Blob Storage — subject via Microsoft Corp.
+• Combined: 100% of production workloads within US legal reach.
+
+DORA ARTICLE 28 IMPLICATIONS:
+Under Art. 28(2), financial entities must ensure ICT providers don't expose them to jurisdictional risks compromising operational resilience. Current configuration creates direct conflict.
+
+RECOMMENDED SOVEREIGN ALTERNATIVES:
+1. Nebius AI Cloud — Helsinki, Finland. EU-incorporated (Nebius B.V., NL). No US jurisdiction.
+2. OVHcloud — EU-headquartered. SecNumCloud qualified.
+3. STACKIT — Schwarz Group subsidiary. German sovereignty.
+
+RISK RATING: ████████░░ 8/10 — Immediate remediation recommended.`,
+
+  "07": `DORA COMPLIANCE GAP ANALYSIS — Article 11
+ICT-RELATED INCIDENT MANAGEMENT
+
+REQUIREMENT 1 — Incident Classification (Art. 11(1)):
+STATUS: PARTIAL GAP
+Finding: CloudWatch and Azure Monitor configured but lack unified classification aligned with ESA regulatory technical standards.
+Remediation: Implement unified taxonomy per EBA/RTS/2024/XX. Effort: 3 weeks.
+
+REQUIREMENT 2 — Major Incident Criteria (Art. 11(2)):
+STATUS: GAP
+Finding: No automated major incident classification. Current escalation is manual and inconsistent.
+Remediation: Deploy automated classification against ESA criteria.
+
+REQUIREMENT 3 — Root Cause Analysis (Art. 11(6)):
+STATUS: PARTIAL
+Finding: Post-incident reviews not structured per DORA requirements. No link to ICT Change Management (Art. 9(4)(e)).
+Remediation: Standardise RCA template with DORA-mandated fields.
+
+OVERALL ARTICLE 11 COMPLIANCE: 38%
+████░░░░░░ — Significant gaps requiring structured remediation.`,
+
+  "03": `DMZ SECURITY ASSESSMENT — DORA Article 9
+
+NETWORK SEGMENTATION:
+✓ DMZ properly isolated between internet-facing and internal zones.
+✓ WAF deployed on all public endpoints.
+✗ No East-West traffic inspection between microservices.
+✗ PrivateLink not configured — data traverses public VPC peering.
+
+ENCRYPTION:
+✓ TLS 1.3 on all external connections.
+✓ KMS encryption at rest.
+✗ Inter-service HTTP on port 80 (unencrypted).
+✗ Certificate rotation: 14 days to expiry, no policy.
+
+ACCESS CONTROL:
+✓ IAM least-privilege for production.
+✗ 3 service accounts with AdministratorAccess in non-prod.
+✗ No MFA on programmatic access keys.
+✗ 7 API keys >180 days without rotation.
+
+DORA ART. 9 COMPLIANCE: 52%
+█████░░░░░ — Priority: East-West encryption and key rotation.`,
+
+  "04": `CARBON FOOTPRINT COMPARISON
+
+AWS FRANKFURT (eu-central-1):
+• Grid carbon intensity: 385g CO₂/kWh (German energy mix)
+• Estimated monthly emissions: 4.2 tonnes CO₂e
+• PUE: 1.15 (reported, not independently verified)
+• Renewable energy: ~90% (corporate PPA, not direct)
+
+NEBIUS HELSINKI (eu-north-1):
+• Grid carbon intensity: 82g CO₂/kWh (Finnish energy mix — nuclear + hydro)
+• Estimated monthly emissions: 0.9 tonnes CO₂e
+• PUE: 1.06 (Nordic climate advantage)
+• Renewable energy: 100% (direct grid, verified)
+
+REDUCTION: 78.6% lower carbon emissions on Nebius Helsinki
+Annual saving: ~39.6 tonnes CO₂e
+
+CSRD IMPLICATIONS:
+Under the Corporate Sustainability Reporting Directive, Fictief NV must report Scope 3 emissions including cloud infrastructure. Migrating to Nebius demonstrates measurable environmental improvement for ESG reporting.`,
+
+  "10": `SAP RISE MIGRATION ASSESSMENT — Fictief NV
+
+CURRENT STATE:
+• SAP ECC 6.0 on IBM z16 with 8TB DB2
+• Estimated 5,000 concurrent users
+• Custom ABAP: ~2.4M lines (estimated)
+• ECC mainstream support ends: December 2027
+
+RISK ASSESSMENT:
+ISG research (Feb 2026): 60% of SAP migrations delayed and over budget. 49% perform little or no re-engineering. Two-thirds still in planning.
+
+MIGRATION PATHS:
+1. RISE with SAP (managed): SAP operates S/4HANA on hyperscaler. Fast but sovereignty risk — data on US-controlled infrastructure.
+2. Sovereign RISE: S/4HANA on EU-sovereign cloud (STACKIT, OVHcloud). Slower, maintains data residency.
+3. Self-managed S/4HANA: Full control on Nebius/own infrastructure. Maximum sovereignty, highest internal effort.
+
+RECOMMENDED: Path 2 (Sovereign RISE) with amleht continuous compliance monitoring.
+
+TIMELINE: 18-24 months for core migration. Custom ABAP remediation is the critical path.`,
+
+  "09": `TOTAL COST OF OWNERSHIP — Sovereignty Transition
+
+CURRENT ANNUAL SPEND (estimated):
+• AWS eu-west-1: €840,000/year (compute, storage, egress, support)
+• Azure West Europe: €520,000/year (AKS, Cosmos DB, networking)
+• Total: €1,360,000/year
+
+EU-SOVEREIGN ALTERNATIVE (Nebius):
+• Compute (equivalent): €780,000/year (15-20% lower base pricing)
+• Storage: €180,000/year (comparable)
+• Egress: €0 (Nebius: free egress vs AWS ~€120,000/year)
+• Support: €90,000/year (included at enterprise tier)
+• Total: €1,050,000/year
+
+ANNUAL SAVING: €310,000 (22.8% reduction)
+
+KEY DIFFERENTIATORS:
+• Zero egress costs — AWS charges €0.09/GB, Nebius includes it
+• No CLOUD Act risk premium (legal exposure currently unquantified)
+• DORA Art. 28 compliance without supplementary measures
+• amleht continuous monitoring: €24,000/year (10-agent tier)
+
+SOVEREIGNTY PREMIUM: Negative. EU-sovereign is cheaper.`,
+};
+
+// Compliance ledger — blockchain-anchored chain from onboarding through every assessment
+const LEDGER_ENTRIES = [
+  {
+    id: "GEN-001", type: "genesis",
+    title: "Onboarding Certificate Issued",
+    description: "Infrastructure assessed, validated, and certified as EU-sovereign-ready. Landing zone deployed, PrivateLink connected, all checks passed.",
+    agentLabel: "Portal — Certificate Ceremony", agent: null,
+    timestamp: "2026-02-10T09:14:22Z", hash: "0xa3f7c8d1e92b...4f6a", prevHash: "0x0000000000...0000",
+    score: "CERTIFIED", scoreColor: GREEN, blockNumber: 19847201,
+  },
+  {
+    id: "ASM-002", type: "assessment",
+    title: "Sovereign Cloud Assessment",
+    description: "CLOUD Act exposure: 100% of production workloads within US legal reach. Immediate remediation recommended.",
+    agentLabel: "Agent 02 — Sovereign Cloud", agent: "02",
+    timestamp: "2026-02-10T09:32:07Z", hash: "0x7b2e4f91a0c3...8d1e", prevHash: "0xa3f7c8d1e92b...4f6a",
+    score: "8/10 RISK", scoreColor: RED, blockNumber: 19847215,
+  },
+  {
+    id: "ASM-003", type: "assessment",
+    title: "DORA Article 11 — Incident Management",
+    description: "Partial classification, missing automated major incident detection, incomplete root cause analysis process.",
+    agentLabel: "Agent 07 — DORA Compliance", agent: "07",
+    timestamp: "2026-02-10T10:15:44Z", hash: "0x1d8f3a6c7e50...b2c9", prevHash: "0x7b2e4f91a0c3...8d1e",
+    score: "38%", scoreColor: RED, blockNumber: 19847228,
+  },
+  {
+    id: "ASM-004", type: "assessment",
+    title: "DMZ Security — DORA Article 9",
+    description: "East-West traffic unencrypted, key rotation overdue, 3 admin accounts in non-prod, 23 unpatched HIGH vulnerabilities.",
+    agentLabel: "Agent 03 — Security & Compliance", agent: "03",
+    timestamp: "2026-02-10T11:03:19Z", hash: "0xe5c2d7f84a19...63f0", prevHash: "0x1d8f3a6c7e50...b2c9",
+    score: "52%", scoreColor: AMBER, blockNumber: 19847241,
+  },
+  {
+    id: "ASM-005", type: "assessment",
+    title: "Carbon Footprint Comparison",
+    description: "AWS Frankfurt vs Nebius Helsinki: 78.6% carbon reduction achievable. CSRD Scope 3 implications assessed.",
+    agentLabel: "Agent 04 — Carbon Footprint", agent: "04",
+    timestamp: "2026-02-10T14:22:51Z", hash: "0x94a1b3e6f708...d5c2", prevHash: "0xe5c2d7f84a19...63f0",
+    score: "−78.6%", scoreColor: GREEN, blockNumber: 19847267,
+  },
+  {
+    id: "ASM-006", type: "assessment",
+    title: "SAP RISE Migration Readiness",
+    description: "ECC 6.0 on IBM z16. 2.4M lines ABAP. Sovereign RISE recommended. 18-24 month timeline.",
+    agentLabel: "Agent 10 — SAP RISE Migration", agent: "10",
+    timestamp: "2026-02-11T08:47:33Z", hash: "0xf2d8c1a73b49...e7a6", prevHash: "0x94a1b3e6f708...d5c2",
+    score: "MODERATE", scoreColor: AMBER, blockNumber: 19847512,
+  },
+  {
+    id: "ASM-007", type: "assessment",
+    title: "TCO — Sovereignty Cost-Benefit",
+    description: "€1.36M/year current vs €1.05M/year sovereign. 22.8% reduction. Sovereignty premium: negative.",
+    agentLabel: "Agent 09 — Cost Optimisation", agent: "09",
+    timestamp: "2026-02-11T10:11:08Z", hash: "0x6c3e9d2f81a5...4b70", prevHash: "0xf2d8c1a73b49...e7a6",
+    score: "−22.8%", scoreColor: GREEN, blockNumber: 19847538,
+  },
+  {
+    id: "REM-008", type: "remediation",
+    title: "Remediation — East-West Encryption",
+    description: "mTLS deployed across all K8s services. Inter-service HTTP eliminated. Certificate auto-rotation enabled.",
+    agentLabel: "Agent 03 — Security & Compliance", agent: "03",
+    timestamp: "2026-02-14T16:30:22Z", hash: "0xb8a4e1d5f392...c6d8", prevHash: "0x6c3e9d2f81a5...4b70",
+    score: "VERIFIED", scoreColor: GREEN, blockNumber: 19848901,
+  },
+  {
+    id: "ASM-009", type: "reassessment",
+    title: "Re-Assessment — DORA Article 9",
+    description: "Post-remediation. East-West encryption verified. Key rotation active. Compliance improved 52% → 71%.",
+    agentLabel: "Agent 03 — Security & Compliance", agent: "03",
+    timestamp: "2026-02-14T17:15:44Z", hash: "0x2f7a9c4d68e1...a3b5", prevHash: "0xb8a4e1d5f392...c6d8",
+    score: "71% ↑", scoreColor: GREEN, blockNumber: 19848915,
+  },
+];
+
+function ChatMessage({ role, content, agent, streaming }) {
+  const [text, setText] = useState(streaming ? "" : content);
+  
+  useEffect(() => {
+    if (!streaming) { setText(content); return; }
+    let i = 0;
+    setText("");
+    const iv = setInterval(() => {
+      i += 2 + Math.floor(Math.random() * 3);
+      setText(content.slice(0, Math.min(i, content.length)));
+      if (i >= content.length) clearInterval(iv);
+    }, 10);
+    return () => clearInterval(iv);
+  }, [content, streaming]);
+
+  if (role === "user") {
+    return (
+      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "16px" }}>
+        <div style={{ maxWidth: "80%", padding: "12px 16px", borderRadius: "12px 12px 2px 12px", background: `${EU_BLUE}30`, border: `1px solid ${EU_BLUE}40`, fontSize: "13px", lineHeight: 1.6, color: "#e2e8f0" }}>{content}</div>
+      </div>
+    );
+  }
+  const ag = agent ? AGENTS.find(a => a.id === agent) : null;
+  return (
+    <div style={{ marginBottom: "16px" }}>
+      {ag && (
+        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
+          <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: ag.color }} />
+          <span style={{ fontSize: "11px", color: ag.color, fontWeight: 500 }}>Agent {ag.id} — {ag.name}</span>
+          <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.2)" }}>via Nebius Token Factory, Helsinki</span>
+        </div>
+      )}
+      <div style={{ maxWidth: "90%", padding: "14px 16px", borderRadius: "2px 12px 12px 12px", background: "rgba(255,255,255,0.03)", border: `1px solid ${BORDER}`, fontSize: "12px", lineHeight: 1.7, color: "#cbd5e1", fontFamily: MONO, whiteSpace: "pre-wrap" }}>
+        {text}
+        {streaming && text.length < content.length && <span style={{ animation: "blink 1s step-end infinite", color: GREEN }}>█</span>}
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [view, setView] = useState("overview"); // overview, chat
+  const [messages, setMessages] = useState([]);
+  const [streaming, setStreaming] = useState(false);
+  const chatRef = useRef(null);
+
+  useEffect(() => {
+    if (chatRef.current) chatRef.current.scrollTop = chatRef.current.scrollHeight;
+  }, [messages, streaming]);
+
+  const sendAssessment = (card) => {
+    setView("chat");
+    setMessages(prev => [...prev, { role: "user", content: card.prompt }]);
+    setStreaming(true);
+    
+    setTimeout(() => {
+      const resp = RESPONSES[card.agent] || "Assessment in progress...";
+      setMessages(prev => [...prev, { role: "assistant", content: resp, agent: card.agent, streaming: true }]);
+      setTimeout(() => setStreaming(false), resp.length * 5);
+    }, 1500);
+  };
+
+  return (
+    <div style={{ minHeight: "100vh", background: NAVY, color: "#e2e8f0", fontFamily: FONT, display: "flex" }}>
+      {/* Sidebar */}
+      <div style={{ width: "220px", borderRight: `1px solid ${BORDER}`, display: "flex", flexDirection: "column", flexShrink: 0 }}>
+        <div style={{ padding: "18px 16px", borderBottom: `1px solid ${BORDER}` }}>
+          <div style={{ fontWeight: 700, fontSize: "16px", marginBottom: "4px" }}>
+            <span style={{ color: "#fff" }}>amleht</span>
+            <span style={{ color: EU_BLUE, margin: "0 4px" }}>|</span>
+            <span style={{ color: EU_GOLD }}>EU</span>
+          </div>
+          <div style={{ fontSize: "9px", color: "rgba(255,255,255,0.3)", letterSpacing: "0.15em", textTransform: "uppercase" }}>Infrastructure Intelligence</div>
+        </div>
+
+        {/* Client info */}
+        <div style={{ padding: "14px 16px", borderBottom: `1px solid ${BORDER}`, background: "rgba(255,255,255,0.01)" }}>
+          <div style={{ fontSize: "10px", color: "rgba(255,255,255,0.3)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "6px" }}>Client</div>
+          <div style={{ fontSize: "14px", fontWeight: 600, color: "#fff" }}>Fictief NV</div>
+          <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.4)", marginTop: "2px" }}>Dutch Banking Institution</div>
+        </div>
+
+        {/* Nav */}
+        <div style={{ padding: "12px 8px", flex: 1 }}>
+          {[
+            { id: "overview", label: "Overview", icon: "📊" },
+            { id: "chat", label: "Chat", icon: "💬" },
+            { id: "ledger", label: "Compliance Ledger", icon: "⛓️" },
+          ].map(nav => (
+            <button key={nav.id} onClick={() => setView(nav.id)}
+              style={{
+                display: "flex", alignItems: "center", gap: "10px", width: "100%", padding: "10px 12px", marginBottom: "2px",
+                background: view === nav.id ? "rgba(0,51,153,0.12)" : "transparent",
+                border: "none", borderRadius: "6px", cursor: "pointer", textAlign: "left",
+                color: view === nav.id ? "#fff" : "rgba(255,255,255,0.5)", fontSize: "13px", fontFamily: FONT,
+              }}
+            >
+              <span>{nav.icon}</span>{nav.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Agent status */}
+        <div style={{ padding: "12px 16px", borderTop: `1px solid ${BORDER}` }}>
+          <div style={{ fontSize: "10px", color: "rgba(255,255,255,0.3)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "8px" }}>Agents — 10/10 Active</div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>
+            {AGENTS.map(a => (
+              <div key={a.id} title={`Agent ${a.id}: ${a.name}`}
+                style={{ width: "18px", height: "18px", borderRadius: "4px", background: `${a.color}20`, border: `1px solid ${a.color}40`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "8px", color: a.color, fontWeight: 600 }}
+              >{a.id}</div>
+            ))}
+          </div>
+        </div>
+
+        {/* Connection */}
+        <div style={{ padding: "10px 16px", borderTop: `1px solid ${BORDER}`, fontSize: "10px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "4px" }}>
+            <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: GREEN, boxShadow: `0 0 6px ${GREEN}`, animation: "pulse 2s ease-in-out infinite" }} />
+            <span style={{ color: GREEN }}>Connected — EU Sovereign</span>
+          </div>
+          <div style={{ color: "rgba(255,255,255,0.25)" }}>Nebius Token Factory · Helsinki</div>
+        </div>
+      </div>
+
+      {/* Main content */}
+      <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+        {/* Top bar */}
+        <div style={{ padding: "12px 24px", borderBottom: `1px solid ${BORDER}`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div>
+            <span style={{ fontSize: "15px", fontWeight: 600, color: "#fff" }}>
+              {view === "overview" ? "Fictief NV — Compliance Overview" : view === "ledger" ? "Fictief NV — Compliance Ledger" : "Agent Chat — Fictief NV"}
+            </span>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: "16px", fontSize: "11px" }}>
+            <span style={{ color: "rgba(255,255,255,0.3)" }}>Region: <span style={{ color: IRELAND }}>eu-west-1</span></span>
+            <span style={{ color: "rgba(255,255,255,0.3)" }}>Sovereignty: <span style={{ color: GREEN }}>EU Tier 1</span></span>
+            <span style={{ padding: "4px 10px", borderRadius: "12px", background: `${GREEN}15`, color: GREEN, fontSize: "10px", fontWeight: 500 }}>
+              <span style={{ display: "inline-block", width: "5px", height: "5px", borderRadius: "50%", background: GREEN, marginRight: "6px", animation: "pulse 2s ease-in-out infinite" }} />
+              Live
+            </span>
+          </div>
+        </div>
+
+        {/* Content */}
+        <div style={{ flex: 1, overflowY: "auto", padding: (view === "overview" || view === "ledger") ? "24px" : "0" }}>
+          {view === "overview" && (
+            <>
+              {/* Stats row */}
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "12px", marginBottom: "24px" }}>
+                {[
+                  { label: "Agents Active", value: "10/10", color: GREEN },
+                  { label: "Overall Compliance", value: "47%", color: AMBER },
+                  { label: "CLOUD Act Exposure", value: "HIGH", color: RED },
+                  { label: "Carbon Reduction", value: "78.6%", color: IRELAND },
+                ].map(s => (
+                  <div key={s.label} style={{ padding: "16px", borderRadius: "8px", background: CARD_BG, border: `1px solid ${BORDER}` }}>
+                    <div style={{ fontSize: "10px", color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "8px" }}>{s.label}</div>
+                    <div style={{ fontSize: "24px", fontWeight: 700, color: s.color }}>{s.value}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Assessment cards */}
+              <div style={{ fontSize: "10px", color: "rgba(255,255,255,0.4)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "12px" }}>Quick Assessments — Click to Run</div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px" }}>
+                {ASSESSMENT_CARDS.map(card => (
+                  <button key={card.title} onClick={() => sendAssessment(card)}
+                    style={{
+                      padding: "18px", borderRadius: "10px", background: CARD_BG, border: `1px solid ${BORDER}`,
+                      cursor: "pointer", textAlign: "left", transition: "all 0.2s", fontFamily: FONT,
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.borderColor = EU_BLUE + "60"; e.currentTarget.style.background = "rgba(0,51,153,0.06)"; }}
+                    onMouseLeave={e => { e.currentTarget.style.borderColor = BORDER; e.currentTarget.style.background = CARD_BG; }}
+                  >
+                    <div style={{ fontSize: "22px", marginBottom: "10px" }}>{card.icon}</div>
+                    <div style={{ fontSize: "14px", fontWeight: 600, color: "#fff", marginBottom: "4px" }}>{card.title}</div>
+                    <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.4)", marginBottom: "10px" }}>{card.subtitle}</div>
+                    <div style={{ fontSize: "10px", color: EU_BLUE, fontWeight: 500 }}>Agent {card.agent} →</div>
+                  </button>
+                ))}
+              </div>
+
+              {/* Agent grid */}
+              <div style={{ marginTop: "24px" }}>
+                <div style={{ fontSize: "10px", color: "rgba(255,255,255,0.4)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "12px" }}>Agent Fleet — All EU Sovereign</div>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "8px" }}>
+                  {AGENTS.map(a => (
+                    <div key={a.id} style={{ padding: "10px 12px", borderRadius: "6px", background: `${a.color}08`, border: `1px solid ${a.color}18` }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "4px" }}>
+                        <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: a.color, boxShadow: `0 0 4px ${a.color}` }} />
+                        <span style={{ fontSize: "10px", fontWeight: 600, color: a.color }}>Agent {a.id}</span>
+                      </div>
+                      <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.6)" }}>{a.name}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+
+          {view === "chat" && (
+            <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+              <div ref={chatRef} style={{ flex: 1, overflowY: "auto", padding: "20px 24px" }}>
+                {messages.length === 0 && (
+                  <div style={{ textAlign: "center", marginTop: "80px", color: "rgba(255,255,255,0.2)" }}>
+                    <div style={{ fontSize: "28px", marginBottom: "12px" }}>💬</div>
+                    <div style={{ fontSize: "14px" }}>Select an assessment from Overview, or ask a question below</div>
+                    <div style={{ fontSize: "12px", marginTop: "8px" }}>10 agents ready · Nebius Token Factory · Helsinki, Finland</div>
+                  </div>
+                )}
+                {messages.map((m, i) => (
+                  <ChatMessage key={i} role={m.role} content={m.content} agent={m.agent} streaming={m.streaming && i === messages.length - 1} />
+                ))}
+              </div>
+
+              {/* Quick assessment buttons in chat */}
+              <div style={{ padding: "12px 24px", borderTop: `1px solid ${BORDER}`, display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                {ASSESSMENT_CARDS.map(card => (
+                  <button key={card.title} onClick={() => sendAssessment(card)}
+                    style={{
+                      padding: "6px 14px", borderRadius: "16px", fontSize: "11px", fontWeight: 500,
+                      background: "rgba(255,255,255,0.04)", border: `1px solid ${BORDER}`,
+                      color: "rgba(255,255,255,0.6)", cursor: "pointer", fontFamily: FONT,
+                    }}
+                  >{card.icon} {card.title}</button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {view === "ledger" && (
+            <>
+              {/* Ledger header */}
+              <div style={{ marginBottom: "20px", padding: "16px 20px", borderRadius: "8px", background: `${EU_BLUE}10`, border: `1px solid ${EU_BLUE}25` }}>
+                <div style={{ fontSize: "13px", color: "#e2e8f0", lineHeight: 1.7 }}>
+                  Every agent assessment chains back to the onboarding certificate — creating a continuous, blockchain-anchored compliance ledger that proves not just that you were compliant on day one, but that you stayed compliant every day since.
+                </div>
+                <div style={{ marginTop: "10px", display: "flex", gap: "20px", fontSize: "11px" }}>
+                  <span style={{ color: "rgba(255,255,255,0.3)" }}>Client: <span style={{ color: "#fff", fontWeight: 500 }}>Fictief NV</span></span>
+                  <span style={{ color: "rgba(255,255,255,0.3)" }}>Chain: <span style={{ color: EU_GOLD }}>Polygon PoS</span></span>
+                  <span style={{ color: "rgba(255,255,255,0.3)" }}>Entries: <span style={{ color: GREEN }}>{LEDGER_ENTRIES.length}</span></span>
+                  <span style={{ color: "rgba(255,255,255,0.3)" }}>Genesis: <span style={{ color: GREEN }}>2026-02-10</span></span>
+                </div>
+              </div>
+
+              {/* Chain visualisation */}
+              <div style={{ position: "relative" }}>
+                {/* Vertical chain line */}
+                <div style={{ position: "absolute", left: "19px", top: "0", bottom: "0", width: "2px", background: `linear-gradient(to bottom, ${GREEN}, ${EU_BLUE}40)` }} />
+
+                {LEDGER_ENTRIES.map((entry, i) => {
+                  const ag = entry.agent ? AGENTS.find(a => a.id === entry.agent) : null;
+                  const typeColors = { genesis: EU_GOLD, assessment: EU_BLUE, remediation: IRELAND, reassessment: "#8b5cf6" };
+                  const typeLabels = { genesis: "GENESIS", assessment: "ASSESSMENT", remediation: "REMEDIATION", reassessment: "RE-ASSESSMENT" };
+                  const dotColor = entry.type === "genesis" ? EU_GOLD : (ag ? ag.color : EU_BLUE);
+
+                  return (
+                    <div key={entry.id} style={{ display: "flex", gap: "20px", marginBottom: "4px", position: "relative" }}>
+                      {/* Chain dot */}
+                      <div style={{ flexShrink: 0, width: "40px", display: "flex", justifyContent: "center", paddingTop: "16px", position: "relative", zIndex: 1 }}>
+                        <div style={{
+                          width: entry.type === "genesis" ? "16px" : "10px",
+                          height: entry.type === "genesis" ? "16px" : "10px",
+                          borderRadius: "50%", background: dotColor,
+                          boxShadow: `0 0 ${entry.type === "genesis" ? "12" : "6"}px ${dotColor}60`,
+                          border: entry.type === "genesis" ? `2px solid ${EU_GOLD}` : "none",
+                        }} />
+                      </div>
+
+                      {/* Entry card */}
+                      <div style={{
+                        flex: 1, padding: "14px 18px", borderRadius: "8px", marginBottom: "8px",
+                        background: entry.type === "genesis" ? `${EU_GOLD}08` : CARD_BG,
+                        border: `1px solid ${entry.type === "genesis" ? `${EU_GOLD}30` : BORDER}`,
+                      }}>
+                        {/* Top row: type badge + timestamp + score */}
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px" }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                            <span style={{
+                              padding: "2px 8px", borderRadius: "3px", fontSize: "9px", fontWeight: 600,
+                              letterSpacing: "0.1em", color: typeColors[entry.type],
+                              background: `${typeColors[entry.type]}15`, border: `1px solid ${typeColors[entry.type]}30`,
+                            }}>{typeLabels[entry.type]}</span>
+                            <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.3)", fontFamily: MONO }}>
+                              {new Date(entry.timestamp).toLocaleString("en-GB", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}
+                            </span>
+                            <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.2)" }}>{entry.agentLabel}</span>
+                          </div>
+                          {entry.score && (
+                            <span style={{ fontSize: "12px", fontWeight: 700, color: entry.scoreColor, fontFamily: MONO }}>{entry.score}</span>
+                          )}
+                        </div>
+
+                        {/* Title + description */}
+                        <div style={{ fontSize: "13px", fontWeight: 600, color: "#fff", marginBottom: "4px" }}>{entry.title}</div>
+                        <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.5)", lineHeight: 1.5, marginBottom: "10px" }}>{entry.description}</div>
+
+                        {/* Hash chain */}
+                        <div style={{ display: "flex", gap: "16px", fontSize: "10px", fontFamily: MONO }}>
+                          <span style={{ color: "rgba(255,255,255,0.2)" }}>
+                            hash: <span style={{ color: GREEN }}>{entry.hash}</span>
+                          </span>
+                          <span style={{ color: "rgba(255,255,255,0.2)" }}>
+                            prev: <span style={{ color: i === 0 ? "rgba(255,255,255,0.15)" : EU_BLUE }}>{entry.prevHash}</span>
+                          </span>
+                          <span style={{ color: "rgba(255,255,255,0.2)" }}>
+                            block: <span style={{ color: EU_GOLD }}>#{entry.blockNumber}</span>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+
+                {/* Chain continues indicator */}
+                <div style={{ display: "flex", gap: "20px", position: "relative" }}>
+                  <div style={{ flexShrink: 0, width: "40px", display: "flex", justifyContent: "center", paddingTop: "8px", position: "relative", zIndex: 1 }}>
+                    <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: "rgba(255,255,255,0.15)", animation: "pulse 2s ease-in-out infinite" }} />
+                  </div>
+                  <div style={{ padding: "8px 0", fontSize: "11px", color: "rgba(255,255,255,0.2)", fontStyle: "italic" }}>
+                    Ledger continues — next assessment anchored on agent execution...
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* Footer */}
+        <div style={{ padding: "8px 24px", borderTop: `1px solid ${BORDER}`, display: "flex", justifyContent: "space-between", fontSize: "10px", color: "rgba(255,255,255,0.2)" }}>
+          <span>amleht · EU Sovereign Multi-Agent AI Infrastructure · Amsterdam</span>
+          <span>Fictief NV · Demo Instance · All data fictitious</span>
+        </div>
+      </div>
+
+      <style>{`
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 3px; }
+      `}</style>
+    </div>
+  );
+}
+
+
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
+</script>
+</body>
+</html>

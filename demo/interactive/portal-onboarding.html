@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>amleht | EU - Sovereign Onboarding Portal</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x1F1EA;&#x1F1FA;</text></svg>">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #050a18; overflow-x: hidden; }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 3px; }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef, useCallback } = React;
+
+
+/* ─── DESIGN SYSTEM (from amleht.eu Swedish frontend) ─── */
+const EU = { blue: "#003399", gold: "#FFCC00", white: "#ffffff" };
+const AURORA = { finland: "#003580", ireland: "#009A49", netherlands: "#FF6C00", france: "#CE1126", euBlue: "#003399", euGold: "#FFCC00" };
+const C = {
+  bg: "#050a18", bgCard: "rgba(8,14,36,0.75)", border: "rgba(255,255,255,0.06)",
+  borderActive: "rgba(0,154,73,0.3)", text: "#e2e8f0", textMuted: "rgba(255,255,255,0.45)",
+  textDim: "rgba(255,255,255,0.25)", success: "#22c55e", warn: "#f59e0b",
+};
+
+const PHASES = [
+  { id: 0, label: "Welcome", title: "Welcome to amleht", subtitle: "Sovereign Infrastructure Intelligence" },
+  { id: 1, label: "Specification", title: "Landing Zone Specification", subtitle: "Download your infrastructure blueprint" },
+  { id: 2, label: "Provision", title: "Infrastructure Provisioning", subtitle: "Deploy to your AWS environment" },
+  { id: 3, label: "Connect", title: "PrivateLink Handshake", subtitle: "Establish sovereign connection" },
+  { id: 4, label: "Certify", title: "Certificate Ceremony", subtitle: "Blockchain-anchored verification" },
+  { id: 5, label: "Live", title: "You're Live", subtitle: "Welcome to amleht Infrastructure Intelligence" },
+];
+
+/* ─── AURORA BOREALIS BACKGROUND ─── */
+function AuroraBackground() {
+  return (
+    <div style={{ position: "fixed", inset: 0, zIndex: 0, overflow: "hidden", pointerEvents: "none", background: C.bg }}>
+      <div className="aurora-layer aurora-fi" /><div className="aurora-layer aurora-ie" />
+      <div className="aurora-layer aurora-nl" /><div className="aurora-layer aurora-fr" />
+      <div className="aurora-layer aurora-eu" /><div className="aurora-layer aurora-gold" />
+      <div className="aurora-breathe" /><div className="aurora-ring" />
+      <style>{`
+        .aurora-layer { position: absolute; inset: -20%; opacity: 0.85; mix-blend-mode: screen; will-change: transform; }
+        .aurora-fi { background: radial-gradient(ellipse 50% 55% at 15% 40%, rgba(0,53,128,0.9) 0%, transparent 70%); animation: drift-1 18s ease-in-out infinite alternate; }
+        .aurora-ie { background: radial-gradient(ellipse 40% 60% at 25% 30%, rgba(0,154,73,0.85) 0%, transparent 70%); animation: drift-2 22s ease-in-out infinite alternate; }
+        .aurora-nl { background: radial-gradient(ellipse 35% 55% at 45% 65%, rgba(255,108,0,0.8) 0%, transparent 70%); animation: drift-3 20s ease-in-out infinite alternate; }
+        .aurora-fr { background: radial-gradient(ellipse 40% 60% at 60% 35%, rgba(206,17,38,0.7) 0%, transparent 70%); animation: drift-4 24s ease-in-out infinite alternate; }
+        .aurora-eu { background: radial-gradient(ellipse 45% 65% at 75% 55%, rgba(0,53,128,0.85) 0%, transparent 70%); animation: drift-5 19s ease-in-out infinite alternate; }
+        .aurora-gold { background: radial-gradient(ellipse 30% 45% at 85% 25%, rgba(255,204,0,0.65) 0%, transparent 70%); animation: drift-6 21s ease-in-out infinite alternate; }
+        @keyframes drift-1 { 0% { transform: translate(0%,0%) scale(1); } 25% { transform: translate(3%,-2%) scale(1.05); } 50% { transform: translate(-2%,3%) scale(0.98); } 75% { transform: translate(4%,1%) scale(1.03); } 100% { transform: translate(-1%,-3%) scale(1.02); } }
+        @keyframes drift-2 { 0% { transform: translate(0%,0%) scale(1); } 25% { transform: translate(-4%,2%) scale(1.04); } 50% { transform: translate(3%,-3%) scale(0.97); } 75% { transform: translate(-2%,4%) scale(1.06); } 100% { transform: translate(2%,-1%) scale(1); } }
+        @keyframes drift-3 { 0% { transform: translate(0%,0%) scale(1); } 25% { transform: translate(2%,3%) scale(0.96); } 50% { transform: translate(-3%,-2%) scale(1.05); } 75% { transform: translate(1%,-4%) scale(1.02); } 100% { transform: translate(-2%,2%) scale(0.98); } }
+        @keyframes drift-4 { 0% { transform: translate(0%,0%) scale(1); } 25% { transform: translate(-3%,-3%) scale(1.03); } 50% { transform: translate(4%,2%) scale(0.97); } 75% { transform: translate(-1%,3%) scale(1.04); } 100% { transform: translate(3%,-2%) scale(1.01); } }
+        @keyframes drift-5 { 0% { transform: translate(0%,0%) scale(1); } 25% { transform: translate(3%,2%) scale(1.02); } 50% { transform: translate(-4%,-1%) scale(1.06); } 75% { transform: translate(2%,-3%) scale(0.98); } 100% { transform: translate(-1%,4%) scale(1.03); } }
+        @keyframes drift-6 { 0% { transform: translate(0%,0%) scale(1); } 25% { transform: translate(-2%,-4%) scale(1.05); } 50% { transform: translate(3%,1%) scale(0.96); } 75% { transform: translate(-3%,2%) scale(1.03); } 100% { transform: translate(1%,-2%) scale(1.01); } }
+        .aurora-breathe { position: absolute; inset: 0; animation: breathe 8s ease-in-out infinite; pointer-events: none; }
+        @keyframes breathe { 0%, 100% { backdrop-filter: brightness(0.95); } 50% { backdrop-filter: brightness(1.15); } }
+        .aurora-ring { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 700px; height: 700px; border: 1px solid rgba(255,255,255,0.015); border-radius: 50%; animation: ring-pulse 12s ease-in-out infinite; pointer-events: none; }
+        @keyframes ring-pulse { 0% { opacity:0.5; transform: translate(-50%,-50%) scale(1); } 50% { opacity:1; transform: translate(-50%,-50%) scale(1.02); } 100% { opacity:0.5; transform: translate(-50%,-50%) scale(1); } }
+        @keyframes pulse-dot { 0%,100% { opacity:1; box-shadow: 0 0 0 0 rgba(34,197,94,0.4); } 50% { opacity:0.7; box-shadow: 0 0 0 8px rgba(34,197,94,0); } }
+        @keyframes travel { 0% { left: 0; } 100% { left: calc(100% - 8px); } }
+        @keyframes fadeSlideUp { 0% { opacity:0; transform: translateY(12px); } 100% { opacity:1; transform: translateY(0); } }
+        @keyframes taglineFade { 0% { opacity:0; } 100% { opacity:1; } }
+        @keyframes demoPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(255,204,0,0.4); } 50% { box-shadow: 0 0 0 6px rgba(255,204,0,0); } }
+      `}</style>
+    </div>
+  );
+}
+
+/* ─── LOGO ─── */
+function Logo({ size = "md" }) {
+  const sizes = {
+    sm: { main: "1.4rem", eu: "0.7rem", sep: "20px", sepW: "1.5px", gap: "10px" },
+    md: { main: "1.8rem", eu: "0.9rem", sep: "24px", sepW: "2px", gap: "12px" },
+    lg: { main: "3.5rem", eu: "1.6rem", sep: "38px", sepW: "2.5px", gap: "18px" },
+  };
+  const s = sizes[size];
+  return (
+    <div style={{ display: "flex", alignItems: "center" }}>
+      <span style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 500, fontSize: s.main, letterSpacing: "0.04em", color: EU.white, textShadow: "0 3px 40px rgba(0,0,0,0.35)" }}>amleht</span>
+      <div style={{ width: s.sepW, height: s.sep, background: EU.gold, margin: `0 ${s.gap}`, opacity: 0.85, boxShadow: "0 0 18px rgba(255,204,0,0.35)", borderRadius: "1px" }} />
+      <span style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 300, fontSize: s.eu, letterSpacing: "0.2em", textTransform: "uppercase", color: EU.gold, textShadow: "0 3px 25px rgba(0,0,0,0.25)" }}>EU</span>
+    </div>
+  );
+}
+
+function Tagline({ text, style = {} }) {
+  return <div style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 300, fontSize: "0.75rem", letterSpacing: "0.28em", textTransform: "uppercase", color: "rgba(255,255,255,0.38)", animation: "taglineFade 2s ease-out 0.5s both", ...style }}>{text}</div>;
+}
+
+/* ─── SHARED COMPONENTS ─── */
+function Card({ children, style = {}, glow = false }) {
+  return (
+    <div style={{
+      background: C.bgCard, border: `1px solid ${glow ? C.borderActive : C.border}`,
+      borderRadius: "12px", padding: "28px", position: "relative",
+      backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)",
+      boxShadow: glow ? `0 0 40px rgba(0,154,73,0.08), inset 0 1px 0 rgba(0,154,73,0.1)` : `0 4px 24px rgba(0,0,0,0.4)`,
+      transition: "all 0.4s ease", ...style,
+    }}>
+      {glow && <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: `linear-gradient(90deg, transparent, ${AURORA.ireland}40, ${EU.gold}30, transparent)` }} />}
+      {children}
+    </div>
+  );
+}
+
+function StatusBadge({ status }) {
+  const colors = {
+    pending: { bg: "rgba(245,158,11,0.12)", text: C.warn, label: "Pending" },
+    active: { bg: "rgba(245,158,11,0.12)", text: C.warn, label: "In Progress" },
+    complete: { bg: "rgba(34,197,94,0.12)", text: C.success, label: "Complete" },
+    live: { bg: "rgba(34,197,94,0.12)", text: C.success, label: "Live" },
+    demo: { bg: "rgba(255,204,0,0.15)", text: EU.gold, label: "▶ Demo Mode" },
+  };
+  const c = colors[status] || colors.pending;
+  return (
+    <span style={{
+      display: "inline-flex", alignItems: "center", gap: "6px", padding: "4px 12px",
+      background: c.bg, borderRadius: "20px", fontSize: "11px", fontWeight: 500,
+      color: c.text, fontFamily: "'Outfit', sans-serif", letterSpacing: "0.05em",
+      animation: status === "demo" ? "demoPulse 2s ease-in-out infinite" : "none",
+    }}>
+      <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: c.text, boxShadow: `0 0 6px ${c.text}`, animation: (status === "active" || status === "demo" || status === "live") ? "pulse-dot 2s ease-in-out infinite" : "none" }} />
+      {c.label}
+    </span>
+  );
+}
+
+function ProgressBar({ phase, onNavigate }) {
+  const getBarColor = (i) => {
+    if (phase === 5) return C.success;   // all green when live
+    if (i < phase) return C.success;     // completed = green
+    if (i === phase) return C.warn;      // current = yellow
+    return "rgba(255,255,255,0.06)";     // future = grey
+  };
+  const getBarGlow = (i) => {
+    if (phase === 5) return `0 0 10px rgba(34,197,94,0.25)`;
+    if (i < phase) return `0 0 10px rgba(34,197,94,0.25)`;
+    if (i === phase) return `0 0 10px rgba(245,158,11,0.25)`;
+    return "none";
+  };
+  const getLabelColor = (i) => {
+    if (phase === 5) return C.success;   // all green when live
+    if (i < phase) return C.success;
+    if (i === phase) return C.warn;
+    return C.textDim;
+  };
+  const canClick = (i) => i <= phase;
+  return (
+    <div style={{ display: "flex", gap: "4px", alignItems: "center", width: "100%", maxWidth: "700px", margin: "0 auto" }}>
+      {PHASES.map((p, i) => (
+        <div key={p.id}
+          onClick={() => canClick(i) && onNavigate && onNavigate(i)}
+          style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: "6px", cursor: canClick(i) ? "pointer" : "default" }}>
+          <div style={{
+            height: "2px", width: "100%", borderRadius: "1px",
+            background: getBarColor(i),
+            transition: "all 0.6s ease", boxShadow: getBarGlow(i),
+          }} />
+          <span style={{
+            fontSize: "9px", fontFamily: "'Outfit', sans-serif", letterSpacing: "0.12em", textTransform: "uppercase",
+            color: getLabelColor(i),
+            fontWeight: i === phase ? 500 : 300, transition: "all 0.3s ease",
+            textDecoration: canClick(i) && i !== phase ? "none" : "none",
+          }}>{p.label}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function Btn({ onClick, children, variant = "primary", disabled = false, style = {} }) {
+  const v = {
+    primary: { background: `linear-gradient(135deg, ${AURORA.ireland}, ${AURORA.finland})`, color: EU.white, boxShadow: `0 4px 24px rgba(0,154,73,0.25)` },
+    gold: { background: `linear-gradient(135deg, ${EU.gold}, ${AURORA.netherlands})`, color: "#1a1a2e", boxShadow: `0 4px 24px rgba(255,204,0,0.25)` },
+    ghost: { background: "rgba(255,255,255,0.04)", border: `1px solid rgba(255,255,255,0.1)`, color: "rgba(255,255,255,0.6)" },
+  }[variant];
+  return <button onClick={onClick} disabled={disabled} style={{ padding: "12px 32px", border: "none", borderRadius: "8px", cursor: disabled ? "wait" : "pointer", fontFamily: "'Outfit', sans-serif", fontWeight: 500, fontSize: "13px", letterSpacing: "0.04em", transition: "all 0.3s ease", opacity: disabled ? 0.6 : 1, ...v, ...style }}>{children}</button>;
+}
+
+/* ─── PHASE: WELCOME ─── */
+function PhaseWelcome({ customer, onNext, demo }) {
+  useEffect(() => { if (demo) { const t = setTimeout(onNext, 3500); return () => clearTimeout(t); } }, [demo]);
+  return (
+    <div style={{ textAlign: "center", maxWidth: "600px", margin: "0 auto", animation: "fadeSlideUp 0.8s ease-out" }}>
+      <div style={{ marginBottom: "28px" }}><Logo size="lg" /><Tagline text="EU Sovereign Multi-Agent Infrastructure Intelligence" style={{ marginTop: "16px" }} /></div>
+      <p style={{ color: C.textMuted, fontSize: "14px", lineHeight: 1.8, fontFamily: "'Outfit', sans-serif", fontWeight: 300, marginBottom: "32px" }}>
+        Your sovereign AI infrastructure environment is being prepared.<br />This portal guides you through the four-step onboarding process.
+      </p>
+      <Card glow>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+          <span style={{ color: C.textMuted, fontSize: "10px", fontFamily: "'Outfit', sans-serif", textTransform: "uppercase", letterSpacing: "0.15em", fontWeight: 300 }}>Your Environment</span>
+          <StatusBadge status="pending" />
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+          {[["Organisation", customer], ["Region", "eu-west-1 (Ireland)"], ["Cloud Provider", "AWS"], ["Sovereignty Tier", "EU Sovereign"]].map(([l, v]) => (
+            <div key={l}><div style={{ color: C.textDim, fontSize: "10px", fontFamily: "'Outfit', sans-serif", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "4px", fontWeight: 300 }}>{l}</div><div style={{ color: C.text, fontSize: "14px", fontFamily: "'Outfit', sans-serif", fontWeight: 500 }}>{v}</div></div>
+          ))}
+        </div>
+      </Card>
+      {!demo && <div style={{ marginTop: "28px" }}><Btn onClick={onNext}>Begin Onboarding →</Btn></div>}
+    </div>
+  );
+}
+
+/* ─── PHASE: SPECIFICATION ─── */
+function PhaseSpecification({ onNext, demo }) {
+  const [downloaded, setDownloaded] = useState(false);
+  useEffect(() => { if (demo) { const t1 = setTimeout(() => setDownloaded(true), 1500); const t2 = setTimeout(onNext, 3500); return () => { clearTimeout(t1); clearTimeout(t2); }; } }, [demo]);
+  return (
+    <div style={{ maxWidth: "640px", margin: "0 auto", animation: "fadeSlideUp 0.8s ease-out" }}>
+      <Card glow>
+        <div style={{ display: "flex", alignItems: "flex-start", gap: "16px" }}>
+          <div style={{ width: "48px", height: "48px", borderRadius: "10px", flexShrink: 0, background: `linear-gradient(135deg, ${AURORA.finland}30, ${AURORA.ireland}20)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "22px" }}>📋</div>
+          <div style={{ flex: 1 }}>
+            <h3 style={{ fontFamily: "'Outfit', sans-serif", fontSize: "18px", fontWeight: 500, color: EU.white, margin: "0 0 6px 0" }}>Landing Zone Specification v2.1</h3>
+            <p style={{ color: C.textMuted, fontSize: "13px", fontFamily: "'Outfit', sans-serif", fontWeight: 300, margin: "0 0 16px 0", lineHeight: 1.7 }}>
+              Terraform modules and architecture documentation for provisioning your sovereign processing zone and data landing zone.
+            </p>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "16px" }}>
+              {["Terraform HCL", "CIS Hardened AMI", "PrivateLink Config", "IAM Policies"].map(tag => (
+                <span key={tag} style={{ padding: "3px 10px", borderRadius: "4px", fontSize: "10px", fontWeight: 400, letterSpacing: "0.06em", background: `rgba(0,154,73,0.08)`, color: AURORA.ireland, fontFamily: "'Outfit', sans-serif", border: `1px solid rgba(0,154,73,0.15)` }}>{tag}</span>
+              ))}
+            </div>
+            <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+              <Btn onClick={() => setDownloaded(true)} variant={downloaded ? "ghost" : "primary"} style={{ padding: "10px 24px" }}>{downloaded ? "✓ Downloaded" : "⬇ Download Specification"}</Btn>
+              <span style={{ color: C.textDim, fontSize: "11px", fontFamily: "'Outfit', sans-serif", fontWeight: 300 }}>amleht-landing-zone-spec-v2.1.tar.gz · 2.4 MB</span>
+            </div>
+          </div>
+        </div>
+      </Card>
+      <Card style={{ marginTop: "16px" }}>
+        <h4 style={{ fontFamily: "'Outfit', sans-serif", fontSize: "11px", fontWeight: 400, color: C.textMuted, margin: "0 0 14px 0", textTransform: "uppercase", letterSpacing: "0.15em" }}>What's Included</h4>
+        <div style={{ display: "grid", gap: "8px" }}>
+          {[["Module 2", "Customer Processing Zone", "Hardened agent server, egress whitelist, VPC endpoints"], ["Module 3", "Customer Data Zone", "Concierge in-tray, results outbox, PrivateLink, KMS encryption"], ["Security", "CIS Benchmark L1", "Hardened AMI, SELinux, IMDSv2, no SSH, audit logging"]].map(([mod, title, desc]) => (
+            <div key={mod} style={{ display: "flex", gap: "12px", padding: "10px 12px", borderRadius: "8px", background: "rgba(255,255,255,0.02)" }}>
+              <span style={{ color: EU.gold, fontSize: "10px", fontWeight: 500, fontFamily: "'Outfit', sans-serif", minWidth: "70px", letterSpacing: "0.06em", textTransform: "uppercase" }}>{mod}</span>
+              <div><div style={{ color: C.text, fontSize: "13px", fontWeight: 500, fontFamily: "'Outfit', sans-serif" }}>{title}</div><div style={{ color: C.textMuted, fontSize: "12px", fontFamily: "'Outfit', sans-serif", fontWeight: 300, marginTop: "2px" }}>{desc}</div></div>
+            </div>
+          ))}
+        </div>
+      </Card>
+      {downloaded && !demo && <div style={{ textAlign: "center", marginTop: "24px" }}><Btn onClick={onNext}>Continue to Provisioning →</Btn></div>}
+    </div>
+  );
+}
+
+/* ─── PHASE: PROVISION ─── */
+function PhaseProvision({ onNext, demo }) {
+  const [checks, setChecks] = useState([false, false, false, false]);
+  const labels = ["VPC and subnets provisioned", "Hardened agent server deployed", "Security groups and egress whitelist configured", "KMS encryption keys created"];
+  const allDone = checks.every(Boolean);
+
+  useEffect(() => {
+    if (demo) {
+      const timers = labels.map((_, i) => setTimeout(() => setChecks(prev => { const n = [...prev]; n[i] = true; return n; }), 800 + i * 700));
+      const advance = setTimeout(onNext, 800 + labels.length * 700 + 800);
+      return () => { timers.forEach(clearTimeout); clearTimeout(advance); };
+    }
+  }, [demo]);
+
+  return (
+    <div style={{ maxWidth: "600px", margin: "0 auto", animation: "fadeSlideUp 0.8s ease-out" }}>
+      <Card glow>
+        <h3 style={{ fontFamily: "'Outfit', sans-serif", fontSize: "18px", fontWeight: 500, color: EU.white, margin: "0 0 6px 0" }}>Provisioning Checklist</h3>
+        <p style={{ color: C.textMuted, fontSize: "13px", fontFamily: "'Outfit', sans-serif", fontWeight: 300, margin: "0 0 20px 0", lineHeight: 1.7 }}>
+          Deploy the specification to your AWS account, then confirm each step. Your infrastructure, your control, your bill.
+        </p>
+        <div style={{ display: "grid", gap: "6px" }}>
+          {labels.map((label, i) => (
+            <div key={i} onClick={() => { if (!demo) { const n = [...checks]; n[i] = !n[i]; setChecks(n); } }}
+              style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 14px", borderRadius: "8px", cursor: demo ? "default" : "pointer", background: checks[i] ? "rgba(34,197,94,0.04)" : "rgba(255,255,255,0.015)", border: `1px solid ${checks[i] ? "rgba(34,197,94,0.2)" : "transparent"}`, transition: "all 0.3s ease" }}>
+              <div style={{ width: "22px", height: "22px", borderRadius: "6px", flexShrink: 0, border: `1.5px solid ${checks[i] ? C.success : "rgba(255,255,255,0.15)"}`, background: checks[i] ? "rgba(34,197,94,0.12)" : "transparent", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.3s ease", fontSize: "12px", color: C.success }}>{checks[i] ? "✓" : ""}</div>
+              <span style={{ fontFamily: "'Outfit', sans-serif", fontSize: "13px", fontWeight: checks[i] ? 500 : 300, color: checks[i] ? C.text : C.textMuted, transition: "all 0.3s ease" }}>{label}</span>
+            </div>
+          ))}
+        </div>
+      </Card>
+      <Card style={{ marginTop: "16px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px" }}>
+          <span style={{ fontSize: "13px" }}>🇪🇺</span>
+          <span style={{ color: EU.gold, fontSize: "10px", fontWeight: 500, fontFamily: "'Outfit', sans-serif", textTransform: "uppercase", letterSpacing: "0.15em" }}>Sovereign Guarantee</span>
+        </div>
+        <p style={{ color: C.textMuted, fontSize: "13px", fontFamily: "'Outfit', sans-serif", fontWeight: 300, margin: 0, lineHeight: 1.7 }}>
+          All infrastructure is provisioned in your AWS account under your IAM credentials. amleht has no standing access. Data never leaves EU jurisdiction.
+        </p>
+      </Card>
+      {allDone && !demo && <div style={{ textAlign: "center", marginTop: "24px" }}><Btn onClick={onNext}>Initiate PrivateLink Handshake →</Btn></div>}
+    </div>
+  );
+}
+
+/* ─── PHASE: CONNECT ─── */
+function PhaseConnect({ onNext, demo }) {
+  const [connecting, setConnecting] = useState(false);
+  const [connected, setConnected] = useState(false);
+  const handleConnect = () => { setConnecting(true); setTimeout(() => { setConnecting(false); setConnected(true); }, 3000); };
+
+  useEffect(() => {
+    if (demo) {
+      const t1 = setTimeout(() => { setConnecting(true); }, 800);
+      const t2 = setTimeout(() => { setConnecting(false); setConnected(true); }, 3800);
+      const t3 = setTimeout(onNext, 5800);
+      return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
+    }
+  }, [demo]);
+
+  return (
+    <div style={{ maxWidth: "640px", margin: "0 auto", animation: "fadeSlideUp 0.8s ease-out" }}>
+      <Card glow={connected}>
+        <div style={{ textAlign: "center", padding: "12px 0" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0px", marginBottom: "28px" }}>
+            <div style={{ padding: "16px 20px", borderRadius: "10px", border: `1px solid ${C.border}`, background: "rgba(255,255,255,0.02)", minWidth: "130px" }}>
+              <div style={{ fontSize: "22px", marginBottom: "6px" }}>🏢</div>
+              <div style={{ color: C.text, fontSize: "12px", fontWeight: 500, fontFamily: "'Outfit', sans-serif" }}>Your Data Zone</div>
+              <div style={{ color: C.textDim, fontSize: "10px", fontFamily: "'Outfit', sans-serif", fontWeight: 300 }}>eu-west-1</div>
+            </div>
+            <div style={{ display: "flex", alignItems: "center", padding: "0 4px" }}>
+              <div style={{ width: "70px", height: "2px", borderRadius: "1px", position: "relative", background: connected ? `linear-gradient(90deg, ${AURORA.ireland}, ${EU.gold})` : connecting ? `rgba(0,154,73,0.3)` : C.border, transition: "all 1s ease", boxShadow: connected ? `0 0 12px rgba(0,154,73,0.3)` : "none" }}>
+                {connecting && <div style={{ position: "absolute", top: "-3px", left: 0, width: "8px", height: "8px", borderRadius: "50%", background: AURORA.ireland, animation: "travel 1.5s ease-in-out infinite" }} />}
+              </div>
+              <div style={{ padding: "4px 10px", borderRadius: "4px", fontSize: "9px", fontWeight: 500, letterSpacing: "0.1em", fontFamily: "'Outfit', sans-serif", background: connected ? "rgba(34,197,94,0.1)" : connecting ? "rgba(245,158,11,0.1)" : "rgba(255,255,255,0.03)", color: connected ? C.success : connecting ? C.warn : C.textDim }}>{connected ? "LINKED" : connecting ? "..." : "PENDING"}</div>
+              <div style={{ width: "70px", height: "2px", borderRadius: "1px", background: connected ? `linear-gradient(90deg, ${EU.gold}, ${AURORA.ireland})` : connecting ? `rgba(0,154,73,0.3)` : C.border, transition: "all 1s ease", boxShadow: connected ? `0 0 12px rgba(0,154,73,0.3)` : "none" }} />
+            </div>
+            <div style={{ padding: "16px 20px", borderRadius: "10px", minWidth: "130px", border: `1px solid ${connected ? C.borderActive : C.border}`, background: connected ? "rgba(0,154,73,0.04)" : "rgba(255,255,255,0.02)", transition: "all 0.6s ease" }}>
+              <div style={{ fontSize: "22px", marginBottom: "6px" }}>🛡</div>
+              <div style={{ color: C.text, fontSize: "12px", fontWeight: 500, fontFamily: "'Outfit', sans-serif" }}>Processing Zone</div>
+              <div style={{ color: EU.gold, fontSize: "10px", fontFamily: "'Outfit', sans-serif", fontWeight: 300 }}>amleht agents</div>
+            </div>
+          </div>
+
+          {!connected && !connecting && !demo && (
+            <>
+              <div style={{ marginBottom: "16px", textAlign: "left" }}>
+                <label style={{ color: C.textMuted, fontSize: "10px", fontFamily: "'Outfit', sans-serif", display: "block", marginBottom: "6px", letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 300 }}>Your VPC Endpoint Service Name</label>
+                <input type="text" defaultValue="com.amazonaws.vpce.eu-west-1.vpce-svc-0a1b2c3d4e5f" readOnly style={{ width: "100%", padding: "10px 14px", borderRadius: "6px", border: `1px solid ${C.border}`, background: "rgba(255,255,255,0.02)", color: C.text, fontFamily: "monospace", fontSize: "11px", boxSizing: "border-box" }} />
+              </div>
+              <Btn onClick={handleConnect}>Accept Connection</Btn>
+            </>
+          )}
+          {connecting && <p style={{ color: C.warn, fontSize: "13px", fontFamily: "'Outfit', sans-serif", fontWeight: 400, margin: 0 }}>Establishing PrivateLink connection...</p>}
+          {connected && (
+            <div>
+              <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "10px 20px", background: "rgba(34,197,94,0.06)", borderRadius: "8px", border: "1px solid rgba(34,197,94,0.15)", marginBottom: "16px" }}>
+                <span style={{ color: C.success, fontSize: "14px" }}>✓</span>
+                <span style={{ color: C.success, fontSize: "13px", fontWeight: 500, fontFamily: "'Outfit', sans-serif" }}>PrivateLink Established — Connection Verified</span>
+              </div>
+              <p style={{ color: C.textMuted, fontSize: "13px", fontFamily: "'Outfit', sans-serif", fontWeight: 300, margin: "0 0 20px 0" }}>Sovereign connection active. No internet traversal. All traffic is private.</p>
+              {!demo && <Btn onClick={onNext}>Proceed to Certification →</Btn>}
+            </div>
+          )}
+        </div>
+      </Card>
+    </div>
+  );
+}
+
+/* ─── PHASE: CERTIFY ─── */
+function PhaseCertify({ onNext, demo }) {
+  const [stage, setStage] = useState(0); // 0=upload, 1=processing, 2=certified
+  const steps = ["Receiving readiness certificate...", "Validating PrivateLink connectivity...", "Verifying KMS encryption configuration...", "Confirming security group egress whitelist...", "Scanning IAM role permissions...", "Timestamping verification results...", "Anchoring to blockchain ledger...", "Generating sovereign certification..."];
+  const [currentStep, setCurrentStep] = useState(0);
+
+  const runCeremony = useCallback(() => {
+    setStage(1);
+    let step = 0;
+    const interval = setInterval(() => { step++; setCurrentStep(step); if (step >= steps.length) { clearInterval(interval); setTimeout(() => setStage(2), 800); } }, 650);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (demo) {
+      const t1 = setTimeout(() => { runCeremony(); }, 800);
+      const t2 = setTimeout(onNext, 800 + steps.length * 650 + 800 + 2500);
+      return () => { clearTimeout(t1); clearTimeout(t2); };
+    }
+  }, [demo]);
+
+  if (stage === 0) return (
+    <div style={{ maxWidth: "600px", margin: "0 auto", animation: "fadeSlideUp 0.8s ease-out" }}>
+      <Card glow>
+        <div style={{ textAlign: "center", padding: "20px 0" }}>
+          <div style={{ fontSize: "40px", marginBottom: "12px" }}>📜</div>
+          <h3 style={{ fontFamily: "'Outfit', sans-serif", fontSize: "18px", fontWeight: 500, color: EU.white, margin: "0 0 8px 0" }}>Submit Readiness Certificate</h3>
+          <p style={{ color: C.textMuted, fontSize: "13px", fontFamily: "'Outfit', sans-serif", fontWeight: 300, margin: "0 0 24px 0", lineHeight: 1.7 }}>Upload your environment readiness file. Our agents will validate, timestamp, and anchor to blockchain.</p>
+          <div onClick={() => { if (!demo) runCeremony(); }} style={{ padding: "32px", border: `1.5px dashed rgba(255,255,255,0.1)`, borderRadius: "10px", cursor: "pointer", transition: "all 0.3s ease" }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = `${AURORA.ireland}60`; e.currentTarget.style.background = "rgba(0,154,73,0.03)"; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"; e.currentTarget.style.background = "transparent"; }}>
+            <div style={{ color: EU.gold, fontSize: "13px", fontWeight: 500, fontFamily: "'Outfit', sans-serif", letterSpacing: "0.04em" }}>⬆ Click to upload readiness certificate</div>
+            <div style={{ color: C.textDim, fontSize: "11px", fontFamily: "'Outfit', sans-serif", marginTop: "6px", fontWeight: 300 }}>readiness-certificate.json</div>
+          </div>
+        </div>
+      </Card>
+    </div>
+  );
+
+  if (stage === 1) return (
+    <div style={{ maxWidth: "600px", margin: "0 auto" }}>
+      <Card glow>
+        <div style={{ padding: "12px 0" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "20px" }}>
+            <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: AURORA.ireland, animation: "pulse-dot 1.5s ease-in-out infinite" }} />
+            <span style={{ color: EU.gold, fontSize: "13px", fontWeight: 500, fontFamily: "'Outfit', sans-serif", letterSpacing: "0.04em" }}>Certificate Ceremony in Progress</span>
+          </div>
+          <div style={{ display: "grid", gap: "4px" }}>
+            {steps.map((step, i) => (
+              <div key={i} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 12px", borderRadius: "6px", transition: "all 0.4s ease", background: i < currentStep ? "rgba(34,197,94,0.03)" : i === currentStep ? "rgba(0,154,73,0.05)" : "transparent", opacity: i <= currentStep ? 1 : 0.25 }}>
+                <span style={{ fontSize: "11px", width: "18px", textAlign: "center", color: i < currentStep ? C.success : i === currentStep ? EU.gold : C.textDim }}>{i < currentStep ? "✓" : i === currentStep ? "◉" : "○"}</span>
+                <span style={{ fontFamily: "'Outfit', sans-serif", fontSize: "12px", fontWeight: i === currentStep ? 500 : 300, color: i <= currentStep ? C.text : C.textDim }}>{step}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Card>
+    </div>
+  );
+
+  return (
+    <div style={{ maxWidth: "600px", margin: "0 auto", animation: "fadeSlideUp 0.8s ease-out" }}>
+      <Card glow>
+        <div style={{ textAlign: "center", padding: "16px 0" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: "64px", height: "64px", borderRadius: "50%", marginBottom: "16px", background: `radial-gradient(circle, rgba(255,204,0,0.15), transparent)`, border: `1.5px solid rgba(255,204,0,0.25)`, boxShadow: `0 0 40px rgba(255,204,0,0.08)` }}>
+            <span style={{ fontSize: "28px" }}>🏅</span>
+          </div>
+          <h3 style={{ fontFamily: "'Outfit', sans-serif", fontSize: "22px", fontWeight: 500, color: EU.white, margin: "0 0 4px 0" }}>Environment Certified</h3>
+          <p style={{ color: EU.gold, fontSize: "12px", fontFamily: "'Outfit', sans-serif", fontWeight: 300, margin: "0 0 20px 0", letterSpacing: "0.15em", textTransform: "uppercase" }}>Blockchain-anchored · Timestamped · Verified</p>
+          <div style={{ padding: "16px", borderRadius: "8px", background: "rgba(255,255,255,0.02)", border: `1px solid ${C.border}`, textAlign: "left", marginBottom: "20px" }}>
+            {[["Certificate ID", "amleht-cert-2026-0214-001"], ["Blockchain Hash", "0x7a3f...e91b"], ["Issued", new Date().toISOString().slice(0, 19) + "Z"], ["Validation", "8/8 checks passed"], ["Sovereignty", "EU Sovereign — Data residency confirmed"]].map(([k, v], i) => (
+              <div key={k} style={{ display: "flex", justifyContent: "space-between", padding: "7px 0", borderBottom: i < 4 ? `1px solid rgba(255,255,255,0.03)` : "none" }}>
+                <span style={{ color: C.textMuted, fontSize: "11px", fontFamily: "'Outfit', sans-serif", fontWeight: 300 }}>{k}</span>
+                <span style={{ color: C.text, fontSize: "11px", fontFamily: "monospace", fontWeight: 500 }}>{v}</span>
+              </div>
+            ))}
+          </div>
+          {!demo && <Btn onClick={onNext} variant="primary">Enter amleht →</Btn>}
+        </div>
+      </Card>
+    </div>
+  );
+}
+
+/* ─── PHASE: LIVE ─── */
+function PhaseLive({ customer }) {
+  return (
+    <div style={{ maxWidth: "700px", margin: "0 auto", animation: "fadeSlideUp 0.8s ease-out" }}>
+      <div style={{ textAlign: "center", marginBottom: "32px" }}>
+        <div style={{ marginBottom: "20px" }}><Logo size="lg" /></div>
+        <Tagline text="Infrastructure Intelligence · Active" style={{ color: EU.gold, opacity: 1 }} />
+        <p style={{ color: C.textMuted, fontSize: "13px", fontFamily: "'Outfit', sans-serif", fontWeight: 300, marginTop: "10px" }}>{customer} · EU Sovereign · Certified · Live</p>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+        {[
+          { icon: "🛡", title: "Agent Status", value: "10/10 Active", color: C.success },
+          { icon: "🔗", title: "PrivateLink", value: "Connected", color: C.success },
+          { icon: "🔐", title: "Encryption", value: "KMS Active", color: AURORA.ireland },
+          { icon: "⛓", title: "Blockchain", value: "Anchored", color: EU.gold },
+          { icon: "📊", title: "Compliance Coverage", value: "MiFID II · DORA · AML · GDPR · AI Act", color: AURORA.finland },
+          { icon: "🇪🇺", title: "Sovereignty Verification", value: "EU Sovereign — Verified & Certified", color: EU.gold },
+        ].map((item, i) => (
+          <Card key={i} style={i >= 4 ? { gridColumn: "1 / -1" } : {}}>
+            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+              <span style={{ fontSize: "18px" }}>{item.icon}</span>
+              <div>
+                <div style={{ color: C.textDim, fontSize: "9px", fontFamily: "'Outfit', sans-serif", textTransform: "uppercase", letterSpacing: "0.12em", fontWeight: 300 }}>{item.title}</div>
+                <div style={{ color: item.color, fontSize: "13px", fontWeight: 500, fontFamily: "'Outfit', sans-serif" }}>{item.value}</div>
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
+
+      {/* Genesis Certificate */}
+      <Card glow style={{ marginTop: "16px" }}>
+        <div style={{ textAlign: "center", marginBottom: "14px" }}>
+          <span style={{ color: EU.gold, fontSize: "10px", fontFamily: "'Outfit', sans-serif", fontWeight: 400, letterSpacing: "0.15em", textTransform: "uppercase" }}>Genesis Certificate — Blockchain Anchored</span>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px 20px" }}>
+          {[
+            ["Certificate ID", "amleht-cert-2026-0214-001"],
+            ["Blockchain Hash", "0x7a3f...e91b"],
+            ["Issued", new Date().toISOString().slice(0, 19) + "Z"],
+            ["Validation", "8/8 checks passed"],
+            ["Chain", "Polygon PoS · Block #19847201"],
+            ["Sovereignty", "EU Sovereign — Confirmed"],
+            ["Client", customer],
+            ["Status", "ACTIVE — Continuous monitoring"],
+          ].map(([k, v]) => (
+            <div key={k} style={{ display: "flex", justifyContent: "space-between", padding: "4px 0", borderBottom: "1px solid rgba(255,255,255,0.03)" }}>
+              <span style={{ color: C.textDim, fontSize: "10px", fontFamily: "'Outfit', sans-serif", fontWeight: 300 }}>{k}</span>
+              <span style={{ color: k === "Status" ? C.success : k === "Blockchain Hash" || k === "Chain" ? EU.gold : C.text, fontSize: "10px", fontFamily: k === "Blockchain Hash" || k === "Chain" ? "monospace" : "'Outfit', sans-serif", fontWeight: 500 }}>{v}</span>
+            </div>
+          ))}
+        </div>
+        <div style={{ textAlign: "center", marginTop: "14px" }}>
+          <span style={{ color: C.textMuted, fontSize: "10px", fontFamily: "'Outfit', sans-serif", fontWeight: 300, fontStyle: "italic" }}>
+            This certificate is the genesis block. Every future agent assessment chains from this anchor.
+          </span>
+        </div>
+      </Card>
+    </div>
+  );
+}
+
+/* ─── MAIN PORTAL ─── */
+function App() {
+  const [phase, setPhase] = useState(0);
+  const [highestPhase, setHighestPhase] = useState(0);
+  const [demoMode, setDemoMode] = useState(false);
+  const customer = "Duna B.V.";
+  const next = useCallback(() => {
+    setPhase(p => {
+      const np = Math.min(p + 1, 5);
+      setHighestPhase(h => Math.max(h, np));
+      return np;
+    });
+  }, []);
+  const navigateTo = useCallback((p) => {
+    if (p <= highestPhase) { setDemoMode(false); setPhase(p); }
+  }, [highestPhase]);
+
+  const startDemo = () => { setPhase(0); setHighestPhase(0); setDemoMode(false); setTimeout(() => { setPhase(0); setDemoMode(true); }, 100); };
+  const resetPortal = () => { setDemoMode(false); setPhase(0); setHighestPhase(0); };
+
+  const getStatus = () => {
+    if (demoMode && phase < 5) return "demo";
+    if (phase === 5) return "live";
+    if (phase > 0) return "active";
+    return "pending";
+  };
+
+  return (
+    <div style={{ minHeight: "100vh", background: C.bg, color: C.text, position: "relative" }}>
+      <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+      <AuroraBackground />
+
+      {/* Header */}
+      <div style={{ position: "relative", zIndex: 10, padding: "14px 28px", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: `1px solid ${C.border}`, background: "rgba(5,10,24,0.7)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)" }}>
+        <Logo size="sm" />
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          {/* Demo / Reset buttons */}
+          {!demoMode && phase === 0 && (
+            <button onClick={startDemo} style={{
+              padding: "5px 14px", borderRadius: "6px", border: `1px solid rgba(255,204,0,0.2)`,
+              background: "rgba(255,204,0,0.06)", color: EU.gold, fontSize: "11px", fontWeight: 500,
+              fontFamily: "'Outfit', sans-serif", letterSpacing: "0.06em", cursor: "pointer",
+              transition: "all 0.3s ease",
+            }}>▶ Demo Mode</button>
+          )}
+          {(demoMode || phase > 0) && (
+            <button onClick={resetPortal} style={{
+              padding: "5px 14px", borderRadius: "6px", border: `1px solid rgba(255,255,255,0.08)`,
+              background: "rgba(255,255,255,0.03)", color: C.textMuted, fontSize: "11px", fontWeight: 400,
+              fontFamily: "'Outfit', sans-serif", letterSpacing: "0.06em", cursor: "pointer",
+              transition: "all 0.3s ease",
+            }}>↺ Reset</button>
+          )}
+          <StatusBadge status={getStatus()} />
+          <div style={{ padding: "5px 14px", borderRadius: "6px", background: "rgba(255,204,0,0.06)", border: `1px solid rgba(255,204,0,0.12)`, color: EU.gold, fontSize: "11px", fontWeight: 400, fontFamily: "'Outfit', sans-serif", letterSpacing: "0.04em" }}>{customer}</div>
+        </div>
+      </div>
+
+      {/* Progress */}
+      <div style={{ position: "relative", zIndex: 10, padding: "20px 28px 0" }}><ProgressBar phase={phase} onNavigate={navigateTo} /></div>
+
+      {/* Phase title — hidden on Live page which has its own header */}
+      {phase < 5 && (
+        <div style={{ position: "relative", zIndex: 10, textAlign: "center", padding: "28px 28px 8px" }}>
+          <h1 style={{ fontFamily: "'Outfit', sans-serif", fontSize: "22px", fontWeight: 500, color: EU.white, margin: "0 0 4px 0", letterSpacing: "0.02em" }}>{PHASES[phase].title}</h1>
+          <p style={{ fontFamily: "'Outfit', sans-serif", fontSize: "12px", color: C.textMuted, margin: 0, fontWeight: 300, letterSpacing: "0.06em" }}>{PHASES[phase].subtitle}</p>
+        </div>
+      )}
+
+      {/* Content — each phase gets demo prop */}
+      <div style={{ position: "relative", zIndex: 10, padding: "20px 28px 40px" }}>
+        {phase === 0 && <PhaseWelcome customer={customer} onNext={next} demo={demoMode} />}
+        {phase === 1 && <PhaseSpecification onNext={next} demo={demoMode} />}
+        {phase === 2 && <PhaseProvision onNext={next} demo={demoMode} />}
+        {phase === 3 && <PhaseConnect onNext={next} demo={demoMode} />}
+        {phase === 4 && <PhaseCertify onNext={next} demo={demoMode} />}
+        {phase === 5 && <PhaseLive customer={customer} />}
+      </div>
+
+      {/* Footer */}
+      <div style={{ position: "relative", zIndex: 10, padding: "14px 28px", borderTop: `1px solid ${C.border}`, textAlign: "center", background: "rgba(5,10,24,0.7)", backdropFilter: "blur(12px)" }}>
+        <span style={{ color: C.textDim, fontSize: "10px", fontFamily: "'Outfit', sans-serif", fontWeight: 300, letterSpacing: "0.1em" }}>amleht · EU Sovereign Multi-Agent AI Infrastructure · Amsterdam · {new Date().getFullYear()} · CONFIDENTIAL</span>
+      </div>
+    </div>
+  );
+}
+
+
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
+</script>
+</body>
+</html>
