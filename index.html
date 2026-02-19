@@ -23,12 +23,6 @@
     font-family: 'Outfit', sans-serif;
   }
 
-  /* ====================================
-     MOVING AURORA BACKGROUND
-     Uses multiple layered elements that
-     drift and morph independently
-     ==================================== */
-
   .aurora-container {
     width: 100%;
     height: 100vh;
@@ -38,122 +32,16 @@
     justify-content: center;
     position: relative;
     overflow: hidden;
-    background: linear-gradient(135deg, #1a2d4d 0%, #1e3352 50%, #1a2844 100%);
   }
 
-  /* Each aurora layer is an absolutely positioned element
-     that moves independently — like real aurora curtains */
-
-  .aurora-layer {
+  #aurora-canvas {
     position: absolute;
-    top: -20%;
-    left: -20%;
-    width: 140%;
-    height: 140%;
-    opacity: 0.85;
+    top: -80px;
+    left: -80px;
+    width: calc(100% + 160px);
+    height: calc(100% + 160px);
+    z-index: 0;
     filter: blur(60px);
-    will-change: transform;
-  }
-
-  .aurora-fi {
-    background: radial-gradient(ellipse 50% 70% at 30% 40%, rgba(0,53,128,0.95) 0%, transparent 70%);
-    animation: drift-1 18s ease-in-out infinite alternate;
-  }
-
-  .aurora-ie {
-    background: radial-gradient(ellipse 40% 60% at 25% 30%, rgba(0,154,73,0.85) 0%, transparent 70%);
-    animation: drift-2 22s ease-in-out infinite alternate;
-  }
-
-  .aurora-nl {
-    background: radial-gradient(ellipse 35% 55% at 45% 65%, rgba(255,108,0,0.8) 0%, transparent 70%);
-    animation: drift-3 20s ease-in-out infinite alternate;
-  }
-
-  .aurora-fr {
-    background: radial-gradient(ellipse 40% 60% at 60% 35%, rgba(206,17,38,0.7) 0%, transparent 70%);
-    animation: drift-4 24s ease-in-out infinite alternate;
-  }
-
-  .aurora-eu {
-    background: radial-gradient(ellipse 45% 65% at 75% 55%, rgba(0,53,128,0.85) 0%, transparent 70%);
-    animation: drift-5 19s ease-in-out infinite alternate;
-  }
-
-  .aurora-gold {
-    background: radial-gradient(ellipse 30% 45% at 85% 25%, rgba(255,204,0,0.65) 0%, transparent 70%);
-    animation: drift-6 21s ease-in-out infinite alternate;
-  }
-
-  /* Each layer drifts on a unique path — the combination
-     creates organic, unpredictable aurora movement */
-
-  @keyframes drift-1 {
-    0%   { transform: translate(0%, 0%) scale(1); }
-    25%  { transform: translate(3%, -2%) scale(1.05); }
-    50%  { transform: translate(-2%, 3%) scale(0.98); }
-    75%  { transform: translate(4%, 1%) scale(1.03); }
-    100% { transform: translate(-1%, -3%) scale(1.02); }
-  }
-
-  @keyframes drift-2 {
-    0%   { transform: translate(0%, 0%) scale(1); }
-    25%  { transform: translate(-4%, 2%) scale(1.04); }
-    50%  { transform: translate(3%, -3%) scale(0.97); }
-    75%  { transform: translate(-2%, 4%) scale(1.06); }
-    100% { transform: translate(2%, -1%) scale(1); }
-  }
-
-  @keyframes drift-3 {
-    0%   { transform: translate(0%, 0%) scale(1); }
-    25%  { transform: translate(2%, 3%) scale(0.96); }
-    50%  { transform: translate(-3%, -2%) scale(1.05); }
-    75%  { transform: translate(1%, -4%) scale(1.02); }
-    100% { transform: translate(-2%, 2%) scale(0.98); }
-  }
-
-  @keyframes drift-4 {
-    0%   { transform: translate(0%, 0%) scale(1); }
-    25%  { transform: translate(-3%, -3%) scale(1.03); }
-    50%  { transform: translate(4%, 2%) scale(0.97); }
-    75%  { transform: translate(-1%, 3%) scale(1.04); }
-    100% { transform: translate(3%, -2%) scale(1.01); }
-  }
-
-  @keyframes drift-5 {
-    0%   { transform: translate(0%, 0%) scale(1); }
-    25%  { transform: translate(3%, 2%) scale(1.02); }
-    50%  { transform: translate(-2%, -3%) scale(1.06); }
-    75%  { transform: translate(-3%, 1%) scale(0.98); }
-    100% { transform: translate(1%, 3%) scale(1.03); }
-  }
-
-  @keyframes drift-6 {
-    0%   { transform: translate(0%, 0%) scale(1); }
-    25%  { transform: translate(-2%, 3%) scale(1.05); }
-    50%  { transform: translate(3%, -1%) scale(0.96); }
-    75%  { transform: translate(2%, -3%) scale(1.04); }
-    100% { transform: translate(-3%, 2%) scale(1); }
-  }
-
-  /* Global brightness breathing layered on top */
-  .aurora-brightness {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: transparent;
-    animation: breathe 7s ease-in-out infinite alternate;
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  @keyframes breathe {
-    0%   { backdrop-filter: brightness(1) saturate(1); }
-    33%  { backdrop-filter: brightness(1.12) saturate(1.1); }
-    66%  { backdrop-filter: brightness(1.05) saturate(1.05); }
-    100% { backdrop-filter: brightness(0.96) saturate(0.98); }
   }
 
   /* Subtle ring */
@@ -186,10 +74,7 @@
     100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
   }
 
-  /* ====================================
-     LOGO
-     ==================================== */
-
+  /* Logo */
   .logo-wrap {
     position: relative;
     z-index: 10;
@@ -224,14 +109,29 @@
     border-radius: 1px;
   }
 
-  .logo-main .eu-badge {
-    color: #FFCC00;
-    font-weight: 300;
-    font-size: 2.6rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    text-shadow: 0 3px 25px rgba(0,0,0,0.25);
+  #flag-canvas {
+    display: block;
+    filter: drop-shadow(0 4px 24px rgba(0,51,153,0.35));
+    border-radius: 2px;
+    opacity: 0;
+    transition: opacity 0.6s ease-out;
   }
+
+  #flag-canvas.visible { opacity: 1; }
+
+  .eu-label {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    font-size: clamp(0.65rem, 1.2vw, 0.85rem);
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: #FFCC00;
+    margin-top: 16px;
+    opacity: 0;
+    transition: opacity 0.8s ease-out 0.3s;
+  }
+
+  .eu-label.visible { opacity: 1; }
 
   .tagline {
     font-weight: 300;
@@ -240,6 +140,7 @@
     text-transform: uppercase;
     color: rgba(255,255,255,0.38);
     margin-top: 22px;
+    opacity: 0;
     animation: tagline-fadein 2s ease-out 3.3s both;
   }
 
@@ -247,10 +148,6 @@
     0%   { opacity: 0; }
     100% { opacity: 1; }
   }
-
-  /* ====================================
-     COMING SOON — gentle pulse in/out
-     ==================================== */
 
   .coming-soon {
     font-weight: 300;
@@ -269,14 +166,11 @@
     100% { color: rgba(255,255,255,0); }
   }
 
-  /* ====================================
-     RESPONSIVE
-     ==================================== */
-
+  /* Responsive */
   @media (max-width: 800px) {
     .logo-main { font-size: 3rem; }
     .logo-main .sep { height: 32px; margin: 0 14px; }
-    .logo-main .eu-badge { font-size: 1.6rem; }
+    #flag-canvas { width: 90px !important; height: 60px !important; }
     .tagline { font-size: 0.7rem; letter-spacing: 0.2em; }
     .coming-soon { font-size: 0.65rem; }
     .ring-1 { width: 300px; height: 300px; }
@@ -286,7 +180,7 @@
   @media (max-width: 480px) {
     .logo-main { font-size: 2.2rem; }
     .logo-main .sep { height: 24px; margin: 0 10px; }
-    .logo-main .eu-badge { font-size: 1.2rem; }
+    #flag-canvas { width: 65px !important; height: 43px !important; }
     .tagline { font-size: 0.6rem; letter-spacing: 0.15em; }
     .coming-soon { font-size: 0.55rem; }
   }
@@ -294,16 +188,7 @@
 </head>
 <body>
   <div class="aurora-container">
-    <!-- Individual aurora colour layers that move independently -->
-    <div class="aurora-layer aurora-fi"></div>
-    <div class="aurora-layer aurora-ie"></div>
-    <div class="aurora-layer aurora-nl"></div>
-    <div class="aurora-layer aurora-fr"></div>
-    <div class="aurora-layer aurora-eu"></div>
-    <div class="aurora-layer aurora-gold"></div>
-
-    <!-- Brightness breathing overlay -->
-    <div class="aurora-brightness"></div>
+    <canvas id="aurora-canvas"></canvas>
 
     <!-- Subtle rings -->
     <div class="ring ring-1"></div>
@@ -312,14 +197,16 @@
     <!-- Logo -->
     <div class="logo-wrap">
       <div class="logo-main">
-        <span class="letter" data-index="0">a</span><span class="letter" data-index="1">m</span><span class="letter" data-index="2">l</span><span class="letter" data-index="3">e</span><span class="letter" data-index="4">h</span><span class="letter" data-index="5">t</span><span class="sep"></span><span class="eu-badge">EU</span>
+        <span class="letter" data-index="0">a</span><span class="letter" data-index="1">m</span><span class="letter" data-index="2">l</span><span class="letter" data-index="3">e</span><span class="letter" data-index="4">h</span><span class="letter" data-index="5">t</span><span class="sep"></span><canvas id="flag-canvas"></canvas>
       </div>
+      <div class="eu-label" id="eu-label">European Union &thinsp;/&thinsp; EEA</div>
       <div class="tagline">EU Sovereign Multi-Agent Infrastructure Intelligence</div>
       <div class="coming-soon">Coming Soon</div>
     </div>
   </div>
 <script>
 (function() {
+  /* ═══ LETTER FLICKERING ═══ */
   var colors = ['#003580','#009A49','#FF6C00','#CE1126','#003399','#FFCC00'];
   var letters = document.querySelectorAll('.letter');
 
@@ -348,6 +235,183 @@
       el.style.textShadow = '0 0 20px ' + next + '99, 0 3px 40px rgba(0,0,0,0.35)';
     }, flickerInterval);
   });
+
+  /* ═══ REVEAL TIMING ═══ */
+  setTimeout(function() {
+    document.getElementById("flag-canvas").classList.add("visible");
+    document.getElementById("eu-label").classList.add("visible");
+  }, 2800);
+
+  /* ═══ CANVAS AURORA ═══ */
+  var ac = document.getElementById("aurora-canvas");
+  var ctx = ac.getContext("2d");
+  var t = 0;
+
+  function hexToRgb(hex) {
+    return [parseInt(hex.slice(1,3),16), parseInt(hex.slice(3,5),16), parseInt(hex.slice(5,7),16)];
+  }
+
+  var layers = [
+    { color:'#003580', cx:0.30, cy:0.40, rx:0.50, ry:0.70, speed:0.47, phase:0,   intensity:1.00, driftX:0.22, driftY:0.16 },
+    { color:'#009A49', cx:0.25, cy:0.30, rx:0.40, ry:0.60, speed:0.38, phase:1.2, intensity:0.95, driftX:0.20, driftY:0.14 },
+    { color:'#FF6C00', cx:0.45, cy:0.65, rx:0.35, ry:0.55, speed:0.52, phase:2.5, intensity:0.90, driftX:0.24, driftY:0.18 },
+    { color:'#CE1126', cx:0.60, cy:0.35, rx:0.40, ry:0.60, speed:0.33, phase:3.8, intensity:0.80, driftX:0.18, driftY:0.13 },
+    { color:'#003399', cx:0.75, cy:0.55, rx:0.45, ry:0.65, speed:0.44, phase:5.0, intensity:0.95, driftX:0.16, driftY:0.12 },
+    { color:'#FFCC00', cx:0.85, cy:0.25, rx:0.30, ry:0.45, speed:0.41, phase:0.7, intensity:0.75, driftX:0.21, driftY:0.15 }
+  ];
+  layers.forEach(function(l) { l.rgb = hexToRgb(l.color); });
+
+  function resizeAurora() {
+    ac.width = window.innerWidth + 160;
+    ac.height = window.innerHeight + 160;
+  }
+  resizeAurora();
+  window.addEventListener('resize', resizeAurora);
+
+  function renderAurora() {
+    t += 0.014;
+    var w = ac.width, h = ac.height;
+
+    /* Base gradient — bright steel-blue like mockup */
+    var bg = ctx.createLinearGradient(0, 0, w, h);
+    bg.addColorStop(0, '#243b5e');
+    bg.addColorStop(0.5, '#2a4468');
+    bg.addColorStop(1, '#223758');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, w, h);
+
+    /* Aurora layers — each with complex multi-wave orbital drift */
+    for (var i = 0; i < layers.length; i++) {
+      var l = layers[i];
+      var pa = t * l.speed + l.phase;
+
+      /* Breathing — deep, visible pulsing */
+      var breath = 0.65 + 0.35 * Math.sin(pa * 1.3 + Math.sin(pa * 0.4) * 0.8);
+
+      /* Position — 3 overlapping sine waves per axis for organic, random-feeling drift */
+      var cx = (l.cx
+        + Math.sin(pa) * l.driftX
+        + Math.sin(pa * 0.6 + 2.0) * l.driftX * 0.6
+        + Math.sin(pa * 1.7 + 4.2) * l.driftX * 0.3) * w;
+      var cy = (l.cy
+        + Math.cos(pa * 0.7) * l.driftY
+        + Math.cos(pa * 0.4 + 1.0) * l.driftY * 0.7
+        + Math.cos(pa * 1.9 + 3.1) * l.driftY * 0.35) * h;
+
+      /* Size — dramatic pulsing so blobs visibly grow and shrink */
+      var rx = l.rx * w * (1 + 0.25 * Math.sin(pa * 0.6) + 0.1 * Math.sin(pa * 1.4 + 1.0));
+      var ry = l.ry * h * (1 + 0.20 * Math.cos(pa * 0.8) + 0.08 * Math.cos(pa * 1.6 + 2.0));
+      var maxR = Math.max(rx, ry);
+      var alpha = l.intensity * breath;
+
+      var grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, maxR);
+      grad.addColorStop(0, 'rgba(' + l.rgb[0] + ',' + l.rgb[1] + ',' + l.rgb[2] + ',' + alpha + ')');
+      grad.addColorStop(0.35, 'rgba(' + l.rgb[0] + ',' + l.rgb[1] + ',' + l.rgb[2] + ',' + (alpha * 0.45) + ')');
+      grad.addColorStop(0.58, 'rgba(' + l.rgb[0] + ',' + l.rgb[1] + ',' + l.rgb[2] + ',0)');
+
+      /* Rotation — slow wobble for organic shape-shifting */
+      ctx.save();
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, Math.max(1, rx), Math.max(1, ry), pa * 0.25 + Math.sin(pa * 0.3) * 0.4, 0, Math.PI * 2);
+      ctx.fillStyle = grad;
+      ctx.fill();
+      ctx.restore();
+    }
+
+    /* Global brightness breathing — visible pulse across everything */
+    var globalBreath = 0.82 + 0.18 * Math.sin(t * 1.8 + Math.sin(t * 0.7) * 0.5);
+    ctx.fillStyle = 'rgba(5,10,24,' + ((1 - globalBreath) * 0.35) + ')';
+    ctx.fillRect(0, 0, w, h);
+
+    requestAnimationFrame(renderAurora);
+  }
+  requestAnimationFrame(renderAurora);
+
+  /* ═══ WAVING EU FLAG ═══ */
+  var FLAG_W = 140, FLAG_H = 93, DPR = 2;
+  var fC = document.getElementById("flag-canvas");
+  var fCtx = fC.getContext("2d");
+  fC.width = FLAG_W * DPR;
+  fC.height = FLAG_H * DPR;
+  fC.style.width = FLAG_W + "px";
+  fC.style.height = FLAG_H + "px";
+  fCtx.scale(DPR, DPR);
+
+  var flagT = 0;
+
+  function drawStar(sCtx, scx, scy, outerR, innerR, pts) {
+    sCtx.beginPath();
+    for (var i = 0; i < pts * 2; i++) {
+      var r = (i % 2 === 0) ? outerR : innerR;
+      var a = (Math.PI / 2 * 3) + (i * Math.PI / pts);
+      if (i === 0) sCtx.moveTo(scx + Math.cos(a) * r, scy + Math.sin(a) * r);
+      else sCtx.lineTo(scx + Math.cos(a) * r, scy + Math.sin(a) * r);
+    }
+    sCtx.closePath();
+    sCtx.fill();
+  }
+
+  /* Render flat flag to offscreen canvas */
+  var flagSrc = (function() {
+    var s = 3, sw = FLAG_W * s, sh = FLAG_H * s;
+    var off = document.createElement("canvas");
+    off.width = sw; off.height = sh;
+    var c = off.getContext("2d");
+    c.fillStyle = "#003399";
+    c.fillRect(0, 0, sw, sh);
+    c.fillStyle = "#FFCC00";
+    var cxF = sw * 0.5, cyF = sh * 0.5;
+    var cR = Math.min(sw, sh) * 0.32;
+    var sO = Math.min(sw, sh) * 0.055, sI = sO * 0.4;
+    for (var i = 0; i < 12; i++) {
+      var ang = -Math.PI / 2 + (i * Math.PI * 2 / 12);
+      drawStar(c, cxF + Math.cos(ang) * cR, cyF + Math.sin(ang) * cR, sO, sI, 5);
+    }
+    return off;
+  })();
+
+  function renderWavingFlag() {
+    flagT += 0.032;
+    fCtx.clearRect(0, 0, FLAG_W, FLAG_H);
+
+    var srcW = flagSrc.width, srcH = flagSrc.height;
+
+    for (var col = 0; col < FLAG_W; col++) {
+      var nX = col / FLAG_W;
+      var amp = nX * nX;
+      var wO = Math.sin(nX * 5.0 + flagT * 2.4) * 9 * amp
+             + Math.sin(nX * 8.5 + flagT * 1.7 + 1.5) * 5 * amp
+             + Math.sin(nX * 3.0 + flagT * 3.0 + 0.8) * 3 * amp
+             + Math.sin(nX * 12 + flagT * 0.9 + 3.0) * 2 * amp;
+
+      var slope = Math.cos(nX * 5.0 + flagT * 2.4) * 0.35
+                + Math.cos(nX * 8.5 + flagT * 1.7 + 1.5) * 0.18
+                + Math.cos(nX * 12 + flagT * 0.9 + 3.0) * 0.08;
+      var br = Math.max(0.55, Math.min(1.5, 1 + slope * 0.3));
+
+      fCtx.save();
+      fCtx.filter = "brightness(" + br + ")";
+      fCtx.drawImage(flagSrc, nX * srcW, 0, Math.max(1, srcW / FLAG_W), srcH, col, wO, 1.5, FLAG_H);
+      fCtx.restore();
+    }
+
+    /* Trailing edge fade */
+    var fg = fCtx.createLinearGradient(FLAG_W - 12, 0, FLAG_W, 0);
+    fg.addColorStop(0, "rgba(5,10,24,0)");
+    fg.addColorStop(1, "rgba(5,10,24,0.5)");
+    fCtx.fillStyle = fg;
+    fCtx.fillRect(FLAG_W - 12, 0, 12, FLAG_H);
+
+    /* Pole shadow */
+    var pg = fCtx.createLinearGradient(0, 0, 4, 0);
+    pg.addColorStop(0, "rgba(0,0,0,0.3)");
+    pg.addColorStop(1, "rgba(0,0,0,0)");
+    fCtx.fillStyle = pg;
+    fCtx.fillRect(0, -15, 4, FLAG_H + 30);
+
+    requestAnimationFrame(renderWavingFlag);
+  }
+  requestAnimationFrame(renderWavingFlag);
 })();
 </script>
 </body>
