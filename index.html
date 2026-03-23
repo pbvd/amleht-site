@@ -184,6 +184,30 @@
     .tagline { font-size: 0.6rem; letter-spacing: 0.15em; }
     .coming-soon { font-size: 0.55rem; }
   }
+
+  #csm-stage {
+    position: relative;
+    width: 100%;
+    max-width: 700px;
+    height: 90px;
+    margin: 0 auto 28px;
+    overflow: visible;
+  }
+
+  .csm-word {
+    position: absolute;
+    opacity: 0;
+    white-space: nowrap;
+    font-family: 'Outfit', sans-serif;
+    font-size: clamp(18px, 3vw, 26px);
+    font-weight: 300;
+    letter-spacing: 0.06em;
+    color: #ffffff;
+  }
+
+  .csm-ini {
+    color: #FFCC00;
+  }
 </style>
 </head>
 <body>
@@ -201,6 +225,12 @@
       </div>
       <div class="eu-label" id="eu-label">European Union &thinsp;/&thinsp; EEA</div>
       <div class="tagline">EU Sovereign Multi-Agent Infrastructure Intelligence</div>
+      <!-- CSM Animation -->
+      <div id="csm-stage">
+        <div id="csm-c" class="csm-word"><span class="csm-ini">C</span>ompliance</div>
+        <div id="csm-s" class="csm-word"><span class="csm-ini">S</span>overeignty</div>
+        <div id="csm-m" class="csm-word"><span class="csm-ini">M</span>odernisation</div>
+      </div>
       <div class="coming-soon">Coming Soon</div>
     </div>
   </div>
@@ -412,6 +442,55 @@
     requestAnimationFrame(renderWavingFlag);
   }
   requestAnimationFrame(renderWavingFlag);
+
+  // CSM animation
+  (function() {
+    var wC = document.getElementById('csm-c');
+    var wS = document.getElementById('csm-s');
+    var wM = document.getElementById('csm-m');
+    var stage = document.getElementById('csm-stage');
+    var T = [];
+    function s(el, p) { Object.assign(el.style, p); }
+    function w(ms, fn) { T.push(setTimeout(fn, ms)); }
+
+    function runCSM() {
+      T.forEach(clearTimeout); T = [];
+      [wC, wS, wM].forEach(function(e) {
+        s(e, { transition: 'none', opacity: '0', left: '0px', top: '0px' });
+      });
+
+      w(800, function() {
+        var sw = stage.offsetWidth || 480;
+        var cW = wC.offsetWidth || 138;
+        var sW = wS.offsetWidth || 138;
+        var mW = wM.offsetWidth || 162;
+
+        // Scatter: C top-left, S mid-right, M bottom-left
+        s(wC, { left: Math.round(sw * 0.03) + 'px', top: '4px' });
+        s(wS, { left: Math.round(sw * 0.54) + 'px', top: '44px' });
+        s(wM, { left: Math.round(sw * 0.05) + 'px', top: '84px' });
+
+        // Staggered fade-in
+        w(200,  function() { s(wC, { transition: 'opacity 1.1s ease', opacity: '1' }); });
+        w(1400, function() { s(wS, { transition: 'opacity 1.1s ease', opacity: '1' }); });
+        w(2600, function() { s(wM, { transition: 'opacity 1.1s ease', opacity: '1' }); });
+
+        // Converge into one row
+        w(4200, function() {
+          var gap = 14;
+          var tot = cW + sW + mW + gap * 2;
+          var x = Math.max(0, Math.round((sw - tot) / 2));
+          var tr = 'left 1.5s cubic-bezier(0.25,0.46,0.45,0.94), top 1.5s cubic-bezier(0.25,0.46,0.45,0.94)';
+          s(wC, { transition: tr, left: x + 'px', top: '28px' });
+          s(wS, { transition: tr, left: (x + cW + gap) + 'px', top: '28px' });
+          s(wM, { transition: tr, left: (x + cW + gap + sW + gap) + 'px', top: '28px' });
+        });
+      });
+    }
+
+    // Fire after the existing page animations have settled (~3.5s)
+    setTimeout(runCSM, 3500);
+  })();
 })();
 </script>
 </body>
