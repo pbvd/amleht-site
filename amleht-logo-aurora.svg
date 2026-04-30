@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" width="900" height="400">
+  <defs>
+    <linearGradient id="base" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#243b5e"/><stop offset="50%" stop-color="#2a4468"/><stop offset="100%" stop-color="#223758"/></linearGradient>
+    <radialGradient id="fi" cx="0.05" cy="0.5" rx="0.45" ry="0.65"><stop offset="0%" stop-color="#003580" stop-opacity="1"/><stop offset="40%" stop-color="#0050b4" stop-opacity="0.4"/><stop offset="100%" stop-color="#003580" stop-opacity="0"/></radialGradient>
+    <radialGradient id="ie" cx="0.2" cy="0.2" rx="0.3" ry="0.7"><stop offset="0%" stop-color="#009A49" stop-opacity="0.95"/><stop offset="40%" stop-color="#00c85a" stop-opacity="0.3"/><stop offset="100%" stop-color="#009A49" stop-opacity="0"/></radialGradient>
+    <radialGradient id="nl" cx="0.4" cy="0.75" rx="0.28" ry="0.55"><stop offset="0%" stop-color="#FF6C00" stop-opacity="0.9"/><stop offset="40%" stop-color="#ff8c28" stop-opacity="0.3"/><stop offset="100%" stop-color="#FF6C00" stop-opacity="0"/></radialGradient>
+    <radialGradient id="fr" cx="0.6" cy="0.3" rx="0.28" ry="0.65"><stop offset="0%" stop-color="#CE1126" stop-opacity="0.8"/><stop offset="40%" stop-color="#e63246" stop-opacity="0.25"/><stop offset="100%" stop-color="#CE1126" stop-opacity="0"/></radialGradient>
+    <radialGradient id="eu" cx="0.82" cy="0.58" rx="0.35" ry="0.7"><stop offset="0%" stop-color="#003580" stop-opacity="0.9"/><stop offset="40%" stop-color="#0050b4" stop-opacity="0.3"/><stop offset="100%" stop-color="#003580" stop-opacity="0"/></radialGradient>
+    <radialGradient id="gold" cx="0.95" cy="0.22" rx="0.22" ry="0.55"><stop offset="0%" stop-color="#FFCC00" stop-opacity="0.75"/><stop offset="40%" stop-color="#ffdc3c" stop-opacity="0.2"/><stop offset="100%" stop-color="#FFCC00" stop-opacity="0"/></radialGradient>
+    <style>@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;500&amp;display=swap');</style>
+  </defs>
+  <rect width="900" height="400" rx="16" fill="url(#base)"/><rect width="900" height="400" rx="16" fill="url(#fi)"/><rect width="900" height="400" rx="16" fill="url(#ie)"/><rect width="900" height="400" rx="16" fill="url(#nl)"/><rect width="900" height="400" rx="16" fill="url(#fr)"/><rect width="900" height="400" rx="16" fill="url(#eu)"/><rect width="900" height="400" rx="16" fill="url(#gold)"/>
+  <text x="268" y="210" font-family="Outfit, sans-serif" font-weight="500" font-size="66" letter-spacing="2.5" fill="#ffffff">amleht</text>
+  <rect x="556" y="179" width="2.5" height="36" rx="1" fill="#FFCC00" opacity="0.85"/>
+  <text x="575" y="203" font-family="Outfit, sans-serif" font-weight="300" font-size="31" letter-spacing="6" fill="#FFCC00">EU</text>
+  <text x="450" y="248" font-family="Outfit, sans-serif" font-weight="300" font-size="11.4" letter-spacing="3.2" fill="rgba(255,255,255,0.4)" text-anchor="middle">EU SOVEREIGN MULTI-AGENT INFRASTRUCTURE INTELLIGENCE</text>
+</svg>

@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>amleht.eu — EU Sovereignty Logo Concepts</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@200;300;400;500;600;700&family=Outfit:wght@200;300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --eu-blue: #003399;
+    --eu-blue-deep: #002266;
+    --eu-yellow: #FFCC00;
+    --white: #FFFFFF;
+
+    /* EU Member State flag colours */
+    --nl-orange: #FF6C00;       /* Netherlands */
+    --ie-green: #009A49;        /* Ireland */
+    --de-black: #1a1a1a;        /* Germany */
+    --fr-red: #CE1126;          /* France */
+    --se-blue: #006AA7;         /* Sweden */
+    --ro-blue: #002B7F;         /* Romania */
+    --it-green: #008C45;        /* Italy */
+    --be-yellow: #FDDA24;       /* Belgium */
+    --fi-blue: #003580;         /* Finland - where Nebius runs! */
+    --pt-green: #006600;        /* Portugal */
+  }
+
+  body {
+    background: #0a0e1a;
+    color: var(--white);
+    font-family: 'Outfit', sans-serif;
+    min-height: 100vh;
+    padding: 60px 40px;
+  }
+
+  h1 {
+    font-weight: 300;
+    font-size: 1.4rem;
+    color: #94a3b8;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .subtitle {
+    color: var(--eu-yellow);
+    font-size: 0.95rem;
+    margin-bottom: 16px;
+    font-weight: 300;
+    letter-spacing: 0.03em;
+  }
+
+  .section-note {
+    color: #64748b;
+    font-size: 0.8rem;
+    margin-bottom: 50px;
+    line-height: 1.6;
+    max-width: 700px;
+  }
+
+  h2 {
+    font-weight: 300;
+    font-size: 1rem;
+    color: #94a3b8;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-top: 60px;
+    margin-bottom: 30px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .concept {
+    border-radius: 16px;
+    padding: 52px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    position: relative;
+    transition: box-shadow 0.3s ease;
+  }
+
+  .concept:hover {
+    box-shadow: 0 0 50px rgba(0,51,153,0.25);
+  }
+
+  .eu-bg {
+    background: var(--eu-blue);
+    border: 1px solid rgba(255,204,0,0.15);
+  }
+
+  .white-bg {
+    background: var(--white);
+    border: 1px solid #e2e8f0;
+  }
+
+  .dark-bg {
+    background: #0f1628;
+    border: 1px solid rgba(0,51,153,0.3);
+  }
+
+  .concept-label {
+    position: absolute;
+    top: 16px;
+    left: 20px;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+    opacity: 0.7;
+  }
+  .eu-bg .concept-label { color: var(--eu-yellow); }
+  .white-bg .concept-label { color: var(--eu-blue); }
+  .dark-bg .concept-label { color: #4a6fa5; }
+
+  .concept-desc {
+    position: absolute;
+    bottom: 16px;
+    left: 20px;
+    right: 20px;
+    font-size: 0.72rem;
+    letter-spacing: 0.02em;
+    line-height: 1.5;
+  }
+  .eu-bg .concept-desc { color: rgba(255,255,255,0.5); }
+  .white-bg .concept-desc { color: #94a3b8; }
+  .dark-bg .concept-desc { color: #4a6fa5; }
+
+  /* ====================================
+     CONCEPT A — SORA WORDMARK
+     ==================================== */
+
+  /* A1: EU blue bg, white text, yellow .eu */
+  .logo-a1 {
+    font-family: 'Sora', sans-serif;
+    font-weight: 300;
+    font-size: 3.4rem;
+    letter-spacing: -0.02em;
+    color: var(--white);
+  }
+  .logo-a1 .dot-eu {
+    color: var(--eu-yellow);
+    font-weight: 400;
+  }
+
+  /* A2: Multi-colour EU member state flags */
+  .logo-a2 {
+    font-family: 'Sora', sans-serif;
+    font-weight: 400;
+    font-size: 3.4rem;
+    letter-spacing: -0.02em;
+  }
+  .logo-a2 .dot-eu {
+    font-weight: 400;
+  }
+
+  /* A3: Multi-colour on white */
+  .logo-a3 {
+    font-family: 'Sora', sans-serif;
+    font-weight: 400;
+    font-size: 3.4rem;
+    letter-spacing: -0.02em;
+  }
+  .logo-a3 .dot-eu {
+    font-weight: 400;
+  }
+
+  /* ====================================
+     CONCEPT D — OUTFIT + SEPARATOR
+     ==================================== */
+
+  .logo-d-base {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 500;
+    font-size: 3rem;
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+  }
+
+  .logo-d-base .separator {
+    width: 1.5px;
+    height: 30px;
+    margin: 0 14px;
+    opacity: 0.5;
+  }
+
+  .logo-d-base .eu-part {
+    font-weight: 300;
+    font-size: 1.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  /* D1: EU blue bg */
+  .logo-d1 { color: var(--white); }
+  .logo-d1 .separator { background: var(--eu-yellow); }
+  .logo-d1 .eu-part { color: var(--eu-yellow); }
+
+  /* D2: Multi-colour */
+  .logo-d2 .separator { background: var(--eu-yellow); }
+  .logo-d2 .eu-part { color: var(--eu-yellow); }
+
+  /* ====================================
+     COLOUR KEY
+     ==================================== */
+
+  .color-key {
+    margin-top: 60px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .color-key h2 {
+    margin-top: 0;
+  }
+
+  .key-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+  }
+
+  .key-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .key-swatch {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    flex-shrink: 0;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .key-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .key-letter {
+    font-family: 'Sora', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--white);
+  }
+
+  .key-country {
+    font-size: 0.7rem;
+    color: #64748b;
+    letter-spacing: 0.03em;
+  }
+
+  /* ====================================
+     FAVICON ROW
+     ==================================== */
+  .favicon-section {
+    margin-top: 60px;
+  }
+
+  .favicon-row {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .favicon-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .favicon-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+  }
+
+  .fav-eu {
+    background: var(--eu-blue);
+    color: var(--eu-yellow);
+    border: 1px solid rgba(255,204,0,0.2);
+  }
+
+  .fav-eu-inv {
+    background: var(--eu-yellow);
+    color: var(--eu-blue);
+  }
+
+  .fav-multi {
+    background: var(--eu-blue);
+    color: var(--white);
+    font-size: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .fav-multi-letter {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+  }
+
+  .fav-dark {
+    background: #0f1628;
+    border: 1px solid rgba(0,51,153,0.3);
+    color: var(--eu-yellow);
+  }
+
+  .favicon-label {
+    font-size: 0.65rem;
+    color: #64748b;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ====================================
+     FULL WIDTH SHOWCASE
+     ==================================== */
+  .showcase {
+    margin-top: 60px;
+    background: var(--eu-blue);
+    border-radius: 20px;
+    padding: 80px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .showcase::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 300px;
+    border: 1px solid rgba(255,204,0,0.06);
+    border-radius: 50%;
+  }
+
+  .showcase::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    height: 500px;
+    border: 1px solid rgba(255,204,0,0.03);
+    border-radius: 50%;
+  }
+
+  .showcase-logo {
+    font-family: 'Sora', sans-serif;
+    font-weight: 300;
+    font-size: 5rem;
+    letter-spacing: -0.02em;
+    color: var(--white);
+    position: relative;
+    z-index: 1;
+  }
+
+  .showcase-logo .dot-eu {
+    color: var(--eu-yellow);
+    font-weight: 400;
+  }
+
+  .showcase-tagline {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    font-size: 1rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-top: 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  @media (max-width: 800px) {
+    .grid { grid-template-columns: 1fr; }
+    body { padding: 30px 20px; }
+    .showcase-logo { font-size: 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<h1>amleht.eu — EU Sovereignty Editions</h1>
+<p class="subtitle">European identity, encoded in every letter</p>
+<p class="section-note">Version 1: EU flag palette — blue background, white wordmark, yellow .eu<br>
+Version 2: Each letter carries a colour from a different EU member state flag — unity through diversity</p>
+
+<!-- ========== CONCEPT A VARIANTS ========== -->
+<h2>Concept A — Sora Wordmark</h2>
+
+<div class="grid">
+
+  <!-- A1: Classic EU palette -->
+  <div class="concept eu-bg">
+    <span class="concept-label">A1 — EU Flag Palette</span>
+    <div class="logo-a1">amleht<span class="dot-eu">.eu</span></div>
+    <div class="concept-desc">EU blue background, white wordmark, yellow .eu — sovereignty at a glance</div>
+  </div>
+
+  <!-- A2: Multi-colour on EU blue -->
+  <div class="concept eu-bg">
+    <span class="concept-label">A2 — Member State Colours on Blue</span>
+    <div class="logo-a2">
+      <span style="color: var(--white);">a</span><span style="color: var(--nl-orange);">m</span><span style="color: var(--ie-green);">l</span><span style="color: #e8e8e8;">e</span><span style="color: var(--fr-red);">h</span><span style="color: var(--fi-blue); text-shadow: 0 0 8px rgba(0,53,128,0.6);">t</span><span class="dot-eu" style="color: var(--eu-yellow);">.eu</span>
+    </div>
+    <div class="concept-desc">a=white · m=NL orange · l=IE green · e=white · h=FR red · t=FI blue · .eu=EU yellow</div>
+  </div>
+
+  <!-- A3: Multi-colour on white -->
+  <div class="concept white-bg">
+    <span class="concept-label">A3 — Member State Colours on White</span>
+    <div class="logo-a3">
+      <span style="color: var(--eu-blue);">a</span><span style="color: var(--nl-orange);">m</span><span style="color: var(--ie-green);">l</span><span style="color: var(--de-black);">e</span><span style="color: var(--fr-red);">h</span><span style="color: var(--fi-blue);">t</span><span class="dot-eu" style="color: var(--eu-yellow); text-shadow: 0 0 1px rgba(0,0,0,0.15);">.eu</span>
+    </div>
+    <div class="concept-desc">a=EU blue · m=NL orange · l=IE green · e=DE black · h=FR red · t=FI blue · .eu=EU yellow</div>
+  </div>
+
+  <!-- A1 on dark -->
+  <div class="concept dark-bg">
+    <span class="concept-label">A1 — Dark Variant</span>
+    <div class="logo-a1" style="color: #c8d6e5;">amleht<span class="dot-eu" style="color: var(--eu-yellow);">.eu</span></div>
+    <div class="concept-desc">For dark UI contexts — presentations, dashboards, dark mode</div>
+  </div>
+
+</div>
+
+<!-- ========== CONCEPT D VARIANTS ========== -->
+<h2>Concept D — Outfit + Separator</h2>
+
+<div class="grid">
+
+  <!-- D1: EU palette -->
+  <div class="concept eu-bg">
+    <span class="concept-label">D1 — EU Flag Palette</span>
+    <div class="logo-d-base logo-d1">
+      amleht<span class="separator"></span><span class="eu-part">EU</span>
+    </div>
+    <div class="concept-desc">The separator makes EU a sovereign badge, not just a TLD</div>
+  </div>
+
+  <!-- D2: Multi-colour on EU blue -->
+  <div class="concept eu-bg">
+    <span class="concept-label">D2 — Member State Colours</span>
+    <div class="logo-d-base logo-d2">
+      <span style="color: var(--white);">a</span><span style="color: var(--nl-orange);">m</span><span style="color: var(--ie-green);">l</span><span style="color: #e8e8e8;">e</span><span style="color: var(--fr-red);">h</span><span style="color: var(--fi-blue); text-shadow: 0 0 8px rgba(0,53,128,0.6);">t</span><span class="separator"></span><span class="eu-part">EU</span>
+    </div>
+    <div class="concept-desc">Each letter a member state, EU stands proud as the badge</div>
+  </div>
+
+  <!-- D1: White bg -->
+  <div class="concept white-bg">
+    <span class="concept-label">D1 — White Variant</span>
+    <div class="logo-d-base" style="color: var(--eu-blue);">
+      amleht<span class="separator" style="background: var(--eu-blue);"></span><span class="eu-part" style="color: var(--eu-blue);">EU</span>
+    </div>
+    <div class="concept-desc">Clean mono version for documents, invoices, formal use</div>
+  </div>
+
+  <!-- D2: Multi-colour on white -->
+  <div class="concept white-bg">
+    <span class="concept-label">D2 — Member States on White</span>
+    <div class="logo-d-base">
+      <span style="color: var(--eu-blue);">a</span><span style="color: var(--nl-orange);">m</span><span style="color: var(--ie-green);">l</span><span style="color: var(--de-black);">e</span><span style="color: var(--fr-red);">h</span><span style="color: var(--fi-blue);">t</span><span class="separator" style="background: var(--eu-yellow); opacity: 1; width: 2px;"></span><span class="eu-part" style="color: var(--eu-yellow); text-shadow: 0 0 1px rgba(0,0,0,0.1);">EU</span>
+    </div>
+    <div class="concept-desc">Full colour on white — bold, celebratory, unmistakably European</div>
+  </div>
+
+</div>
+
+<!-- ========== COLOUR KEY ========== -->
+<div class="color-key">
+  <h2>Letter → Member State Colour Key</h2>
+  <div class="key-grid">
+    <div class="key-item">
+      <div class="key-swatch" style="background: var(--white);"></div>
+      <div class="key-info">
+        <span class="key-letter" style="color: var(--eu-blue);">a</span>
+        <span class="key-country">White — universal EU</span>
+      </div>
+    </div>
+    <div class="key-item">
+      <div class="key-swatch" style="background: var(--nl-orange);"></div>
+      <div class="key-info">
+        <span class="key-letter" style="color: var(--nl-orange);">m</span>
+        <span class="key-country">Netherlands 🇳🇱 (home)</span>
+      </div>
+    </div>
+    <div class="key-item">
+      <div class="key-swatch" style="background: var(--ie-green);"></div>
+      <div class="key-info">
+        <span class="key-letter" style="color: var(--ie-green);">l</span>
+        <span class="key-country">Ireland 🇮🇪</span>
+      </div>
+    </div>
+    <div class="key-item">
+      <div class="key-swatch" style="background: var(--de-black);"></div>
+      <div class="key-info">
+        <span class="key-letter">e</span>
+        <span class="key-country">Germany 🇩🇪 (banking)</span>
+      </div>
+    </div>
+    <div class="key-item">
+      <div class="key-swatch" style="background: var(--fr-red);"></div>
+      <div class="key-info">
+        <span class="key-letter" style="color: var(--fr-red);">h</span>
+        <span class="key-country">France 🇫🇷</span>
+      </div>
+    </div>
+    <div class="key-item">
+      <div class="key-swatch" style="background: var(--fi-blue);"></div>
+      <div class="key-info">
+        <span class="key-letter" style="color: var(--fi-blue);">t</span>
+        <span class="key-country">Finland 🇫🇮 (Nebius!)</span>
+      </div>
+    </div>
+    <div class="key-item">
+      <div class="key-swatch" style="background: var(--eu-yellow);"></div>
+      <div class="key-info">
+        <span class="key-letter" style="color: var(--eu-yellow);">.eu</span>
+        <span class="key-country">EU gold — sovereignty</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== FAVICONS ========== -->
+<div class="favicon-section">
+  <h2>Favicon / App Icon Options</h2>
+  <div class="favicon-row">
+    <div class="favicon-item">
+      <div class="favicon-box fav-eu" style="font-family:'Sora',sans-serif;">a</div>
+      <span class="favicon-label">EU Blue + Yellow</span>
+    </div>
+    <div class="favicon-item">
+      <div class="favicon-box fav-eu-inv" style="font-family:'Sora',sans-serif;">a</div>
+      <span class="favicon-label">Inverted</span>
+    </div>
+    <div class="favicon-item">
+      <div class="favicon-box fav-multi">
+        <span class="fav-multi-letter" style="color: var(--nl-orange);">a</span>
+      </div>
+      <span class="favicon-label">NL Orange on Blue</span>
+    </div>
+    <div class="favicon-item">
+      <div class="favicon-box fav-eu" style="font-family:'Outfit',sans-serif; font-size: 1.3rem; letter-spacing: 0.05em;">a|<span style="font-size:0.9rem;">eu</span></div>
+      <span class="favicon-label">Separator Style</span>
+    </div>
+    <div class="favicon-item">
+      <div class="favicon-box fav-dark" style="font-family:'Sora',sans-serif;">a</div>
+      <span class="favicon-label">Dark Mode</span>
+    </div>
+  </div>
+</div>
+
+<!-- ========== HERO SHOWCASE ========== -->
+<div class="showcase">
+  <div class="showcase-logo">amleht<span class="dot-eu">.eu</span></div>
+  <div class="showcase-tagline">EU Sovereign Multi-Agent Infrastructure Intelligence</div>
+</div>
+
+</body>
+</html>

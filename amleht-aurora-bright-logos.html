@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>amleht.eu — Aurora Borealis (Bright Edition)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@200;300;400;500;600;700&family=Outfit:wght@200;300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --eu-blue: #003399;
+    --eu-yellow: #FFCC00;
+    --white: #FFFFFF;
+    --nl-orange: #FF6C00;
+    --ie-green: #009A49;
+    --fr-red: #CE1126;
+    --fi-blue: #003580;
+  }
+
+  body {
+    background: #0d1220;
+    color: var(--white);
+    font-family: 'Outfit', sans-serif;
+    min-height: 100vh;
+    padding: 60px 40px;
+  }
+
+  h1 {
+    font-weight: 300;
+    font-size: 1.4rem;
+    color: #94a3b8;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .subtitle {
+    color: var(--eu-yellow);
+    font-size: 0.95rem;
+    margin-bottom: 50px;
+    font-weight: 300;
+    letter-spacing: 0.03em;
+  }
+
+  h2 {
+    font-weight: 300;
+    font-size: 1rem;
+    color: #94a3b8;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-top: 60px;
+    margin-bottom: 30px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .concept {
+    border-radius: 16px;
+    padding: 56px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 220px;
+    position: relative;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+  }
+
+  .concept:hover {
+    box-shadow: 0 8px 60px rgba(0,0,0,0.3);
+    transform: translateY(-2px);
+  }
+
+  .concept-label {
+    position: absolute;
+    top: 16px;
+    left: 20px;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+    z-index: 2;
+    color: rgba(255,255,255,0.55);
+  }
+
+  .concept-desc {
+    position: absolute;
+    bottom: 16px;
+    left: 20px;
+    right: 20px;
+    font-size: 0.72rem;
+    letter-spacing: 0.02em;
+    line-height: 1.5;
+    z-index: 2;
+    color: rgba(255,255,255,0.45);
+  }
+
+  /* ====================================
+     BRIGHT AURORA BACKGROUNDS
+     ==================================== */
+
+  /* Bright Aurora 1: Full sweep, high luminosity */
+  .aurora-bright-1 {
+    background:
+      radial-gradient(ellipse 80% 120% at 0% 50%, rgba(0,51,128,0.95) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 150% at 20% 25%, rgba(0,154,73,0.75) 0%, transparent 48%),
+      radial-gradient(ellipse 45% 100% at 42% 70%, rgba(255,108,0,0.7) 0%, transparent 48%),
+      radial-gradient(ellipse 50% 120% at 62% 35%, rgba(206,17,38,0.55) 0%, transparent 48%),
+      radial-gradient(ellipse 60% 140% at 82% 60%, rgba(0,53,128,0.8) 0%, transparent 48%),
+      radial-gradient(ellipse 40% 100% at 95% 25%, rgba(255,204,0,0.5) 0%, transparent 45%),
+      linear-gradient(135deg, #1a2d4d 0%, #1e3352 50%, #1a2844 100%);
+  }
+
+  /* Bright Aurora 2: Softer, luminous wash */
+  .aurora-bright-2 {
+    background:
+      radial-gradient(ellipse 100% 80% at 10% 85%, rgba(0,51,153,0.85) 0%, transparent 55%),
+      radial-gradient(ellipse 60% 100% at 28% 15%, rgba(0,154,73,0.65) 0%, transparent 50%),
+      radial-gradient(ellipse 80% 60% at 50% 80%, rgba(255,108,0,0.55) 0%, transparent 48%),
+      radial-gradient(ellipse 50% 90% at 72% 25%, rgba(206,17,38,0.5) 0%, transparent 50%),
+      radial-gradient(ellipse 70% 100% at 92% 65%, rgba(0,53,128,0.7) 0%, transparent 48%),
+      linear-gradient(180deg, #172a45 0%, #1c3050 50%, #162640 100%);
+  }
+
+  /* Bright Aurora 3: Sky glow — concentrated top, bright */
+  .aurora-bright-3 {
+    background:
+      radial-gradient(ellipse 120% 55% at 50% 0%, rgba(0,154,73,0.7) 0%, transparent 55%),
+      radial-gradient(ellipse 80% 45% at 22% 0%, rgba(255,108,0,0.65) 0%, transparent 48%),
+      radial-gradient(ellipse 80% 45% at 78% 0%, rgba(0,53,128,0.75) 0%, transparent 48%),
+      radial-gradient(ellipse 60% 35% at 50% 8%, rgba(206,17,38,0.5) 0%, transparent 48%),
+      radial-gradient(ellipse 45% 35% at 88% 5%, rgba(255,204,0,0.45) 0%, transparent 45%),
+      linear-gradient(180deg, #1e3450 0%, #162a42 35%, #132238 100%);
+  }
+
+  /* Bright Aurora 4: Animated breathing, bright */
+  .aurora-bright-4 {
+    background:
+      radial-gradient(ellipse 80% 120% at 0% 50%, rgba(0,51,128,0.95) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 150% at 22% 20%, rgba(0,154,73,0.7) 0%, transparent 48%),
+      radial-gradient(ellipse 45% 100% at 44% 72%, rgba(255,108,0,0.65) 0%, transparent 48%),
+      radial-gradient(ellipse 50% 120% at 64% 32%, rgba(206,17,38,0.5) 0%, transparent 48%),
+      radial-gradient(ellipse 60% 140% at 84% 62%, rgba(0,53,128,0.75) 0%, transparent 48%),
+      radial-gradient(ellipse 40% 100% at 95% 22%, rgba(255,204,0,0.45) 0%, transparent 45%),
+      linear-gradient(135deg, #1a2d4d 0%, #1e3352 50%, #1a2844 100%);
+    animation: aurora-breathe 8s ease-in-out infinite alternate;
+  }
+
+  @keyframes aurora-breathe {
+    0% { filter: brightness(1) saturate(1); }
+    50% { filter: brightness(1.12) saturate(1.1); }
+    100% { filter: brightness(0.95) saturate(0.95); }
+  }
+
+  /* ====================================
+     LOGOS — same as before
+     ==================================== */
+
+  .logo-sora-white {
+    font-family: 'Sora', sans-serif;
+    font-weight: 300;
+    font-size: 3.4rem;
+    letter-spacing: -0.02em;
+    color: var(--white);
+    z-index: 2;
+    position: relative;
+  }
+  .logo-sora-white .dot-eu {
+    color: var(--eu-yellow);
+    font-weight: 400;
+  }
+
+  .logo-sora-blue {
+    font-family: 'Sora', sans-serif;
+    font-weight: 400;
+    font-size: 3.4rem;
+    letter-spacing: -0.02em;
+    color: var(--eu-blue);
+    z-index: 2;
+    position: relative;
+    text-shadow: 0 0 35px rgba(255,255,255,0.2);
+  }
+  .logo-sora-blue .dot-eu {
+    color: var(--eu-yellow);
+    font-weight: 500;
+    text-shadow: 0 0 25px rgba(255,204,0,0.35);
+  }
+
+  .logo-outfit-white {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 500;
+    font-size: 3rem;
+    letter-spacing: 0.04em;
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    z-index: 2;
+    position: relative;
+  }
+  .logo-outfit-white .sep {
+    width: 1.5px;
+    height: 30px;
+    background: var(--eu-yellow);
+    margin: 0 14px;
+    opacity: 0.7;
+  }
+  .logo-outfit-white .eu-badge {
+    color: var(--eu-yellow);
+    font-weight: 300;
+    font-size: 1.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .logo-outfit-blue {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 500;
+    font-size: 3rem;
+    letter-spacing: 0.04em;
+    color: var(--eu-blue);
+    display: flex;
+    align-items: center;
+    z-index: 2;
+    position: relative;
+    text-shadow: 0 0 35px rgba(255,255,255,0.15);
+  }
+  .logo-outfit-blue .sep {
+    width: 1.5px;
+    height: 30px;
+    background: var(--eu-yellow);
+    margin: 0 14px;
+    opacity: 0.8;
+  }
+  .logo-outfit-blue .eu-badge {
+    color: var(--eu-yellow);
+    font-weight: 300;
+    font-size: 1.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-shadow: 0 0 20px rgba(255,204,0,0.35);
+  }
+
+  /* ====================================
+     HERO SHOWCASES
+     ==================================== */
+  .hero {
+    margin-top: 60px;
+    border-radius: 20px;
+    padding: 100px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse 70% 100% at 5% 50%, rgba(0,51,128,0.95) 0%, transparent 52%),
+      radial-gradient(ellipse 45% 130% at 22% 22%, rgba(0,154,73,0.7) 0%, transparent 48%),
+      radial-gradient(ellipse 38% 90% at 42% 75%, rgba(255,108,0,0.6) 0%, transparent 46%),
+      radial-gradient(ellipse 45% 110% at 60% 32%, rgba(206,17,38,0.5) 0%, transparent 48%),
+      radial-gradient(ellipse 55% 130% at 80% 62%, rgba(0,53,128,0.7) 0%, transparent 46%),
+      radial-gradient(ellipse 38% 80% at 95% 28%, rgba(255,204,0,0.45) 0%, transparent 42%),
+      linear-gradient(135deg, #1a2d4d 0%, #1e3352 50%, #1a2844 100%);
+    animation: aurora-breathe 8s ease-in-out infinite alternate;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 400px;
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 50%;
+  }
+
+  .hero-logo {
+    font-family: 'Sora', sans-serif;
+    font-weight: 300;
+    font-size: 5.5rem;
+    letter-spacing: -0.02em;
+    color: var(--white);
+    position: relative;
+    z-index: 1;
+  }
+  .hero-logo .dot-eu {
+    color: var(--eu-yellow);
+    font-weight: 400;
+  }
+
+  .hero-tagline {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    font-size: 1rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-top: 18px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-blue {
+    margin-top: 40px;
+    border-radius: 20px;
+    padding: 100px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse 70% 100% at 5% 50%, rgba(0,51,128,0.95) 0%, transparent 52%),
+      radial-gradient(ellipse 45% 130% at 22% 22%, rgba(0,154,73,0.7) 0%, transparent 48%),
+      radial-gradient(ellipse 38% 90% at 42% 75%, rgba(255,108,0,0.6) 0%, transparent 46%),
+      radial-gradient(ellipse 45% 110% at 60% 32%, rgba(206,17,38,0.5) 0%, transparent 48%),
+      radial-gradient(ellipse 55% 130% at 80% 62%, rgba(0,53,128,0.7) 0%, transparent 46%),
+      radial-gradient(ellipse 38% 80% at 95% 28%, rgba(255,204,0,0.45) 0%, transparent 42%),
+      linear-gradient(135deg, #1a2d4d 0%, #1e3352 50%, #1a2844 100%);
+    animation: aurora-breathe 8s ease-in-out infinite alternate;
+  }
+
+  .hero-blue-logo {
+    font-family: 'Sora', sans-serif;
+    font-weight: 400;
+    font-size: 5.5rem;
+    letter-spacing: -0.02em;
+    color: var(--eu-blue);
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 0 45px rgba(255,255,255,0.15);
+  }
+  .hero-blue-logo .dot-eu {
+    color: var(--eu-yellow);
+    font-weight: 500;
+    text-shadow: 0 0 30px rgba(255,204,0,0.35);
+  }
+
+  /* ====================================
+     SEPARATOR HERO
+     ==================================== */
+  .hero-sep {
+    margin-top: 40px;
+    border-radius: 20px;
+    padding: 100px 40px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse 70% 100% at 5% 50%, rgba(0,51,128,0.95) 0%, transparent 52%),
+      radial-gradient(ellipse 45% 130% at 22% 22%, rgba(0,154,73,0.7) 0%, transparent 48%),
+      radial-gradient(ellipse 38% 90% at 42% 75%, rgba(255,108,0,0.6) 0%, transparent 46%),
+      radial-gradient(ellipse 45% 110% at 60% 32%, rgba(206,17,38,0.5) 0%, transparent 48%),
+      radial-gradient(ellipse 55% 130% at 80% 62%, rgba(0,53,128,0.7) 0%, transparent 46%),
+      radial-gradient(ellipse 38% 80% at 95% 28%, rgba(255,204,0,0.45) 0%, transparent 42%),
+      linear-gradient(135deg, #1a2d4d 0%, #1e3352 50%, #1a2844 100%);
+    animation: aurora-breathe 8s ease-in-out infinite alternate;
+  }
+
+  .hero-sep-logo {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 500;
+    font-size: 5rem;
+    letter-spacing: 0.04em;
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-sep-logo .sep {
+    width: 2px;
+    height: 42px;
+    background: var(--eu-yellow);
+    margin: 0 20px;
+    opacity: 0.7;
+  }
+  .hero-sep-logo .eu-badge {
+    color: var(--eu-yellow);
+    font-weight: 300;
+    font-size: 2.4rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  /* ====================================
+     COLOUR KEY
+     ==================================== */
+  .color-key {
+    margin-top: 60px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .key-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .key-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .key-swatch {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .key-country {
+    font-size: 0.72rem;
+    color: #94a3b8;
+    letter-spacing: 0.02em;
+  }
+
+  @media (max-width: 800px) {
+    .grid { grid-template-columns: 1fr; }
+    body { padding: 30px 20px; }
+    .hero-logo, .hero-blue-logo { font-size: 3rem; }
+    .hero-sep-logo { font-size: 2.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<h1>amleht.eu — Aurora Borealis (Bright Edition)</h1>
+<p class="subtitle">Brightness turned up — the aurora glows</p>
+
+<!-- ========== CONCEPT A — SORA ========== -->
+<h2>Concept A — Sora Wordmark</h2>
+
+<div class="grid">
+
+  <div class="concept aurora-bright-1">
+    <span class="concept-label">A1 — White on Bright Aurora</span>
+    <div class="logo-sora-white">amleht<span class="dot-eu">.eu</span></div>
+    <div class="concept-desc">Full sweep, high luminosity — the colours sing</div>
+  </div>
+
+  <div class="concept aurora-bright-1">
+    <span class="concept-label">A2 — EU Blue on Bright Aurora</span>
+    <div class="logo-sora-blue">amleht<span class="dot-eu">.eu</span></div>
+    <div class="concept-desc">EU blue wordmark glows against the lit aurora</div>
+  </div>
+
+  <div class="concept aurora-bright-2">
+    <span class="concept-label">A3 — White on Luminous Wash</span>
+    <div class="logo-sora-white">amleht<span class="dot-eu">.eu</span></div>
+    <div class="concept-desc">Softer blend, still bright — elegant glow</div>
+  </div>
+
+  <div class="concept aurora-bright-3">
+    <span class="concept-label">A4 — White on Bright Sky Glow</span>
+    <div class="logo-sora-white">amleht<span class="dot-eu">.eu</span></div>
+    <div class="concept-desc">Colours cascade from the top — vivid northern sky</div>
+  </div>
+
+</div>
+
+<!-- ========== CONCEPT D — OUTFIT SEPARATOR ========== -->
+<h2>Concept D — Outfit + Separator</h2>
+
+<div class="grid">
+
+  <div class="concept aurora-bright-1">
+    <span class="concept-label">D1 — White Separator, Bright</span>
+    <div class="logo-outfit-white">
+      amleht<span class="sep"></span><span class="eu-badge">EU</span>
+    </div>
+    <div class="concept-desc">Structural and sovereign on the bright aurora</div>
+  </div>
+
+  <div class="concept aurora-bright-1">
+    <span class="concept-label">D2 — EU Blue Separator, Bright</span>
+    <div class="logo-outfit-blue">
+      amleht<span class="sep"></span><span class="eu-badge">EU</span>
+    </div>
+    <div class="concept-desc">EU blue stands bold against the luminous backdrop</div>
+  </div>
+
+  <div class="concept aurora-bright-2">
+    <span class="concept-label">D3 — White on Luminous Wash</span>
+    <div class="logo-outfit-white">
+      amleht<span class="sep"></span><span class="eu-badge">EU</span>
+    </div>
+    <div class="concept-desc">Softer aurora, clean separator — balanced and bright</div>
+  </div>
+
+  <div class="concept aurora-bright-4">
+    <span class="concept-label">D4 — Animated Bright Aurora</span>
+    <div class="logo-outfit-white">
+      amleht<span class="sep"></span><span class="eu-badge">EU</span>
+    </div>
+    <div class="concept-desc">The bright aurora breathes — alive and luminous</div>
+  </div>
+
+</div>
+
+<!-- ========== COLOUR KEY ========== -->
+<div class="color-key">
+  <h2>Aurora Colours</h2>
+  <div class="key-grid">
+    <div class="key-item">
+      <div class="key-swatch" style="background: #003580;"></div>
+      <span class="key-country">Finland 🇫🇮 (Nebius)</span>
+    </div>
+    <div class="key-item">
+      <div class="key-swatch" style="background: #009A49;"></div>
+      <span class="key-country">Ireland 🇮🇪</span>
+    </div>
+    <div class="key-item">
+      <div class="key-swatch" style="background: #FF6C00;"></div>
+      <span class="key-country">Netherlands 🇳🇱</span>
+    </div>
+    <div class="key-item">
+      <div class="key-swatch" style="background: #CE1126;"></div>
+      <span class="key-country">France 🇫🇷</span>
+    </div>
+    <div class="key-item">
+      <div class="key-swatch" style="background: #003399;"></div>
+      <span class="key-country">EU 🇪🇺 blue</span>
+    </div>
+    <div class="key-item">
+      <div class="key-swatch" style="background: #FFCC00;"></div>
+      <span class="key-country">EU 🇪🇺 gold</span>
+    </div>
+  </div>
+</div>
+
+<!-- ========== HERO SHOWCASES ========== -->
+<h2>Full Showcase — Concept A White</h2>
+<div class="hero">
+  <div class="hero-logo">amleht<span class="dot-eu">.eu</span></div>
+  <div class="hero-tagline">EU Sovereign Multi-Agent Infrastructure Intelligence</div>
+</div>
+
+<h2>Full Showcase — Concept A EU Blue</h2>
+<div class="hero-blue">
+  <div class="hero-blue-logo">amleht<span class="dot-eu">.eu</span></div>
+  <div class="hero-tagline" style="color: rgba(255,255,255,0.4);">EU Sovereign Multi-Agent Infrastructure Intelligence</div>
+</div>
+
+<h2>Full Showcase — Concept D Separator</h2>
+<div class="hero-sep">
+  <div class="hero-sep-logo">
+    amleht<span class="sep"></span><span class="eu-badge">EU</span>
+  </div>
+  <div class="hero-tagline" style="color: rgba(255,255,255,0.4);">EU Sovereign Multi-Agent Infrastructure Intelligence</div>
+</div>
+
+</body>
+</html>

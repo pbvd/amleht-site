@@ -7,13 +7,29 @@
 
 | Field | Value |
 |-------|-------|
-| **Generated** | 2026-02-14 |
+| **Generated** | 2026-02-14 (v1), 2026-02-15 (v2 branding fix, v3 themed) |
 | **Method** | Gamma MCP tool (`generate-presentation`) via Claude Code |
-| **Live URL** | https://gamma.app/docs/uf0qrrf9quird2r |
+| **Live URL (v1 — outdated)** | https://gamma.app/docs/uf0qrrf9quird2r |
+| **Live URL (v2 — outdated)** | https://gamma.app/docs/vy6dq5kd5hllamz |
+| **Live URL (v3 — current)** | https://gamma.app/docs/0ivpjx0pz89rif1 |
 | **Slides** | 14 |
 | **Tone** | Professional |
 | **Audience** | Tech startup co-founder (ex-Stripe, understands platforms) |
 | **Text amount** | Medium |
+
+### v2 Branding Fixes (15 Feb 2026)
+- Company name: "amleht" (not "amleht.io") throughout
+- Website: "amleht.eu" on title and closing slides
+- Founder: "Paul Bloomfield" (not "Andrew van den Berg")
+- Removed specific employer names (no UBS, Deutsche Bank, AWS)
+- Founder bio fully rewritten with correct details
+
+### v3 Aurora Theme (15 Feb 2026)
+- Dark navy (#1A2D4D) / light (#F2F5FA) alternating backgrounds
+- EU blue (#003399) and EU gold (#FFCC00) accent colours
+- Abstract geometric imagery — no stock photos of people
+- No photo on founder slide (placeholder for Paul's photo later)
+- All v2 branding fixes preserved
 
 ## Post-Generation Checklist
 
@@ -153,7 +169,7 @@ Duna and amleht, working together, can capture both sides of this wave: the iden
 
 amleht's platform has been through comprehensive validation:
 
-10 specialised AI agents covering DORA, MiFID II, GDPR, AML, Carbon/CSRD, SAP RISE, IBM Z, and more. 56 reproducible test evidence files across full platform validation — run twice for consistency proof. 100% EU-sovereign inference via Nebius Token Factory running from Helsinki, Finland. 20 years of enterprise infrastructure experience — UBS, Deutsche Bank, AWS — backing every architectural decision.
+10 specialised AI agents covering DORA, MiFID II, GDPR, AML, Carbon/CSRD, SAP RISE, IBM Z, and more. 56 reproducible test evidence files across full platform validation — run twice for consistency proof. 100% EU-sovereign inference via Nebius Token Factory running from Helsinki, Finland. 20 years of enterprise infrastructure experience across banking, cloud, and networking — backing every architectural decision.
 
 The platform is not a concept. It is built, tested, and live at amleht.eu.
 
@@ -161,7 +177,11 @@ The platform is not a concept. It is built, tested, and live at amleht.eu.
 
 ## About the Founder
 
-Andrew van den Berg — Principal Consultant, amleht.io. Based in Amsterdam. 20 years in enterprise infrastructure across banking, cloud, and networking. Former roles at UBS, Deutsche Bank, and AWS (Senior Technical Account Manager). Deep expertise in IBM Z mainframes, SAP landscapes, network architecture, and cloud sovereignty. Currently completing advanced DevOps certification covering Kubernetes, Terraform, CI/CD, and cloud-native architecture.
+Paul Bloomfield — Principal Consultant, amleht.
+
+Based in Amsterdam. 20 years of enterprise infrastructure experience across banking, cloud, and networking, with deep expertise in IBM Z mainframes, SAP landscapes, network architecture, and cloud sovereignty.
+
+Currently completing advanced DevOps certification covering Kubernetes, Terraform, CI/CD, and cloud-native architecture — building the platform engineering foundation that underpins amleht's multi-agent infrastructure.
 
 amleht is named after his mother Thelma — representing will and determination. A third of Duna is held by the Duna Foundation, a non-profit aligned with the company's mission. Both founders build with purpose beyond revenue.
 

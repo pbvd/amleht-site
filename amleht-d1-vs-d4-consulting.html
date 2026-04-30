@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>amleht.eu — D1 vs D4 with Consulting Sub-line</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@200;300;400;500;600;700&family=Outfit:wght@200;300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --eu-blue: #003399;
+    --eu-yellow: #FFCC00;
+    --white: #FFFFFF;
+    --nl-orange: #FF6C00;
+    --ie-green: #009A49;
+    --fr-red: #CE1126;
+    --fi-blue: #003580;
+    --light-grey: #b0bcc8;
+    --lighter-grey: #c8d2dc;
+  }
+
+  body {
+    background: #111827;
+    color: var(--white);
+    font-family: 'Outfit', sans-serif;
+    min-height: 100vh;
+    padding: 60px 40px;
+  }
+
+  h1 {
+    font-weight: 300;
+    font-size: 1.4rem;
+    color: #94a3b8;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .subtitle {
+    color: var(--eu-yellow);
+    font-size: 0.95rem;
+    margin-bottom: 50px;
+    font-weight: 300;
+    letter-spacing: 0.03em;
+  }
+
+  h2 {
+    font-weight: 300;
+    font-size: 1rem;
+    color: #94a3b8;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-top: 60px;
+    margin-bottom: 30px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .concept {
+    border-radius: 16px;
+    padding: 56px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 240px;
+    position: relative;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+  }
+
+  .concept:hover {
+    box-shadow: 0 8px 60px rgba(0,0,0,0.3);
+    transform: translateY(-2px);
+  }
+
+  .concept-label {
+    position: absolute;
+    top: 16px;
+    left: 20px;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+    z-index: 2;
+    color: rgba(255,255,255,0.6);
+  }
+
+  .concept-desc {
+    position: absolute;
+    bottom: 16px;
+    left: 20px;
+    right: 20px;
+    font-size: 0.72rem;
+    letter-spacing: 0.02em;
+    line-height: 1.5;
+    z-index: 2;
+    color: rgba(255,255,255,0.5);
+  }
+
+  /* ====================================
+     ULTRA-BRIGHT AURORA (from previous)
+     ==================================== */
+
+  .aurora-static {
+    background:
+      radial-gradient(ellipse 85% 130% at -5% 50%, rgba(0,53,128,1) 0%, rgba(0,80,180,0.4) 40%, transparent 60%),
+      radial-gradient(ellipse 55% 160% at 18% 20%, rgba(0,154,73,0.95) 0%, rgba(0,200,90,0.3) 40%, transparent 58%),
+      radial-gradient(ellipse 50% 110% at 40% 75%, rgba(255,108,0,0.9) 0%, rgba(255,140,40,0.3) 40%, transparent 58%),
+      radial-gradient(ellipse 55% 130% at 60% 30%, rgba(206,17,38,0.8) 0%, rgba(230,50,70,0.25) 40%, transparent 58%),
+      radial-gradient(ellipse 65% 150% at 80% 60%, rgba(0,53,128,0.9) 0%, rgba(0,80,180,0.3) 40%, transparent 55%),
+      radial-gradient(ellipse 45% 110% at 96% 22%, rgba(255,204,0,0.75) 0%, rgba(255,220,60,0.2) 40%, transparent 55%),
+      linear-gradient(135deg, #243b5e 0%, #2a4468 50%, #223758 100%);
+  }
+
+  .aurora-animated {
+    background:
+      radial-gradient(ellipse 85% 130% at -5% 50%, rgba(0,53,128,1) 0%, rgba(0,80,180,0.4) 40%, transparent 60%),
+      radial-gradient(ellipse 55% 160% at 18% 20%, rgba(0,154,73,0.95) 0%, rgba(0,200,90,0.3) 40%, transparent 58%),
+      radial-gradient(ellipse 50% 110% at 40% 75%, rgba(255,108,0,0.9) 0%, rgba(255,140,40,0.3) 40%, transparent 58%),
+      radial-gradient(ellipse 55% 130% at 60% 30%, rgba(206,17,38,0.8) 0%, rgba(230,50,70,0.25) 40%, transparent 58%),
+      radial-gradient(ellipse 65% 150% at 80% 60%, rgba(0,53,128,0.9) 0%, rgba(0,80,180,0.3) 40%, transparent 55%),
+      radial-gradient(ellipse 45% 110% at 96% 22%, rgba(255,204,0,0.75) 0%, rgba(255,220,60,0.2) 40%, transparent 55%),
+      linear-gradient(135deg, #243b5e 0%, #2a4468 50%, #223758 100%);
+    animation: aurora-breathe 7s ease-in-out infinite alternate;
+  }
+
+  @keyframes aurora-breathe {
+    0% { filter: brightness(1) saturate(1); }
+    33% { filter: brightness(1.15) saturate(1.12); }
+    66% { filter: brightness(1.05) saturate(1.05); }
+    100% { filter: brightness(0.95) saturate(0.97); }
+  }
+
+  /* ====================================
+     LOGO BLOCKS
+     ==================================== */
+
+  .logo-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 2;
+    position: relative;
+  }
+
+  /* Main wordmark with separator */
+  .logo-main {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 500;
+    font-size: 3rem;
+    letter-spacing: 0.04em;
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.25);
+  }
+
+  .logo-main .sep {
+    width: 2px;
+    height: 30px;
+    background: var(--eu-yellow);
+    margin: 0 14px;
+    opacity: 0.8;
+    box-shadow: 0 0 10px rgba(255,204,0,0.3);
+  }
+
+  .logo-main .eu-badge {
+    color: var(--eu-yellow);
+    font-weight: 300;
+    font-size: 1.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-shadow: 0 2px 15px rgba(0,0,0,0.2);
+  }
+
+  /* Consulting sub-line */
+  .logo-consulting {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    letter-spacing: 0.18em;
+    color: var(--light-grey);
+    margin-top: 6px;
+  }
+
+  .logo-consulting-sm { font-size: 0.85rem; }
+  .logo-consulting-md { font-size: 1rem; }
+  .logo-consulting-lg { font-size: 1.1rem; }
+
+  /* Lighter grey variant */
+  .logo-consulting-lighter { color: var(--lighter-grey); }
+
+  /* Even more spaced variant */
+  .logo-consulting-wide { letter-spacing: 0.3em; }
+
+  /* Aligned left under "amleht" */
+  .logo-block-left {
+    align-items: flex-start;
+  }
+
+  /* EU blue main variant */
+  .logo-main-blue {
+    color: var(--eu-blue);
+    text-shadow: 0 0 40px rgba(255,255,255,0.25), 0 2px 10px rgba(0,0,0,0.15);
+  }
+  .logo-main-blue .sep {
+    box-shadow: 0 0 14px rgba(255,204,0,0.4);
+    opacity: 0.9;
+  }
+  .logo-main-blue .eu-badge {
+    text-shadow: 0 0 25px rgba(255,204,0,0.4), 0 2px 10px rgba(0,0,0,0.15);
+  }
+
+  /* ====================================
+     HERO SHOWCASES
+     ==================================== */
+
+  .hero {
+    margin-top: 60px;
+    border-radius: 20px;
+    padding: 100px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background:
+      radial-gradient(ellipse 80% 120% at 2% 48%, rgba(0,53,128,1) 0%, rgba(0,80,180,0.38) 38%, transparent 58%),
+      radial-gradient(ellipse 52% 145% at 19% 16%, rgba(0,154,73,0.95) 0%, rgba(0,200,90,0.28) 38%, transparent 56%),
+      radial-gradient(ellipse 46% 100% at 40% 80%, rgba(255,108,0,0.9) 0%, rgba(255,140,40,0.28) 38%, transparent 56%),
+      radial-gradient(ellipse 52% 120% at 58% 28%, rgba(206,17,38,0.8) 0%, rgba(230,50,70,0.22) 38%, transparent 56%),
+      radial-gradient(ellipse 62% 140% at 80% 60%, rgba(0,53,128,0.9) 0%, rgba(0,80,180,0.28) 38%, transparent 54%),
+      radial-gradient(ellipse 42% 100% at 96% 22%, rgba(255,204,0,0.75) 0%, rgba(255,220,60,0.2) 38%, transparent 52%),
+      linear-gradient(135deg, #243b5e 0%, #2a4468 50%, #223758 100%);
+  }
+
+  .hero.animated {
+    animation: aurora-breathe 7s ease-in-out infinite alternate;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 420px;
+    height: 420px;
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 50%;
+  }
+
+  .hero-main {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 500;
+    font-size: 5rem;
+    letter-spacing: 0.04em;
+    color: var(--white);
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 3px 35px rgba(0,0,0,0.35);
+  }
+  .hero-main .sep {
+    width: 2.5px;
+    height: 44px;
+    background: var(--eu-yellow);
+    margin: 0 20px;
+    opacity: 0.85;
+    box-shadow: 0 0 16px rgba(255,204,0,0.4);
+  }
+  .hero-main .eu-badge {
+    color: var(--eu-yellow);
+    font-weight: 300;
+    font-size: 2.4rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .hero-consulting {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    font-size: 1.3rem;
+    letter-spacing: 0.22em;
+    color: var(--light-grey);
+    margin-top: 8px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-tagline {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    font-size: 0.85rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-top: 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  @media (max-width: 800px) {
+    .grid { grid-template-columns: 1fr; }
+    body { padding: 30px 20px; }
+    .hero-main { font-size: 2.8rem; }
+    .hero-consulting { font-size: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<h1>amleht.eu — D1 vs D4 with Consulting</h1>
+<p class="subtitle">Comparing static and animated with the consulting sub-line</p>
+
+<!-- ========== D1 vs D4 SIDE BY SIDE ========== -->
+<h2>D1 (Static) vs D4 (Animated) — Direct Comparison</h2>
+
+<div class="grid">
+
+  <div class="concept aurora-static">
+    <span class="concept-label">D1 — Static</span>
+    <div class="logo-block">
+      <div class="logo-main">
+        amleht<span class="sep"></span><span class="eu-badge">EU</span>
+      </div>
+      <div class="logo-consulting logo-consulting-sm">amleht-consulting</div>
+    </div>
+    <div class="concept-desc">Clean, still, professional — the aurora is the backdrop</div>
+  </div>
+
+  <div class="concept aurora-animated">
+    <span class="concept-label">D4 — Animated</span>
+    <div class="logo-block">
+      <div class="logo-main">
+        amleht<span class="sep"></span><span class="eu-badge">EU</span>
+      </div>
+      <div class="logo-consulting logo-consulting-sm">amleht-consulting</div>
+    </div>
+    <div class="concept-desc">The aurora breathes — alive, dynamic, European</div>
+  </div>
+
+</div>
+
+<!-- ========== CONSULTING SUB-LINE SIZES ========== -->
+<h2>Consulting Sub-line — Size Variations</h2>
+
+<div class="grid">
+
+  <div class="concept aurora-static">
+    <span class="concept-label">Small (0.85rem)</span>
+    <div class="logo-block">
+      <div class="logo-main">
+        amleht<span class="sep"></span><span class="eu-badge">EU</span>
+      </div>
+      <div class="logo-consulting logo-consulting-sm">amleht-consulting</div>
+    </div>
+    <div class="concept-desc">Subtle — consulting is secondary to the brand</div>
+  </div>
+
+  <div class="concept aurora-static">
+    <span class="concept-label">Medium (1rem)</span>
+    <div class="logo-block">
+      <div class="logo-main">
+        amleht<span class="sep"></span><span class="eu-badge">EU</span>
+      </div>
+      <div class="logo-consulting logo-consulting-md">amleht-consulting</div>
+    </div>
+    <div class="concept-desc">Balanced — consulting has presence but doesn't compete</div>
+  </div>
+
+  <div class="concept aurora-static">
+    <span class="concept-label">Larger (1.1rem) + Wider Spacing</span>
+    <div class="logo-block">
+      <div class="logo-main">
+        amleht<span class="sep"></span><span class="eu-badge">EU</span>
+      </div>
+      <div class="logo-consulting logo-consulting-lg logo-consulting-wide">amleht-consulting</div>
+    </div>
+    <div class="concept-desc">More prominent — consulting arm stands on its own</div>
+  </div>
+
+  <div class="concept aurora-static">
+    <span class="concept-label">Medium + Lighter Grey</span>
+    <div class="logo-block">
+      <div class="logo-main">
+        amleht<span class="sep"></span><span class="eu-badge">EU</span>
+      </div>
+      <div class="logo-consulting logo-consulting-md logo-consulting-lighter">amleht-consulting</div>
+    </div>
+    <div class="concept-desc">Brighter grey — more visible on the aurora backdrop</div>
+  </div>
+
+</div>
+
+<!-- ========== ANIMATED VERSIONS ========== -->
+<h2>D4 Animated — With Consulting Sizes</h2>
+
+<div class="grid">
+
+  <div class="concept aurora-animated">
+    <span class="concept-label">D4 — Small Consulting</span>
+    <div class="logo-block">
+      <div class="logo-main">
+        amleht<span class="sep"></span><span class="eu-badge">EU</span>
+      </div>
+      <div class="logo-consulting logo-consulting-sm">amleht-consulting</div>
+    </div>
+  </div>
+
+  <div class="concept aurora-animated">
+    <span class="concept-label">D4 — Medium Consulting</span>
+    <div class="logo-block">
+      <div class="logo-main">
+        amleht<span class="sep"></span><span class="eu-badge">EU</span>
+      </div>
+      <div class="logo-consulting logo-consulting-md logo-consulting-lighter">amleht-consulting</div>
+    </div>
+  </div>
+
+  <div class="concept aurora-animated">
+    <span class="concept-label">D4 — EU Blue Wordmark</span>
+    <div class="logo-block">
+      <div class="logo-main logo-main-blue">
+        amleht<span class="sep"></span><span class="eu-badge">EU</span>
+      </div>
+      <div class="logo-consulting logo-consulting-sm">amleht-consulting</div>
+    </div>
+  </div>
+
+  <div class="concept aurora-animated">
+    <span class="concept-label">D4 — EU Blue + Lighter Grey</span>
+    <div class="logo-block">
+      <div class="logo-main logo-main-blue">
+        amleht<span class="sep"></span><span class="eu-badge">EU</span>
+      </div>
+      <div class="logo-consulting logo-consulting-md logo-consulting-lighter">amleht-consulting</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ========== HERO: D1 STATIC ========== -->
+<h2>Full Showcase — D1 Static</h2>
+<div class="hero">
+  <div class="hero-main">
+    amleht<span class="sep"></span><span class="eu-badge">EU</span>
+  </div>
+  <div class="hero-consulting">amleht-consulting</div>
+  <div class="hero-tagline">EU Sovereign Multi-Agent Infrastructure Intelligence</div>
+</div>
+
+<!-- ========== HERO: D4 ANIMATED ========== -->
+<h2>Full Showcase — D4 Animated</h2>
+<div class="hero animated">
+  <div class="hero-main">
+    amleht<span class="sep"></span><span class="eu-badge">EU</span>
+  </div>
+  <div class="hero-consulting">amleht-consulting</div>
+  <div class="hero-tagline">EU Sovereign Multi-Agent Infrastructure Intelligence</div>
+</div>
+
+<!-- ========== HERO: D4 EU BLUE ========== -->
+<h2>Full Showcase — D4 EU Blue Variant</h2>
+<div class="hero animated">
+  <div class="hero-main" style="color: var(--eu-blue); text-shadow: 0 0 50px rgba(255,255,255,0.25), 0 3px 15px rgba(0,0,0,0.2);">
+    amleht<span class="sep"></span><span class="eu-badge" style="text-shadow: 0 0 30px rgba(255,204,0,0.45);">EU</span>
+  </div>
+  <div class="hero-consulting" style="color: var(--lighter-grey);">amleht-consulting</div>
+  <div class="hero-tagline">EU Sovereign Multi-Agent Infrastructure Intelligence</div>
+</div>
+
+</body>
+</html>

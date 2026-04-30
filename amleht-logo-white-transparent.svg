@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 120" width="600" height="120">
+  <defs><style>@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;500&amp;display=swap');</style></defs>
+  <text x="30" y="68" font-family="Outfit, sans-serif" font-weight="500" font-size="62" letter-spacing="2.5" fill="#ffffff">amleht</text>
+  <rect x="300" y="39" width="2.5" height="34" rx="1" fill="#FFCC00" opacity="0.85"/>
+  <text x="318" y="65" font-family="Outfit, sans-serif" font-weight="300" font-size="29" letter-spacing="6" fill="#FFCC00">EU</text>
+  <text x="30" y="102" font-family="Outfit, sans-serif" font-weight="300" font-size="10.7" letter-spacing="3" fill="rgba(255,255,255,0.45)">EU SOVEREIGN MULTI-AGENT INFRASTRUCTURE INTELLIGENCE</text>
+</svg>
