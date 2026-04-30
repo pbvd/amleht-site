@@ -416,12 +416,12 @@ const WORDLIST = [
 
 // Simple hash — no crypto API needed, works in all browsers
 function simpleHash(str) {
-  let hash = 0x811c9dc5;
+  let h = 0;
+  const MOD = 1000000007;
   for (let i = 0; i < str.length; i++) {
-    hash ^= str.charCodeAt(i);
-    hash = (hash * 0x01000193) >>> 0;
+    h = (h * 31 + str.charCodeAt(i)) % MOD;
   }
-  return hash;
+  return h;
 }
 
 function getCurrentSlot() {
