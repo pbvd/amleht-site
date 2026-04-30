@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Three Chain Breaks — amleht</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;600;700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a0a;
+    --paper: #f2f0eb;
+    --red: #c8281e;
+    --amber: #d4820a;
+    --chain: #1a3a5c;
+    --rule: #c8281e;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 60px 80px;
+  }
+
+  /* HEADER */
+  .masthead {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-top: 3px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    padding: 16px 0;
+    margin-bottom: 48px;
+  }
+
+  .masthead-left {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .brand {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: -0.5px;
+    color: var(--chain);
+  }
+
+  .brand span {
+    color: var(--red);
+  }
+
+  .classification {
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    color: var(--red);
+    text-transform: uppercase;
+  }
+
+  .masthead-right {
+    text-align: right;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: #666;
+    line-height: 1.8;
+  }
+
+  /* TITLE BLOCK */
+  .title-block {
+    margin-bottom: 48px;
+    position: relative;
+    padding-left: 24px;
+  }
+
+  .title-block::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--red);
+  }
+
+  .doc-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    font-family: var(--mono);
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--ink);
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+  }
+
+  h1 .sub {
+    display: block;
+    font-size: 14px;
+    font-weight: 300;
+    letter-spacing: 0;
+    color: #444;
+    margin-top: 8px;
+    font-family: var(--sans);
+  }
+
+  .lede {
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.7;
+    color: #222;
+    max-width: 680px;
+    border-top: 1px solid #ccc;
+    padding-top: 16px;
+    margin-top: 16px;
+  }
+
+  .lede strong {
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  /* CONTEXT BANNER */
+  .context-banner {
+    background: var(--chain);
+    color: #e8e4dc;
+    padding: 20px 28px;
+    margin-bottom: 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+  }
+
+  .context-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .context-label {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #8aa0b8;
+  }
+
+  .context-value {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: #e8e4dc;
+  }
+
+  .context-value.alert {
+    color: #f0b429;
+  }
+
+  /* BREAK SECTIONS */
+  .breaks-header {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 24px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .break-card {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 0;
+    margin-bottom: 2px;
+    border: 1px solid #ddd;
+    background: white;
+    opacity: 0;
+    animation: slideIn 0.5s ease forwards;
+  }
+
+  .break-card:nth-child(2) { animation-delay: 0.15s; }
+  .break-card:nth-child(3) { animation-delay: 0.3s; }
+  .break-card:nth-child(4) { animation-delay: 0.45s; }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-12px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .break-number {
+    background: var(--red);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 0;
+  }
+
+  .break-num-text {
+    font-family: var(--mono);
+    font-size: 32px;
+    font-weight: 700;
+    color: white;
+    line-height: 1;
+  }
+
+  .break-num-label {
+    font-family: var(--mono);
+    font-size: 7px;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .break-content {
+    padding: 20px 24px;
+  }
+
+  .break-type {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 6px;
+  }
+
+  .break-title {
+    font-family: var(--mono);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--chain);
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .break-transition {
+    font-size: 11px;
+    font-family: var(--mono);
+    color: #666;
+    margin-bottom: 10px;
+    padding: 6px 10px;
+    background: #f5f3ee;
+    border-left: 2px solid var(--amber);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .arrow {
+    color: var(--red);
+    font-weight: 700;
+  }
+
+  .break-body {
+    font-size: 13px;
+    color: #333;
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+
+  .dora-tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    padding: 3px 8px;
+    background: var(--chain);
+    color: white;
+    margin-right: 4px;
+  }
+
+  .dora-tag.amber {
+    background: var(--amber);
+  }
+
+  /* THE GAP */
+  .gap-section {
+    margin: 40px 0;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 36px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .gap-section::before {
+    content: 'GAP';
+    position: absolute;
+    right: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--mono);
+    font-size: 120px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.04);
+    line-height: 1;
+  }
+
+  .gap-label {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 16px;
+  }
+
+  .gap-question {
+    font-family: var(--mono);
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 20px;
+    max-width: 600px;
+  }
+
+  .gap-question em {
+    font-style: italic;
+    font-weight: 300;
+    color: #aaa;
+  }
+
+  .gap-answer {
+    font-size: 14px;
+    color: #ccc;
+    line-height: 1.7;
+    max-width: 580px;
+  }
+
+  .gap-answer strong {
+    color: white;
+    font-weight: 600;
+  }
+
+  /* SOLUTION */
+  .solution-section {
+    margin-bottom: 40px;
+  }
+
+  .solution-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .solution-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #888;
+  }
+
+  .solution-rule {
+    flex: 1;
+    height: 1px;
+    background: #ddd;
+  }
+
+  .solution-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2px;
+  }
+
+  .solution-cell {
+    background: white;
+    border: 1px solid #e0ddd8;
+    padding: 20px;
+  }
+
+  .solution-cell-label {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 8px;
+  }
+
+  .solution-cell-title {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--chain);
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .solution-cell-body {
+    font-size: 11px;
+    color: #555;
+    line-height: 1.6;
+  }
+
+  /* PROOF */
+  .proof-bar {
+    background: #eceae4;
+    border: 1px solid #ddd;
+    padding: 20px 28px;
+    margin-bottom: 40px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .proof-icon {
+    font-family: var(--mono);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--chain);
+  }
+
+  .proof-text {
+    font-size: 13px;
+    color: #333;
+    line-height: 1.6;
+  }
+
+  .proof-text strong {
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  /* CLOSING STATEMENT */
+  .closing {
+    border-top: 3px solid var(--ink);
+    padding-top: 24px;
+    margin-bottom: 48px;
+  }
+
+  .closing-quote {
+    font-family: var(--mono);
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--ink);
+    max-width: 720px;
+  }
+
+  .closing-quote strong {
+    font-weight: 700;
+    color: var(--chain);
+  }
+
+  /* FOOTER */
+  .footer {
+    border-top: 1px solid #ccc;
+    padding-top: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-left {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: #888;
+    line-height: 1.8;
+  }
+
+  .footer-right {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: #aaa;
+    text-align: right;
+    font-style: italic;
+  }
+
+  /* TAG ROW */
+  .tag-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+
+  .tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 1px;
+    padding: 4px 10px;
+    border: 1px solid #ccc;
+    color: #666;
+  }
+
+  .tag.live {
+    border-color: var(--red);
+    color: var(--red);
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="masthead">
+    <div class="masthead-left">
+      <div class="brand">aml<span>e</span>ht</div>
+      <div class="classification">Signal Intelligence Series — SIG-037</div>
+    </div>
+    <div class="masthead-right">
+      ISSUED: 28 APRIL 2026<br>
+      CLASSIFICATION: TIER I STRATEGIC<br>
+      DISTRIBUTION: RESTRICTED<br>
+      REF: KfW / DEKABANK / DORA ART.11
+    </div>
+  </div>
+
+  <div class="title-block">
+    <div class="doc-label">Regulatory Intelligence Brief</div>
+    <h1>The Three<br>Chain Breaks
+      <span class="sub">KfW's live tokenized bond infrastructure migration — and the DORA attestation gap no one has closed</span>
+    </h1>
+    <p class="lede">
+      KfW Bankengruppe is actively switching blockchain infrastructure, registrar, and payment rail on a <strong>live, regulated tokenized bond</strong> — simultaneously. Under DORA Art.11, each transition is an ICT continuity event. Under Art.17, any degradation is reportable. <strong>The immutable chain-of-custody attestation for all three transitions does not exist anywhere in their described stack.</strong>
+    </p>
+  </div>
+
+  <div class="context-banner">
+    <div class="context-item">
+      <span class="context-label">Issuer</span>
+      <span class="context-value">KfW Bankengruppe</span>
+    </div>
+    <div class="context-item">
+      <span class="context-label">Receiving Registrar</span>
+      <span class="context-value alert">DekaBank — Qivalis Member</span>
+    </div>
+    <div class="context-item">
+      <span class="context-label">Regulatory Frame</span>
+      <span class="context-value">DORA Art.11 + Art.17 / BaFin</span>
+    </div>
+    <div class="context-item">
+      <span class="context-label">Chain Migration</span>
+      <span class="context-value">Polygon → SWIAT / RL1</span>
+    </div>
+    <div class="context-item">
+      <span class="context-label">Registrar Migration</span>
+      <span class="context-value">Cashlink → DekaBank</span>
+    </div>
+    <div class="context-item">
+      <span class="context-label">Payment Rail Migration</span>
+      <span class="context-value">Bundesbank → Pontes / T2</span>
+    </div>
+  </div>
+
+  <div class="breaks-header">The Three Breaks — Each a DORA Art.11 Continuity Event</div>
+
+  <div class="break-card">
+    <div class="break-number">
+      <div class="break-num-text">01</div>
+      <div class="break-num-label">BREAK</div>
+    </div>
+    <div class="break-content">
+      <div class="break-type">Registrar Migration</div>
+      <div class="break-title">Custodial Chain-of-Custody Transfer</div>
+      <div class="break-transition">
+        <span>Cashlink</span>
+        <span class="arrow">→</span>
+        <span>DekaBank</span>
+      </div>
+      <div class="break-body">
+        Ownership register transfers mid-lifecycle from a fintech registrar to a regulated bank. Every bondholder record, every beneficial ownership entry must arrive at DekaBank with a verifiable, timestamped chain of custody. An auditor examining this for BaFin or ECB needs immutable evidence of the exact state at transfer — what was on chain, under which key, at which block height.
+      </div>
+      <div>
+        <span class="dora-tag">DORA Art.11</span>
+        <span class="dora-tag amber">ICT Continuity</span>
+        <span class="dora-tag">Chain-of-Custody</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="break-card">
+    <div class="break-number">
+      <div class="break-num-text">02</div>
+      <div class="break-num-label">BREAK</div>
+    </div>
+    <div class="break-content">
+      <div class="break-type">Infrastructure Migration</div>
+      <div class="break-title">Blockchain Layer Sovereignty Switch</div>
+      <div class="break-transition">
+        <span>Polygon (US-domiciled)</span>
+        <span class="arrow">→</span>
+        <span>SWIAT / RL1 (EU-sovereign)</span>
+      </div>
+      <div class="break-body">
+        The underlying ledger changes. Smart contracts migrate. Every state root, every ownership proof changes address space. This is not a backup — it is a live migration of a regulated security between infrastructures. The DORA-compliant record of what existed pre-migration and what reconstituted post-migration must be attested independently of either chain. Neither Polygon nor RL1 can self-attest their own migration integrity.
+      </div>
+      <div>
+        <span class="dora-tag">DORA Art.11</span>
+        <span class="dora-tag amber">Sovereignty Event</span>
+        <span class="dora-tag">Pre/Post State Attestation</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="break-card">
+    <div class="break-number">
+      <div class="break-num-text">03</div>
+      <div class="break-num-label">BREAK</div>
+    </div>
+    <div class="break-content">
+      <div class="break-type">Payment Rail Migration</div>
+      <div class="break-title">ECB Settlement Bridge Transition</div>
+      <div class="break-transition">
+        <span>Deutsche Bundesbank trigger solution</span>
+        <span class="arrow">→</span>
+        <span>Eurosystem Pontes / TARGET2</span>
+      </div>
+      <div class="break-body">
+        Coupon and redemption payments move from Bundesbank's trigger solution to Eurosystem Pontes — the DLT-to-TARGET2 bridge. Every payment event now has a dual record: a DLT timestamp and a T2 settlement confirmation. The compliance obligation is cross-referencing these two records into a single, immutable audit artefact. Pontes provides the bridge. It does not provide the attestation.
+      </div>
+      <div>
+        <span class="dora-tag">DORA Art.17</span>
+        <span class="dora-tag amber">ECB Settlement</span>
+        <span class="dora-tag">Cross-Chain Reference</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="gap-section">
+    <div class="gap-label">The Unasked Question</div>
+    <div class="gap-question">
+      Who attests the integrity of all three breaks — <em>independently, immutably, and in a jurisdiction that survives any of the three infrastructures failing?</em>
+    </div>
+    <div class="gap-answer">
+      In traditional markets, the answer is an independent CSD with geographically distributed mirrors and regulatory-grade audit logs. In today's tokenized bond architecture, <strong>that layer does not exist.</strong> KfW's own test exposes the absence. The 12 banks of Qivalis will face the same question at scale the moment the Qivalis stablecoin moves to production.
+    </div>
+  </div>
+
+  <div class="solution-section">
+    <div class="solution-header">
+      <div class="solution-label">The amleht Response — Agent XII</div>
+      <div class="solution-rule"></div>
+    </div>
+    <div class="solution-grid">
+      <div class="solution-cell">
+        <div class="solution-cell-label">Break 01 Response</div>
+        <div class="solution-cell-title">Registrar Transfer Verification Report</div>
+        <div class="solution-cell-body">Agent XII writes an immutable Hyperledger Fabric Verification Report timestamping the pre-transfer state under Cashlink and the post-transfer reconstitution under DekaBank. Survives failure of either registrar. Readable by BaFin auditors without access to either party's systems.</div>
+      </div>
+      <div class="solution-cell">
+        <div class="solution-cell-label">Break 02 Response</div>
+        <div class="solution-cell-title">Infrastructure Migration Attestation</div>
+        <div class="solution-cell-body">Agent XII attests the pre-migration state root on Polygon and the post-migration reconstitution on RL1, writing a chain-bridging Verification Report to the compliance chain — an infrastructure entirely independent of both Polygon and RL1. EU-sovereign inference via Nebius B.V. Netherlands. Zero US jurisdictional exposure.</div>
+      </div>
+      <div class="solution-cell">
+        <div class="solution-cell-label">Break 03 Response</div>
+        <div class="solution-cell-title">DLT × ECB Settlement Cross-Reference</div>
+        <div class="solution-cell-body">Agent XII ingests DLT payment events and Pontes settlement confirmations, producing a cross-referenced Verification Report that timestamps both records against the compliance chain. Every coupon, every redemption — a single immutable audit artefact for regulatory examination.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="proof-bar">
+    <div class="proof-icon">⬡</div>
+    <div class="proof-text">
+      <strong>DekaBank is simultaneously Qivalis founding member #9 and receiving registrar in KfW's live DORA test.</strong> They now carry two live regulatory attestation obligations. Agent XII is a single deployment that closes both — the Qivalis per-member stablecoin audit trail and the KfW bond migration chain-of-custody — from one EU-sovereign compliance chain.
+    </div>
+  </div>
+
+  <div class="closing">
+    <div class="closing-quote">
+      "KfW asked: <em>can tokenized securities survive their own infrastructure failure?</em><br>
+      The deeper question is: <strong>can they prove they survived it — to a regulator, under examination, five years later?</strong><br>
+      That proof requires an attestation layer independent of every infrastructure that failed.<br>
+      That layer is <strong>amleht Agent XII.</strong>"
+    </div>
+
+    <div class="tag-row">
+      <span class="tag live">LIVE PRODUCTION EVENT</span>
+      <span class="tag">KfW BANKENGRUPPE</span>
+      <span class="tag">DEKABANK</span>
+      <span class="tag">QIVALIS MEMBER</span>
+      <span class="tag">DORA ART.11 / ART.17</span>
+      <span class="tag">HYPERLEDGER FABRIC</span>
+      <span class="tag">NEBIUS B.V. EU-SOVEREIGN</span>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-left">
+      amleht — EU-Sovereign Multi-Agent Compliance Platform<br>
+      Amsterdam, Netherlands · Nebius B.V. Sovereign Inference · AWS eu-north-1<br>
+      In memory of Thelma.
+    </div>
+    <div class="footer-right">
+      SIG-037 · 28 April 2026<br>
+      Confidential — Restricted Distribution
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

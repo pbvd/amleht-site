@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>amleht — Executive Briefing for Guillaume Princen</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0d1f35;
+    --gold: #c9a84c;
+    --gold-light: #e8d5a0;
+    --cream: #faf8f3;
+    --warm-white: #f5f2ea;
+    --ink: #1a1a1a;
+    --mid: #4a4a4a;
+    --light: #888;
+    --rule: rgba(201,168,76,0.4);
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --mono: 'DM Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  /* COVER PAGE */
+  .cover {
+    min-height: 100vh;
+    background: var(--navy);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 60px 80px;
+    position: relative;
+    overflow: hidden;
+    page-break-after: always;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0;
+    width: 3px;
+    background: linear-gradient(to bottom, var(--gold), transparent 60%);
+  }
+
+  .cover::after {
+    content: 'amleht';
+    position: absolute;
+    right: 80px;
+    bottom: 100px;
+    font-family: var(--serif);
+    font-size: 200px;
+    font-weight: 300;
+    color: rgba(201,168,76,0.04);
+    letter-spacing: -8px;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .cover-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .cover-brand {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gold);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+  }
+
+  .cover-ref {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: rgba(255,255,255,0.3);
+    text-align: right;
+    line-height: 1.8;
+  }
+
+  .cover-middle {
+    max-width: 680px;
+  }
+
+  .cover-eyebrow {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.7;
+    margin-bottom: 32px;
+  }
+
+  .cover-title {
+    font-family: var(--serif);
+    font-size: 64px;
+    font-weight: 300;
+    line-height: 1.1;
+    color: white;
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+  }
+
+  .cover-title em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+
+  .cover-subtitle {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 48px;
+    line-height: 1.5;
+  }
+
+  .cover-rule {
+    width: 80px;
+    height: 1px;
+    background: var(--gold);
+    margin-bottom: 32px;
+  }
+
+  .cover-lede {
+    font-size: 15px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.8;
+    max-width: 560px;
+  }
+
+  .cover-lede strong {
+    color: white;
+    font-weight: 500;
+  }
+
+  .cover-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 24px;
+  }
+
+  .cover-addressee {
+    color: rgba(255,255,255,0.4);
+    font-size: 11px;
+    font-family: var(--mono);
+    line-height: 1.8;
+  }
+
+  .cover-addressee span {
+    display: block;
+    color: rgba(255,255,255,0.7);
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+
+  .cover-signals {
+    display: flex;
+    gap: 6px;
+  }
+
+  .cover-sig-pill {
+    font-family: var(--mono);
+    font-size: 9px;
+    padding: 4px 10px;
+    border: 1px solid rgba(201,168,76,0.3);
+    color: var(--gold);
+    letter-spacing: 1px;
+  }
+
+  /* MAIN CONTENT */
+  .main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 80px 80px;
+  }
+
+  /* SECTION DIVIDERS */
+  .section {
+    margin-bottom: 72px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+
+  .section-number {
+    font-family: var(--serif);
+    font-size: 48px;
+    font-weight: 300;
+    color: var(--gold);
+    opacity: 0.4;
+    line-height: 1;
+    min-width: 36px;
+  }
+
+  .section-meta {
+    flex: 1;
+  }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--light);
+    margin-bottom: 4px;
+  }
+
+  .section-title {
+    font-family: var(--serif);
+    font-size: 32px;
+    font-weight: 400;
+    color: var(--navy);
+    line-height: 1.2;
+  }
+
+  .section-rule {
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  /* PROSE */
+  .prose {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--mid);
+    max-width: 720px;
+  }
+
+  .prose p {
+    margin-bottom: 16px;
+  }
+
+  .prose strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .prose em {
+    font-style: italic;
+    color: var(--mid);
+  }
+
+  /* PULL QUOTE */
+  .pull-quote {
+    border-left: 3px solid var(--gold);
+    padding: 20px 28px;
+    margin: 32px 0;
+    background: white;
+  }
+
+  .pull-quote p {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--navy);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .pull-quote cite {
+    display: block;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--light);
+    margin-top: 12px;
+    font-style: normal;
+  }
+
+  /* SIGNAL CARDS */
+  .signal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin: 32px 0;
+  }
+
+  .signal-card {
+    background: white;
+    border: 1px solid #e8e4da;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .signal-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--gold);
+  }
+
+  .signal-card.tier1::before {
+    background: linear-gradient(to right, var(--gold), #e8a020);
+  }
+
+  .signal-card-sig {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .signal-card-title {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--navy);
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+
+  .signal-card-body {
+    font-size: 12px;
+    color: var(--mid);
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+
+  .signal-card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .tag {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 1px;
+    padding: 3px 8px;
+    border: 1px solid #ddd;
+    color: #888;
+  }
+
+  .tag.hot {
+    border-color: rgba(201,168,76,0.5);
+    color: var(--gold);
+  }
+
+  /* MARKET DATA BAND */
+  .data-band {
+    background: var(--navy);
+    padding: 24px 32px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 0;
+    margin: 32px 0;
+  }
+
+  .data-item {
+    padding: 0 20px;
+    border-right: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .data-item:first-child { padding-left: 0; }
+  .data-item:last-child { border-right: none; }
+
+  .data-label {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 6px;
+  }
+
+  .data-value {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 300;
+    color: white;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .data-value span {
+    color: var(--gold);
+  }
+
+  .data-context {
+    font-size: 10px;
+    color: rgba(255,255,255,0.35);
+  }
+
+  /* COMPLIANCE TABLE */
+  .compliance-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 12px;
+  }
+
+  .compliance-table th {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--light);
+    text-align: left;
+    padding: 8px 16px;
+    border-bottom: 1px solid var(--rule);
+    font-weight: 400;
+  }
+
+  .compliance-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f0ece2;
+    color: var(--mid);
+    vertical-align: top;
+  }
+
+  .compliance-table tr:hover td {
+    background: rgba(201,168,76,0.04);
+  }
+
+  .compliance-table .layer {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--light);
+  }
+
+  .compliance-table .agent {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--navy);
+  }
+
+  .compliance-table .req {
+    color: var(--ink);
+    font-weight: 400;
+  }
+
+  /* THREAD DIAGRAM */
+  .thread-block {
+    background: white;
+    border: 1px solid #e8e4da;
+    padding: 32px;
+    margin: 32px 0;
+  }
+
+  .thread-title {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+  }
+
+  .thread-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    opacity: 0;
+    animation: fadeThread 0.4s ease forwards;
+  }
+
+  .thread-row:nth-child(2) { animation-delay: 0.1s; }
+  .thread-row:nth-child(3) { animation-delay: 0.2s; }
+  .thread-row:nth-child(4) { animation-delay: 0.3s; }
+  .thread-row:nth-child(5) { animation-delay: 0.4s; }
+  .thread-row:nth-child(6) { animation-delay: 0.5s; }
+  .thread-row:nth-child(7) { animation-delay: 0.6s; }
+  .thread-row:nth-child(8) { animation-delay: 0.7s; }
+
+  @keyframes fadeThread {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .thread-indent {
+    width: 24px;
+    min-width: 24px;
+    position: relative;
+  }
+
+  .thread-indent::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: -12px;
+    bottom: 50%;
+    width: 1px;
+    background: var(--rule);
+  }
+
+  .thread-indent::after {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    width: 10px;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  .thread-node {
+    font-size: 13px;
+    color: var(--mid);
+  }
+
+  .thread-node strong {
+    color: var(--navy);
+    font-weight: 500;
+  }
+
+  .thread-node .note {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--gold);
+    margin-left: 8px;
+  }
+
+  .thread-root {
+    font-family: var(--serif);
+    font-size: 18px;
+    color: var(--navy);
+    font-weight: 400;
+    padding: 8px 0;
+  }
+
+  /* POSITIONING STATEMENT */
+  .position-block {
+    background: var(--navy);
+    padding: 48px;
+    margin: 32px 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .position-block::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle at center, rgba(201,168,76,0.08) 0%, transparent 70%);
+  }
+
+  .position-eyebrow {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(201,168,76,0.6);
+    margin-bottom: 20px;
+  }
+
+  .position-statement {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 300;
+    line-height: 1.6;
+    color: white;
+    max-width: 680px;
+  }
+
+  .position-statement strong {
+    font-weight: 600;
+    color: var(--gold-light);
+    font-style: italic;
+  }
+
+  /* ACTIONS */
+  .actions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin-top: 24px;
+  }
+
+  .action-item {
+    background: white;
+    border: 1px solid #e8e4da;
+    padding: 20px 24px;
+    display: grid;
+    grid-template-columns: 32px 1fr;
+    gap: 12px;
+    align-items: start;
+  }
+
+  .action-num {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--gold);
+    opacity: 0.5;
+    line-height: 1;
+  }
+
+  .action-content {}
+
+  .action-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+
+  .action-body {
+    font-size: 11px;
+    color: var(--mid);
+    line-height: 1.6;
+  }
+
+  .action-tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 1px;
+    padding: 2px 8px;
+    background: rgba(201,168,76,0.1);
+    color: var(--gold);
+    margin-top: 8px;
+  }
+
+  /* CLOSING */
+  .closing-section {
+    border-top: 1px solid var(--rule);
+    padding-top: 48px;
+    margin-top: 48px;
+  }
+
+  .closing-serif {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--navy);
+    line-height: 1.7;
+    max-width: 640px;
+    margin-bottom: 48px;
+  }
+
+  /* FOOTER */
+  .footer {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 40px;
+    align-items: end;
+    border-top: 1px solid #e0dbd0;
+    padding-top: 24px;
+  }
+
+  .footer-brand {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--light);
+    line-height: 1.8;
+  }
+
+  .footer-brand strong {
+    font-size: 15px;
+    color: var(--navy);
+    font-family: var(--serif);
+    font-weight: 400;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .footer-thelma {
+    font-family: var(--serif);
+    font-size: 12px;
+    font-style: italic;
+    color: var(--light);
+    margin-top: 8px;
+  }
+
+  .footer-ref {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--light);
+    text-align: right;
+    line-height: 1.8;
+  }
+
+  /* UTILS */
+  .gold-rule {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, var(--gold), transparent);
+    margin: 48px 0;
+  }
+
+  .highlight {
+    background: rgba(201,168,76,0.08);
+    border-left: 3px solid var(--gold);
+    padding: 16px 20px;
+    margin: 24px 0;
+    font-size: 13px;
+    color: var(--mid);
+    line-height: 1.7;
+  }
+
+  .highlight strong {
+    color: var(--navy);
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-top">
+    <div class="cover-brand">amleht</div>
+    <div class="cover-ref">
+      PREPARED FOR: GUILLAUME PRINCEN<br>
+      ANTHROPIC EMEA GENERAL MANAGER<br>
+      DATE: 28 APRIL 2026<br>
+      REV: 2.0 — SIG-022 + SIG-037
+    </div>
+  </div>
+
+  <div class="cover-middle">
+    <div class="cover-eyebrow">Executive Intelligence Briefing</div>
+    <div class="cover-title">The Compliance<br>Layer <em>Europe</em><br>Has Not Built</div>
+    <div class="cover-subtitle">And why the window to build it is closing faster than anyone is saying publicly.</div>
+    <div class="cover-rule"></div>
+    <div class="cover-lede">
+      Two live market events — <strong>the Qivalis euro stablecoin consortium (12 banks, DNB-supervised)</strong> and <strong>KfW's tokenized bond infrastructure resilience test (DekaBank as receiving registrar)</strong> — have converged in the past seven days to produce a single, unambiguous regulatory gap: the absence of an EU-sovereign, immutable chain-of-custody attestation layer for AI-native tokenized finance. <strong>amleht is that layer.</strong>
+    </div>
+  </div>
+
+  <div class="cover-bottom">
+    <div class="cover-addressee">
+      <span>Guillaume Princen</span>
+      Anthropic, EMEA General Manager<br>
+      Claude Partner Network — Commercial Relationship
+    </div>
+    <div class="cover-signals">
+      <div class="cover-sig-pill">SIG-022</div>
+      <div class="cover-sig-pill">SIG-037</div>
+      <div class="cover-sig-pill">TIER I</div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+  <!-- SECTION 1: MARKET CONTEXT -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">I</div>
+      <div class="section-meta">
+        <div class="section-label">Market Context</div>
+        <div class="section-title">The Gap in the Numbers</div>
+      </div>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="data-band">
+      <div class="data-item">
+        <div class="data-label">Euro share of global FX</div>
+        <div class="data-value"><span>25</span>%</div>
+        <div class="data-context">Second reserve currency</div>
+      </div>
+      <div class="data-item">
+        <div class="data-label">Euro share of on-chain volume</div>
+        <div class="data-value"><span>0.2</span>%</div>
+        <div class="data-context">Paris Blockchain Week 2026</div>
+      </div>
+      <div class="data-item">
+        <div class="data-label">Qivalis member banks</div>
+        <div class="data-value"><span>12</span></div>
+        <div class="data-context">DNB supervised · live 2026</div>
+      </div>
+      <div class="data-item">
+        <div class="data-label">Compliance attestation layer</div>
+        <div class="data-value"><span>0</span></div>
+        <div class="data-context">EU-sovereign · exists today</div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>Jan-Oliver Sell, CEO of Qivalis, took the Mona Lisa Stage at Paris Blockchain Week 2026 to frame the 25%/0.2% gap as a matter of European monetary autonomy, not merely commercial opportunity. The euro commands a quarter of global foreign exchange. It represents two tenths of one percent of on-chain volume. Dollar-denominated stablecoins are filling that space by default.</p>
+      <p>Qivalis — a consortium of 12 European banks operating under DNB supervision, building a MiCAR-compliant euro stablecoin — is the institutional answer to that gap. Their public thesis now explicitly includes <strong>AI-native finance</strong> as a core pillar. That is the regulatory surface that amleht was designed to serve.</p>
+    </div>
+
+    <div class="pull-quote">
+      <p>"The consortium's architecture is modular and multi-vendor by design, with European providers embedded throughout — ensuring operational resilience and avoiding vendor lock-in at every layer."</p>
+      <cite>Jan-Oliver Sell, CEO Qivalis — public statement, April 2026</cite>
+    </div>
+
+    <div class="prose">
+      <p>This statement, made in direct response to a public sovereignty challenge from Dfns CEO Clarisse Hagège, is an open architectural invitation. The compliance attestation layer — AI-native transaction audit, DORA Art.19 incident notification, per-member chain evidence — is not occupied. Jan-Oliver confirmed the architecture permits it. <strong>amleht is the provider.</strong></p>
+    </div>
+  </div>
+
+  <div class="gold-rule"></div>
+
+  <!-- SECTION 2: THE TWO SIGNALS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">II</div>
+      <div class="section-meta">
+        <div class="section-label">Intelligence — This Week</div>
+        <div class="section-title">Two Live Events, One Missing Layer</div>
+      </div>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="signal-grid">
+      <div class="signal-card tier1">
+        <div class="signal-card-sig">SIG-022 · QIVALIS B.V.</div>
+        <div class="signal-card-title">Euro Stablecoin Consortium — AI-Native Finance Declaration</div>
+        <div class="signal-card-body">
+          12 European banks — BNP Paribas, ING, UniCredit, BBVA, SEB, DekaBank, DZ BANK and five others — are building a DNB-supervised MiCAR-compliant euro stablecoin. Their Paris Blockchain Week keynote explicitly named AI-native finance and on-chain treasury management as operational pillars. Every AI-generated financial event in this system requires DORA Art.11 continuity evidence and MiCAR per-member audit attestation. That layer is unbuilt.
+        </div>
+        <div class="signal-card-tags">
+          <span class="tag hot">TIER I · LIVE</span>
+          <span class="tag">DNB SUPERVISED</span>
+          <span class="tag">MiCAR</span>
+          <span class="tag">DORA ART.11</span>
+          <span class="tag">AI-NATIVE</span>
+        </div>
+      </div>
+
+      <div class="signal-card tier1">
+        <div class="signal-card-sig">SIG-037 · KfW / DEKABANK</div>
+        <div class="signal-card-title">Tokenized Bond Infrastructure Migration — Three Simultaneous Chain Breaks</div>
+        <div class="signal-card-body">
+          KfW Bankengruppe executed a live mid-lifecycle tokenized bond migration: registrar switch (Cashlink → DekaBank), infrastructure switch (Polygon → SWIAT/RL1), payment rail switch (Bundesbank → Eurosystem Pontes/T2). DekaBank — Qivalis member #9 — is the receiving registrar. Each transition is a DORA Art.11 ICT continuity event. All three require independent immutable attestation. None of that attestation exists in the described stack.
+        </div>
+        <div class="signal-card-tags">
+          <span class="tag hot">TIER I · LIVE</span>
+          <span class="tag">BaFin REGULATED</span>
+          <span class="tag">DEKABANK</span>
+          <span class="tag">DORA ART.11/17</span>
+          <span class="tag">PRODUCTION</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight">
+      <strong>The DekaBank convergence.</strong> DekaBank is simultaneously Qivalis founding member #9 and the receiving registrar in KfW's live DORA resilience test. They carry two live regulatory attestation obligations — stablecoin per-member audit evidence under MiCAR, and tokenized bond chain-of-custody under BaFin supervision. A single Agent XII deployment closes both.
+    </div>
+  </div>
+
+  <div class="gold-rule"></div>
+
+  <!-- SECTION 3: THREAD -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">III</div>
+      <div class="section-meta">
+        <div class="section-label">Strategic Architecture</div>
+        <div class="section-title">One Thread. One Stack. One Gap.</div>
+      </div>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="thread-block">
+      <div class="thread-title">Convergence Map — April 2026</div>
+
+      <div class="thread-row">
+        <div class="thread-root">European Financial Market Infrastructure</div>
+      </div>
+      <div class="thread-row">
+        <div class="thread-indent"></div>
+        <div class="thread-node"><strong>Qivalis B.V.</strong> — 12-bank euro stablecoin · DNB supervised · MiCAR <span class="note">SIG-022</span></div>
+      </div>
+      <div class="thread-row">
+        <div class="thread-indent"></div>
+        <div class="thread-indent"></div>
+        <div class="thread-node"><strong>DekaBank</strong> — Qivalis member #9 · KfW receiving registrar</div>
+      </div>
+      <div class="thread-row">
+        <div class="thread-indent"></div>
+        <div class="thread-indent"></div>
+        <div class="thread-node"><strong>AI-native finance declared</strong> — Paris Blockchain Week keynote · Mona Lisa Stage</div>
+      </div>
+      <div class="thread-row">
+        <div class="thread-indent"></div>
+        <div class="thread-indent"></div>
+        <div class="thread-node"><strong>Modular multi-vendor architecture</strong> — compliance attestation layer: unoccupied</div>
+      </div>
+      <div class="thread-row">
+        <div class="thread-indent"></div>
+        <div class="thread-node"><strong>KfW tokenized bond</strong> — 3 simultaneous DORA Art.11 continuity events · BaFin <span class="note">SIG-037</span></div>
+      </div>
+      <div class="thread-row">
+        <div class="thread-indent"></div>
+        <div class="thread-indent"></div>
+        <div class="thread-node"><strong>Polygon → SWIAT/RL1</strong> · <strong>Cashlink → DekaBank</strong> · <strong>Bundesbank → Pontes/T2</strong></div>
+      </div>
+      <div class="thread-row">
+        <div class="thread-indent"></div>
+        <div class="thread-indent"></div>
+        <div class="thread-node" style="color: var(--gold); font-weight: 500;"><strong style="color: var(--navy);">amleht Agent XII</strong> — immutable chain-of-custody attestation for all three breaks</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="gold-rule"></div>
+
+  <!-- SECTION 4: COMPLIANCE STACK -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">IV</div>
+      <div class="section-meta">
+        <div class="section-label">amleht Architecture</div>
+        <div class="section-title">The Stack They Need</div>
+      </div>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="prose">
+      <p>amleht does not compete with Fireblocks, Dfns, SWIAT, or RL1. It does not occupy the custody, key management, or settlement layers. It operates above them — as the independent compliance attestation layer that makes every other layer defensible to regulators.</p>
+    </div>
+
+    <table class="compliance-table">
+      <thead>
+        <tr>
+          <th>Obligation</th>
+          <th>Trigger Event</th>
+          <th>amleht Response</th>
+          <th>Regulatory Article</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="req">Per-member stablecoin audit evidence</td>
+          <td>Every Qivalis transaction per bank</td>
+          <td class="agent">Agent XII — Verification Report per member</td>
+          <td class="layer">MiCAR + DNB</td>
+        </tr>
+        <tr>
+          <td class="req">AI-native finance transaction attestation</td>
+          <td>Every AI-generated financial event</td>
+          <td class="agent">Agent XII — AI event chain record</td>
+          <td class="layer">EU AI Act Art.9 + DORA</td>
+        </tr>
+        <tr>
+          <td class="req">ICT continuity evidence — infrastructure migration</td>
+          <td>KfW Polygon → SWIAT/RL1 switch</td>
+          <td class="agent">Agent XII — pre/post state Verification Report</td>
+          <td class="layer">DORA Art.11</td>
+        </tr>
+        <tr>
+          <td class="req">Chain-of-custody — registrar transfer</td>
+          <td>KfW Cashlink → DekaBank transfer</td>
+          <td class="agent">Agent XII — ownership transfer attestation</td>
+          <td class="layer">DORA Art.11 + CSDR</td>
+        </tr>
+        <tr>
+          <td class="req">DLT × ECB settlement cross-reference</td>
+          <td>Coupon/redemption via Pontes/T2</td>
+          <td class="agent">Agent XII — dual-record cross-attestation</td>
+          <td class="layer">DORA Art.17</td>
+        </tr>
+        <tr>
+          <td class="req">Incident classification and notification</td>
+          <td>Any degradation during migration</td>
+          <td class="agent">Agent XX — classification + Art.19 pipeline</td>
+          <td class="layer">DORA Art.17 + Art.19</td>
+        </tr>
+        <tr>
+          <td class="req">Threat intelligence — AI-native landing zone</td>
+          <td>Anomalous AI agent behaviour</td>
+          <td class="agent">Agent XX — K8s quarantine + chain analysis</td>
+          <td class="layer">NIS2 + EU AI Act</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="prose">
+      <p>The common thread in every row: <strong>EU-sovereign inference via Nebius B.V. Netherlands. Zero US jurisdictional exposure. Hyperledger Fabric chain attestation that survives failure of every infrastructure it attests.</strong> That is the architectural non-negotiable in every DORA and MiCAR compliance examination. No US-domiciled provider can offer it. amleht can.</p>
+    </div>
+  </div>
+
+  <div class="gold-rule"></div>
+
+  <!-- SECTION 5: ANTHROPIC DIMENSION -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">V</div>
+      <div class="section-meta">
+        <div class="section-label">The Anthropic Dimension</div>
+        <div class="section-title">Why This Conversation Belongs Here</div>
+      </div>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="prose">
+      <p>The 12 banks of Qivalis have declared AI-native finance as a production pillar. That means Claude — deployed in regulated financial workflows — must operate within a compliance infrastructure that satisfies DORA, MiCAR, and the EU AI Act simultaneously. Every AI-generated treasury decision, every autonomous agent action, every model output with a financial consequence needs an audit chain.</p>
+      <p>amleht is built on Claude as its primary execution intelligence. The Signal Intelligence Series — of which SIG-022 and SIG-037 are the most recent outputs — is produced using Claude Code. The multi-agent hub-and-spoke architecture is orchestrated within the Anthropic harness. <strong>amleht is, in practice, the reference implementation of what responsible AI deployment in European regulated finance looks like.</strong></p>
+    </div>
+
+    <div class="position-block">
+      <div class="position-eyebrow">Positioning for Anthropic</div>
+      <div class="position-statement">
+        When a European bank asks <em>"is Claude safe for regulated financial workflows?"</em> — amleht is the answer. Not in theory. In production. On Hyperledger Fabric. Under DORA, MiCAR, NIS2, and the EU AI Act. With <strong>chain-attested audit evidence for every agent action.</strong>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>The Claude Partner Network application submitted 14 March 2026 was framed as a commercial relationship — not a technical one. The ask is a conversation at the level where market development, regulatory strategy, and enterprise AI deployment intersect. The Qivalis and KfW signals make that conversation urgent, concrete, and well-evidenced.</p>
+    </div>
+  </div>
+
+  <div class="gold-rule"></div>
+
+  <!-- SECTION 6: RECOMMENDED ACTIONS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">VI</div>
+      <div class="section-meta">
+        <div class="section-label">Recommended Next Steps</div>
+        <div class="section-title">What We Are Asking For</div>
+      </div>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="actions-grid">
+      <div class="action-item">
+        <div class="action-num">1</div>
+        <div class="action-content">
+          <div class="action-title">Introductory conversation</div>
+          <div class="action-body">A 30-minute exploratory call to discuss the European regulated AI market, amleht's architecture, and where the Anthropic CPN relationship adds mutual value. No product demo required at this stage.</div>
+          <div class="action-tag">IMMEDIATE</div>
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">2</div>
+        <div class="action-content">
+          <div class="action-title">CPN application review</div>
+          <div class="action-body">Application submitted 14 March 2026. Framed as commercial partnership — enterprise AI deployment in EU regulated finance — not technical integration. Request: visibility on status and next step.</div>
+          <div class="action-tag">OUTSTANDING</div>
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">3</div>
+        <div class="action-content">
+          <div class="action-title">Qivalis strategic alignment</div>
+          <div class="action-body">As Qivalis moves toward production, the compliance attestation layer for their AI-native finance pillar becomes a procurement question for 12 regulated banks. Anthropic's involvement — even indirectly — in that conversation is a significant market signal.</div>
+          <div class="action-tag">STRATEGIC</div>
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-num">4</div>
+        <div class="action-content">
+          <div class="action-title">EU AI Act reference deployment</div>
+          <div class="action-body">amleht is positioned to be the reference implementation of Claude in EU regulated financial infrastructure. That positioning benefits Anthropic's European enterprise narrative as the EU AI Act enters enforcement phase in 2026–27.</div>
+          <div class="action-tag">LONG-TERM</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLOSING -->
+  <div class="closing-section">
+    <div class="closing-serif">
+      The market did not wait for this briefing to become urgent. KfW ran a live DORA test in production. Qivalis declared AI-native finance on the Mona Lisa Stage. DekaBank is holding both obligations simultaneously. The compliance attestation layer that closes every one of these open questions is built, EU-sovereign, and ready. The conversation is overdue — and now well-evidenced.
+    </div>
+
+    <div class="footer">
+      <div class="footer-brand">
+        <strong>amleht</strong>
+        EU-Sovereign Multi-Agent Compliance Platform · Amsterdam, Netherlands<br>
+        Nebius B.V. Sovereign Inference (Netherlands) · AWS eu-north-1<br>
+        DORA · NIS2 · GDPR · MiFID II · EU AI Act · MiCAR
+        <div class="footer-thelma">In memory of Thelma.</div>
+      </div>
+      <div class="footer-ref">
+        BRIEFING REV 2.0<br>
+        28 APRIL 2026<br>
+        SIG-022 + SIG-037<br>
+        RESTRICTED — ADDRESSEE ONLY
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

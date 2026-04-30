@@ -1,0 +1,1623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Operation Appia — amleht Live Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080c10;
+  --surface: #0d1117;
+  --surface2: #111820;
+  --surface3: #161e28;
+  --border: #1e2d3d;
+  --border2: #243344;
+  --amber: #f0a500;
+  --amber-dim: rgba(240,165,0,0.15);
+  --amber-glow: rgba(240,165,0,0.06);
+  --green: #00c896;
+  --green-dim: rgba(0,200,150,0.12);
+  --red: #e8344a;
+  --red-dim: rgba(232,52,74,0.15);
+  --blue: #2d8ef0;
+  --blue-dim: rgba(45,142,240,0.12);
+  --chain: #6eb5ff;
+  --text: #c8d8e8;
+  --text-dim: #5a7a94;
+  --text-bright: #e8f4ff;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'IBM Plex Sans', sans-serif;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.5;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* SCAN LINE EFFECT */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.03) 2px,
+    rgba(0,0,0,0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* LAYOUT */
+.shell {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* MASTHEAD */
+.masthead {
+  border-bottom: 1px solid var(--border);
+  padding: 12px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 100;
+}
+
+.masthead-left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.brand {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--amber);
+  letter-spacing: 2px;
+}
+
+.op-label {
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.op-name {
+  font-size: 10px;
+  color: var(--text-bright);
+  letter-spacing: 1px;
+}
+
+.masthead-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 10px;
+  color: var(--text-dim);
+}
+
+.live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--green);
+}
+
+.live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* MAIN GRID */
+.main-grid {
+  display: grid;
+  grid-template-columns: 300px 1fr 340px;
+  grid-template-rows: auto 1fr;
+  gap: 1px;
+  background: var(--border);
+  margin: 12px 0;
+}
+
+.panel {
+  background: var(--surface);
+  padding: 0;
+  overflow: hidden;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+}
+
+.panel-title {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.panel-badge {
+  font-size: 8px;
+  padding: 2px 8px;
+  border: 1px solid var(--border2);
+  color: var(--text-dim);
+  letter-spacing: 1px;
+}
+
+.panel-badge.green { border-color: var(--green); color: var(--green); }
+.panel-badge.amber { border-color: var(--amber); color: var(--amber); }
+.panel-badge.red { border-color: var(--red); color: var(--red); }
+.panel-badge.blue { border-color: var(--blue); color: var(--blue); }
+
+.panel-body {
+  padding: 14px;
+}
+
+/* BOND STATE PANEL — LEFT */
+.bond-panel {
+  grid-row: 1 / 3;
+}
+
+.bond-hero {
+  padding: 20px 14px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg, var(--surface2), var(--surface));
+}
+
+.bond-isin {
+  font-size: 8px;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+}
+
+.bond-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-bright);
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.bond-name span {
+  color: var(--amber);
+}
+
+.bond-meta {
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-bottom: 16px;
+}
+
+.bond-notional {
+  font-size: 24px;
+  font-weight: 300;
+  color: var(--amber);
+  margin-bottom: 2px;
+}
+
+.bond-notional-label {
+  font-size: 8px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+}
+
+.bond-fields {
+  padding: 0 14px 14px;
+}
+
+.bond-field {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: start;
+}
+
+.bond-field:last-child { border-bottom: none; }
+
+.field-label {
+  font-size: 8px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+
+.field-value {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-bright);
+  transition: all 0.3s ease;
+}
+
+.field-value.migrating {
+  color: var(--amber);
+  animation: flicker 0.5s ease infinite;
+}
+
+.field-value.failed {
+  color: var(--red);
+}
+
+.field-value.resolved {
+  color: var(--green);
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.field-status {
+  font-size: 8px;
+  padding: 2px 6px;
+  border-radius: 0;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.status-ok { background: var(--green-dim); color: var(--green); }
+.status-warn { background: var(--amber-dim); color: var(--amber); }
+.status-fail { background: var(--red-dim); color: var(--red); }
+.status-ok-resolved { background: var(--green-dim); color: var(--green); }
+
+.coupon-event {
+  margin: 14px;
+  padding: 12px;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-left: 3px solid var(--amber);
+}
+
+.coupon-label {
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: var(--amber);
+  margin-bottom: 6px;
+}
+
+.coupon-amount {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-bright);
+}
+
+.coupon-due {
+  font-size: 9px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+.coupon-state {
+  font-size: 9px;
+  margin-top: 8px;
+  padding: 4px 8px;
+  text-align: center;
+  font-weight: 600;
+  transition: all 0.5s;
+}
+
+/* CENTER — MAIN STAGE */
+.stage-panel {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  display: flex;
+  flex-direction: column;
+}
+
+/* BREAK SEQUENCER */
+.sequencer {
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sequencer-label {
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+
+.breaks-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.break-btn {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  padding: 12px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.break-btn:hover:not(:disabled) {
+  border-color: var(--amber);
+  background: var(--amber-glow);
+}
+
+.break-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.break-btn.active {
+  border-color: var(--red);
+  background: var(--red-dim);
+}
+
+.break-btn.resolved-btn {
+  border-color: var(--green);
+  background: var(--green-dim);
+}
+
+.break-btn-num {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--border2);
+  line-height: 1;
+  margin-bottom: 6px;
+  transition: color 0.3s;
+}
+
+.break-btn.active .break-btn-num { color: var(--red); }
+.break-btn.resolved-btn .break-btn-num { color: var(--green); }
+
+.break-btn-type {
+  font-size: 7px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+
+.break-btn-title {
+  font-size: 10px;
+  color: var(--text);
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+
+.break-btn-transition {
+  font-size: 9px;
+  color: var(--text-dim);
+}
+
+.break-btn-transition .arr { color: var(--amber); }
+
+.global-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.ctrl-btn {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  padding: 8px 20px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ctrl-btn.primary {
+  background: var(--amber);
+  color: var(--bg);
+}
+.ctrl-btn.primary:hover { background: #ffb800; }
+
+.ctrl-btn.danger {
+  background: var(--red);
+  color: white;
+}
+.ctrl-btn.danger:hover { background: #ff4060; }
+
+.ctrl-btn.reset {
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--text-dim);
+}
+.ctrl-btn.reset:hover { border-color: var(--text-dim); color: var(--text); }
+
+.ctrl-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* VISUALIZATION */
+.viz-area {
+  flex: 1;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+}
+
+.viz-title {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+/* INFRASTRUCTURE MAP */
+.infra-map {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 0;
+  align-items: center;
+}
+
+.infra-node {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  padding: 10px 12px;
+  text-align: center;
+  transition: all 0.5s;
+}
+
+.infra-node.active-node {
+  border-color: var(--green);
+  background: var(--green-dim);
+}
+
+.infra-node.failing {
+  border-color: var(--red);
+  background: var(--red-dim);
+  animation: shake 0.4s ease;
+}
+
+.infra-node.target-node {
+  border-color: var(--blue);
+  background: var(--blue-dim);
+}
+
+.infra-node.resolved-node {
+  border-color: var(--green);
+  background: var(--green-dim);
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+.infra-node-label {
+  font-size: 7px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+
+.infra-node-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-bright);
+}
+
+.infra-node-sub {
+  font-size: 8px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+.infra-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 8px;
+  font-size: 16px;
+  color: var(--border2);
+  transition: color 0.5s;
+}
+
+.infra-arrow.migrating { color: var(--amber); animation: arrowPulse 1s infinite; }
+.infra-arrow.done { color: var(--green); }
+
+@keyframes arrowPulse {
+  0%, 100% { opacity: 1; transform: translateX(0); }
+  50% { opacity: 0.5; transform: translateX(3px); }
+}
+
+.infra-arrow-label {
+  font-size: 7px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+  margin-top: 4px;
+}
+
+/* DORA EVENTS */
+.dora-panel {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.dora-log {
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 8px 14px;
+}
+
+.dora-event {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  opacity: 0;
+  animation: eventAppear 0.4s ease forwards;
+}
+
+@keyframes eventAppear {
+  from { opacity: 0; transform: translateX(8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.dora-event:last-child { border-bottom: none; }
+
+.dora-event-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 3px;
+}
+
+.dora-event-art {
+  font-size: 8px;
+  font-weight: 700;
+  padding: 1px 6px;
+}
+
+.art-11 { background: var(--amber-dim); color: var(--amber); }
+.art-17 { background: var(--red-dim); color: var(--red); }
+.art-19 { background: var(--blue-dim); color: var(--blue); }
+.art-ok { background: var(--green-dim); color: var(--green); }
+
+.dora-event-time {
+  font-size: 8px;
+  color: var(--text-dim);
+}
+
+.dora-event-text {
+  font-size: 9px;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.dora-event-status {
+  font-size: 8px;
+  font-weight: 700;
+  margin-top: 3px;
+}
+
+.status-open { color: var(--red); }
+.status-closed { color: var(--green); }
+.status-pending { color: var(--amber); }
+
+/* AGENT XII PANEL */
+.xii-panel {
+  grid-column: 3;
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.xii-status {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface2);
+}
+
+.xii-orb {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--border2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-dim);
+  transition: all 0.5s;
+  flex-shrink: 0;
+}
+
+.xii-orb.active {
+  border-color: var(--amber);
+  color: var(--amber);
+  box-shadow: 0 0 16px rgba(240,165,0,0.3);
+  animation: orbPulse 2s infinite;
+}
+
+.xii-orb.resolved {
+  border-color: var(--green);
+  color: var(--green);
+  box-shadow: 0 0 16px rgba(0,200,150,0.3);
+}
+
+@keyframes orbPulse {
+  0%, 100% { box-shadow: 0 0 16px rgba(240,165,0,0.3); }
+  50% { box-shadow: 0 0 28px rgba(240,165,0,0.5); }
+}
+
+.xii-info {}
+
+.xii-name {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-bright);
+}
+
+.xii-state {
+  font-size: 8px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+.xii-state.active { color: var(--amber); }
+.xii-state.resolved { color: var(--green); }
+
+/* VERIFICATION REPORTS */
+.vr-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 14px;
+}
+
+.vr-card {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-left: 3px solid var(--chain);
+  margin-bottom: 10px;
+  opacity: 0;
+  animation: vrAppear 0.6s ease forwards;
+}
+
+@keyframes vrAppear {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.vr-header {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.vr-type {
+  font-size: 7px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--chain);
+}
+
+.vr-block {
+  font-size: 8px;
+  color: var(--text-dim);
+}
+
+.vr-body {
+  padding: 8px 10px;
+}
+
+.vr-row {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 4px;
+  margin-bottom: 4px;
+  font-size: 9px;
+}
+
+.vr-key { color: var(--text-dim); }
+.vr-val { color: var(--text); word-break: break-all; }
+.vr-val.hash { color: var(--chain); font-size: 8px; }
+.vr-val.green { color: var(--green); }
+
+.vr-stamp {
+  padding: 6px 10px;
+  background: var(--surface3);
+  border-top: 1px solid var(--border);
+  font-size: 8px;
+  color: var(--green);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* RESOLUTION BANNER */
+.resolution-banner {
+  margin: 12px 0;
+  padding: 16px;
+  background: var(--green-dim);
+  border: 1px solid var(--green);
+  display: none;
+  animation: bannerReveal 0.8s ease forwards;
+}
+
+@keyframes bannerReveal {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.resolution-banner.show { display: block; }
+
+.resolution-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--green);
+  margin-bottom: 4px;
+}
+
+.resolution-body {
+  font-size: 9px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+/* BOTTOM STATUS BAR */
+.status-bar {
+  border-top: 1px solid var(--border);
+  padding: 8px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.status-items {
+  display: flex;
+  gap: 24px;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9px;
+  color: var(--text-dim);
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+}
+
+.status-dot.amber { background: var(--amber); }
+.status-dot.red { background: var(--red); }
+
+.footer-brand {
+  font-size: 9px;
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+/* TYPEWRITER */
+.typewriter {
+  overflow: hidden;
+  white-space: nowrap;
+  animation: typeOut 0.8s steps(40, end) forwards;
+}
+
+@keyframes typeOut {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+/* NARRATIVE OVERLAY */
+.narrative-bar {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-left: 3px solid var(--amber);
+  padding: 10px 14px;
+  margin: 8px 0;
+  font-size: 10px;
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 52px;
+  transition: all 0.3s;
+}
+
+.narrative-bar.red-alert {
+  border-left-color: var(--red);
+  background: var(--red-dim);
+}
+
+.narrative-bar.green-resolved {
+  border-left-color: var(--green);
+  background: var(--green-dim);
+}
+
+/* INFRA ROWS */
+.infra-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.infra-row {
+  display: grid;
+  grid-template-columns: 80px 1fr 30px 1fr;
+  gap: 4px;
+  align-items: center;
+  padding: 8px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  transition: all 0.5s;
+}
+
+.infra-row.row-active { border-color: var(--amber); background: var(--amber-glow); }
+.infra-row.row-failed { border-color: var(--red); background: var(--red-dim); }
+.infra-row.row-resolved { border-color: var(--green); background: var(--green-dim); }
+
+.infra-row-label {
+  font-size: 7px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.infra-from, .infra-to {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text);
+  transition: color 0.5s;
+}
+
+.infra-from.strikethrough {
+  text-decoration: line-through;
+  color: var(--red);
+}
+
+.infra-to.highlight {
+  color: var(--green);
+}
+
+.infra-row-arrow {
+  text-align: center;
+  font-size: 12px;
+  color: var(--border2);
+  transition: color 0.5s;
+}
+
+.infra-row.row-active .infra-row-arrow { color: var(--amber); }
+.infra-row.row-resolved .infra-row-arrow { color: var(--green); }
+
+/* CHAIN BLOCK VIZ */
+.chain-viz {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  min-height: 48px;
+}
+
+.chain-block {
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 7px;
+  color: var(--text-dim);
+  transition: all 0.3s;
+}
+
+.chain-block.written {
+  border-color: var(--chain);
+  background: rgba(110,181,255,0.1);
+  color: var(--chain);
+  animation: blockWrite 0.4s ease;
+}
+
+@keyframes blockWrite {
+  0% { transform: scale(0.5); opacity: 0; }
+  60% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.chain-link {
+  color: var(--border2);
+  font-size: 8px;
+}
+
+.chain-link.active { color: var(--chain); }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--surface); }
+::-webkit-scrollbar-thumb { background: var(--border2); }
+
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- MASTHEAD -->
+  <div class="masthead">
+    <div class="masthead-left">
+      <div class="brand">amleht</div>
+      <div>
+        <div class="op-label">Operation //</div>
+        <div class="op-name">APPIA — Tokenized Bond Resilience Demo</div>
+      </div>
+    </div>
+    <div class="masthead-right">
+      <div class="live-indicator">
+        <div class="live-dot" id="liveDot"></div>
+        <span id="liveLabel">SIMULATION READY</span>
+      </div>
+      <span id="clockDisplay">--:--:-- UTC</span>
+    </div>
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="main-grid">
+
+    <!-- LEFT: BOND STATE -->
+    <div class="panel bond-panel">
+      <div class="panel-header">
+        <div class="panel-title">Live Security</div>
+        <div class="panel-badge green" id="bondBadge">ACTIVE</div>
+      </div>
+
+      <div class="bond-hero">
+        <div class="bond-isin">ISIN: DE000KFW1234 · EUR · SENIOR</div>
+        <div class="bond-name">Appia Bond <span>Series I</span></div>
+        <div class="bond-meta">KfW Bankengruppe · BaFin Regulated · DLT-Native</div>
+        <div class="bond-notional">€ 500,000,000</div>
+        <div class="bond-notional-label">NOTIONAL · FIXED 3.25% · MAT 2029</div>
+      </div>
+
+      <div class="bond-fields">
+        <div class="bond-field">
+          <div>
+            <div class="field-label">Registrar</div>
+            <div class="field-value" id="registrarValue">Cashlink GmbH</div>
+          </div>
+          <div class="field-status status-ok" id="registrarStatus">OK</div>
+        </div>
+        <div class="bond-field">
+          <div>
+            <div class="field-label">Target Registrar</div>
+            <div class="field-value" id="targetRegistrarValue">DekaBank</div>
+          </div>
+          <div class="field-status" id="targetRegistrarStatus" style="background:var(--surface3); color:var(--text-dim)">PENDING</div>
+        </div>
+        <div class="bond-field">
+          <div>
+            <div class="field-label">Blockchain Infrastructure</div>
+            <div class="field-value" id="chainValue">Polygon (PoS)</div>
+          </div>
+          <div class="field-status status-ok" id="chainStatus">OK</div>
+        </div>
+        <div class="bond-field">
+          <div>
+            <div class="field-label">Payment Rail</div>
+            <div class="field-value" id="railValue">Bundesbank Trigger</div>
+          </div>
+          <div class="field-status status-ok" id="railStatus">OK</div>
+        </div>
+        <div class="bond-field">
+          <div>
+            <div class="field-label">Settlement</div>
+            <div class="field-value" id="settlementValue">OPERATIONAL</div>
+          </div>
+          <div class="field-status status-ok" id="settlementStatus">OK</div>
+        </div>
+        <div class="bond-field">
+          <div>
+            <div class="field-label">Register Access</div>
+            <div class="field-value" id="registerValue">ACCESSIBLE</div>
+          </div>
+          <div class="field-status status-ok" id="registerStatus">OK</div>
+        </div>
+        <div class="bond-field">
+          <div>
+            <div class="field-label">DORA Art.11 Status</div>
+            <div class="field-value" id="doraValue">COMPLIANT</div>
+          </div>
+          <div class="field-status status-ok" id="doraStatus">CLR</div>
+        </div>
+        <div class="bond-field">
+          <div>
+            <div class="field-label">Chain Attestation</div>
+            <div class="field-value" id="attestValue">—</div>
+          </div>
+          <div class="field-status" id="attestStatus" style="background:var(--surface3); color:var(--text-dim)">IDLE</div>
+        </div>
+      </div>
+
+      <div class="coupon-event" id="couponBlock">
+        <div class="coupon-label">⚡ PENDING LIFECYCLE EVENT</div>
+        <div class="coupon-amount">€ 8,125,000</div>
+        <div class="coupon-due">Coupon Payment · Due T+2</div>
+        <div class="coupon-state status-ok" id="couponState" style="background:var(--green-dim); color:var(--green);">SCHEDULED — READY TO PROCESS</div>
+      </div>
+    </div>
+
+    <!-- CENTER: STAGE -->
+    <div class="panel stage-panel">
+      <div class="panel-header">
+        <div class="panel-title">Simulation Control</div>
+        <div class="panel-badge amber" id="stageBadge">READY</div>
+      </div>
+
+      <div class="sequencer">
+        <div class="sequencer-label">Three-Break Sequencer — Trigger in sequence or simultaneously</div>
+
+        <div class="breaks-row">
+          <div class="break-btn" id="btn1" onclick="triggerBreak(1)">
+            <div class="break-btn-num">01</div>
+            <div class="break-btn-type">Registrar Migration</div>
+            <div class="break-btn-title">Custodial Chain-of-Custody Transfer</div>
+            <div class="break-btn-transition">Cashlink <span class="arr">→</span> DekaBank</div>
+          </div>
+          <div class="break-btn" id="btn2" onclick="triggerBreak(2)">
+            <div class="break-btn-num">02</div>
+            <div class="break-btn-type">Infrastructure Migration</div>
+            <div class="break-btn-title">Blockchain Sovereignty Switch</div>
+            <div class="break-btn-transition">Polygon <span class="arr">→</span> SWIAT/RL1</div>
+          </div>
+          <div class="break-btn" id="btn3" onclick="triggerBreak(3)">
+            <div class="break-btn-num">03</div>
+            <div class="break-btn-type">Payment Rail Migration</div>
+            <div class="break-btn-title">ECB Settlement Bridge Transition</div>
+            <div class="break-btn-transition">Bundesbank <span class="arr">→</span> Pontes/T2</div>
+          </div>
+        </div>
+
+        <div class="global-controls">
+          <button class="ctrl-btn danger" id="allBreaksBtn" onclick="triggerAllBreaks()">⚡ TRIGGER ALL BREAKS</button>
+          <button class="ctrl-btn primary" id="resolveBtn" onclick="resolveAll()" disabled>XII RESOLVE ALL</button>
+          <button class="ctrl-btn reset" onclick="resetDemo()">↺ RESET</button>
+        </div>
+      </div>
+
+      <div class="viz-area">
+
+        <div class="narrative-bar" id="narrativeBar">
+          <strong>Appia Bond Series I is live.</strong> Registrar: Cashlink. Infrastructure: Polygon. Payment rail: Bundesbank trigger solution. Coupon event of €8.125M is scheduled T+2. All systems operational. KfW has announced a planned infrastructure resilience test — triggering a mid-lifecycle migration across all three infrastructure layers simultaneously.
+        </div>
+
+        <!-- INFRA STATUS ROWS -->
+        <div class="viz-title">Infrastructure State</div>
+        <div class="infra-rows">
+          <div class="infra-row" id="row1">
+            <div class="infra-row-label">Registrar</div>
+            <div class="infra-from" id="from1">Cashlink GmbH</div>
+            <div class="infra-row-arrow">→</div>
+            <div class="infra-to" id="to1" style="color:var(--text-dim);">DekaBank</div>
+          </div>
+          <div class="infra-row" id="row2">
+            <div class="infra-row-label">Blockchain</div>
+            <div class="infra-from" id="from2">Polygon (PoS)</div>
+            <div class="infra-row-arrow">→</div>
+            <div class="infra-to" id="to2" style="color:var(--text-dim);">SWIAT / RL1</div>
+          </div>
+          <div class="infra-row" id="row3">
+            <div class="infra-row-label">Payment Rail</div>
+            <div class="infra-from" id="from3">Bundesbank Trigger</div>
+            <div class="infra-row-arrow">→</div>
+            <div class="infra-to" id="to3" style="color:var(--text-dim);">Pontes / T2</div>
+          </div>
+        </div>
+
+        <!-- RESOLUTION BANNER -->
+        <div class="resolution-banner" id="resolutionBanner">
+          <div class="resolution-title">✓ ALL BREAKS ATTESTED — DORA ART.11 EVENTS CLOSED</div>
+          <div class="resolution-body">
+            Agent XII has written 3 Verification Reports to the Hyperledger Fabric compliance chain. Every chain-of-custody transfer is immutably timestamped and independently attested — survives failure of any infrastructure it attests. Coupon payment of €8.125M cleared via Pontes/T2. BaFin examination evidence is complete and readable without access to Cashlink, Polygon, or Bundesbank systems.
+          </div>
+        </div>
+
+        <!-- CHAIN VISUALISATION -->
+        <div class="viz-title">Hyperledger Fabric Compliance Chain — Agent XII Write Log</div>
+        <div class="chain-viz" id="chainViz">
+          <div class="chain-block written" style="border-color:var(--border2); color:var(--text-dim); background:transparent;">GEN</div>
+          <div class="chain-link" id="link0">⬡</div>
+          <div class="chain-block written" style="border-color:var(--border2); color:var(--text-dim); background:transparent;">001</div>
+          <div class="chain-link" id="link1">⬡</div>
+          <div class="chain-block written" style="border-color:var(--border2); color:var(--text-dim); background:transparent;">002</div>
+          <div class="chain-link" id="link2">⬡</div>
+          <div id="newBlocks"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RIGHT TOP: DORA LOG -->
+    <div class="panel dora-panel">
+      <div class="panel-header">
+        <div class="panel-title">DORA Event Log</div>
+        <div class="panel-badge" id="doraBadge">CLEAR</div>
+      </div>
+      <div class="dora-log" id="doraLog">
+        <div class="dora-event">
+          <div class="dora-event-header">
+            <span class="dora-event-art art-ok">SYSTEM</span>
+            <span class="dora-event-time" id="initTime">--:--:--</span>
+          </div>
+          <div class="dora-event-text">amleht Agent XII online. IntegrityMSP active. Monitoring Appia Bond Series I. Awaiting events.</div>
+          <div class="dora-event-status status-closed">● MONITORING</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT BOTTOM: AGENT XII -->
+    <div class="panel xii-panel">
+      <div class="panel-header">
+        <div class="panel-title">Agent XII — Chain Attestation</div>
+        <div class="panel-badge" id="xiiBadge">IDLE</div>
+      </div>
+      <div class="xii-status">
+        <div class="xii-orb" id="xiiOrb">XII</div>
+        <div class="xii-info">
+          <div class="xii-name">Agent XII</div>
+          <div class="xii-state" id="xiiState">Standby — awaiting compliance events</div>
+        </div>
+      </div>
+      <div class="vr-scroll" id="vrScroll">
+        <div style="font-size:9px; color:var(--text-dim); padding:8px 0; font-style:italic;">Verification Reports will appear here as Agent XII attests each infrastructure transition.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <div class="status-items">
+      <div class="status-item">
+        <div class="status-dot" id="dot1"></div>
+        <span id="statusNebius">Nebius B.V. · EU-Sovereign Inference · ONLINE</span>
+      </div>
+      <div class="status-item">
+        <div class="status-dot" id="dot2"></div>
+        <span>Hyperledger Fabric · IntegrityMSP · ACTIVE</span>
+      </div>
+      <div class="status-item">
+        <div class="status-dot" id="dot3"></div>
+        <span>AWS eu-north-1 · Backup · STANDBY</span>
+      </div>
+    </div>
+    <div class="footer-brand">amleht — In memory of Thelma.</div>
+  </div>
+
+</div>
+
+<script>
+// STATE
+let state = {
+  breaks: [false, false, false],
+  resolved: [false, false, false],
+  allBroken: false,
+  allResolved: false,
+  blockCount: 3,
+  doraOpen: 0
+};
+
+// CLOCK
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clockDisplay').textContent =
+    now.toUTCString().split(' ')[4] + ' UTC';
+  document.getElementById('initTime').textContent =
+    now.toUTCString().split(' ')[4];
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+// HASH GENERATOR
+function fakeHash(prefix) {
+  const chars = '0123456789abcdef';
+  let h = prefix + ':0x';
+  for (let i = 0; i < 16; i++) h += chars[Math.floor(Math.random() * 16)];
+  return h;
+}
+
+function timestamp() {
+  return new Date().toUTCString().split(' ')[4] + ' UTC';
+}
+
+// ADD DORA EVENT
+function addDoraEvent(art, text, status, cssClass) {
+  const log = document.getElementById('doraLog');
+  const div = document.createElement('div');
+  div.className = 'dora-event';
+  div.innerHTML = `
+    <div class="dora-event-header">
+      <span class="dora-event-art ${cssClass}">${art}</span>
+      <span class="dora-event-time">${timestamp()}</span>
+    </div>
+    <div class="dora-event-text">${text}</div>
+    <div class="dora-event-status ${status.class}">● ${status.label}</div>
+  `;
+  log.appendChild(div);
+  log.scrollTop = log.scrollHeight;
+  if (cssClass === 'art-17' || cssClass === 'art-11') {
+    state.doraOpen++;
+    document.getElementById('doraBadge').textContent = state.doraOpen + ' OPEN';
+    document.getElementById('doraBadge').className = 'panel-badge red';
+  }
+}
+
+// CLOSE DORA EVENT
+function closeDoraEvent(art, text) {
+  const log = document.getElementById('doraLog');
+  const div = document.createElement('div');
+  div.className = 'dora-event';
+  div.innerHTML = `
+    <div class="dora-event-header">
+      <span class="dora-event-art art-ok">${art}</span>
+      <span class="dora-event-time">${timestamp()}</span>
+    </div>
+    <div class="dora-event-text">${text}</div>
+    <div class="dora-event-status status-closed">● CLOSED — ATTESTED</div>
+  `;
+  log.appendChild(div);
+  log.scrollTop = log.scrollHeight;
+  state.doraOpen = Math.max(0, state.doraOpen - 1);
+  if (state.doraOpen === 0) {
+    document.getElementById('doraBadge').textContent = 'CLEAR';
+    document.getElementById('doraBadge').className = 'panel-badge green';
+  } else {
+    document.getElementById('doraBadge').textContent = state.doraOpen + ' OPEN';
+  }
+}
+
+// ADD CHAIN BLOCK
+function addChainBlock(label) {
+  state.blockCount++;
+  const container = document.getElementById('newBlocks');
+  const link = document.createElement('span');
+  link.className = 'chain-link active';
+  link.textContent = '⬡';
+  const block = document.createElement('div');
+  block.className = 'chain-block written';
+  block.textContent = String(state.blockCount).padStart(3, '0');
+  container.appendChild(link);
+  container.appendChild(block);
+}
+
+// ADD VERIFICATION REPORT
+function addVR(type, fields, breakNum) {
+  const scroll = document.getElementById('vrScroll');
+  if (scroll.querySelector('div[style]')) scroll.innerHTML = '';
+
+  const card = document.createElement('div');
+  card.className = 'vr-card';
+  const blockRef = 'HLF-B' + state.blockCount;
+  const agentSig = fakeHash('SIG');
+  const preHash = fakeHash('PRE');
+  const postHash = fakeHash('PST');
+
+  let rows = fields.map(([k, v, cls]) =>
+    `<div class="vr-row"><span class="vr-key">${k}</span><span class="vr-val ${cls||''}">${v}</span></div>`
+  ).join('');
+
+  card.innerHTML = `
+    <div class="vr-header">
+      <span class="vr-type">VERIFICATION REPORT · BREAK ${String(breakNum).padStart(2,'0')} · ${type}</span>
+      <span class="vr-block">${blockRef}</span>
+    </div>
+    <div class="vr-body">
+      ${rows}
+      <div class="vr-row"><span class="vr-key">pre_hash</span><span class="vr-val hash">${preHash}</span></div>
+      <div class="vr-row"><span class="vr-key">post_hash</span><span class="vr-val hash">${postHash}</span></div>
+      <div class="vr-row"><span class="vr-key">agent_sig</span><span class="vr-val hash">${agentSig}</span></div>
+      <div class="vr-row"><span class="vr-key">msp</span><span class="vr-val">IntegrityMSP</span></div>
+      <div class="vr-row"><span class="vr-key">sovereignty</span><span class="vr-val green">Nebius B.V. NL</span></div>
+    </div>
+    <div class="vr-stamp">✓ WRITTEN TO FABRIC · IMMUTABLE · ${timestamp()}</div>
+  `;
+  scroll.appendChild(card);
+  scroll.scrollTop = scroll.scrollHeight;
+  addChainBlock('VR' + breakNum);
+}
+
+// BREAK 1 — REGISTRAR
+function applyBreak1() {
+  document.getElementById('btn1').className = 'break-btn active';
+  document.getElementById('row1').className = 'infra-row row-failed';
+  document.getElementById('from1').className = 'infra-from strikethrough';
+  document.getElementById('registrarValue').textContent = 'INACCESSIBLE';
+  document.getElementById('registrarValue').className = 'field-value failed';
+  document.getElementById('registrarStatus').textContent = 'FAIL';
+  document.getElementById('registrarStatus').className = 'field-status status-fail';
+  document.getElementById('registerValue').textContent = 'INTERRUPTED';
+  document.getElementById('registerValue').className = 'field-value failed';
+  document.getElementById('registerStatus').textContent = 'FAIL';
+  document.getElementById('registerStatus').className = 'field-status status-fail';
+  addDoraEvent('DORA ART.11',
+    'ICT continuity event: Registrar migration initiated. Cashlink ownership register inaccessible mid-transfer. Bondholder records in transit. Chain-of-custody break detected.',
+    { class: 'status-open', label: 'OPEN — UNATTESTED' }, 'art-11');
+}
+
+// BREAK 2 — BLOCKCHAIN
+function applyBreak2() {
+  document.getElementById('btn2').className = 'break-btn active';
+  document.getElementById('row2').className = 'infra-row row-failed';
+  document.getElementById('from2').className = 'infra-from strikethrough';
+  document.getElementById('chainValue').textContent = 'MIGRATING';
+  document.getElementById('chainValue').className = 'field-value migrating';
+  document.getElementById('chainStatus').textContent = 'WARN';
+  document.getElementById('chainStatus').className = 'field-status status-warn';
+  document.getElementById('settlementValue').textContent = 'HALTED';
+  document.getElementById('settlementValue').className = 'field-value failed';
+  document.getElementById('settlementStatus').textContent = 'FAIL';
+  document.getElementById('settlementStatus').className = 'field-status status-fail';
+  document.getElementById('couponState').textContent = '⚠ BLOCKED — SETTLEMENT HALTED';
+  document.getElementById('couponState').style.background = 'var(--red-dim)';
+  document.getElementById('couponState').style.color = 'var(--red)';
+  addDoraEvent('DORA ART.11',
+    'ICT continuity event: Blockchain infrastructure migration Polygon → SWIAT/RL1. Smart contract state in transit. Settlement halted. Coupon event €8.125M blocked pending infrastructure reconstitution.',
+    { class: 'status-open', label: 'OPEN — UNATTESTED' }, 'art-11');
+  addDoraEvent('DORA ART.17',
+    'Potential major incident: Settlement halt on regulated bond constitutes service degradation. Lifecycle event disrupted. Notification assessment required.',
+    { class: 'status-pending', label: 'UNDER ASSESSMENT' }, 'art-17');
+}
+
+// BREAK 3 — PAYMENT RAIL
+function applyBreak3() {
+  document.getElementById('btn3').className = 'break-btn active';
+  document.getElementById('row3').className = 'infra-row row-failed';
+  document.getElementById('from3').className = 'infra-from strikethrough';
+  document.getElementById('railValue').textContent = 'SWITCHING';
+  document.getElementById('railValue').className = 'field-value migrating';
+  document.getElementById('railStatus').textContent = 'WARN';
+  document.getElementById('railStatus').className = 'field-status status-warn';
+  document.getElementById('doraValue').textContent = 'EVENTS OPEN';
+  document.getElementById('doraValue').className = 'field-value failed';
+  document.getElementById('doraStatus').textContent = 'OPEN';
+  document.getElementById('doraStatus').className = 'field-status status-fail';
+  addDoraEvent('DORA ART.11',
+    'ICT continuity event: Payment rail migration Bundesbank trigger solution → Eurosystem Pontes/TARGET2. Coupon DLT event and T2 settlement records now dual-stream. Cross-reference attestation required.',
+    { class: 'status-open', label: 'OPEN — UNATTESTED' }, 'art-11');
+}
+
+// TRIGGER INDIVIDUAL BREAK
+function triggerBreak(n) {
+  if (state.breaks[n-1]) return;
+  state.breaks[n-1] = true;
+
+  // Activate Agent XII
+  document.getElementById('xiiOrb').className = 'xii-orb active';
+  document.getElementById('xiiState').textContent = 'Active — monitoring break ' + String(n).padStart(2,'0');
+  document.getElementById('xiiState').className = 'xii-state active';
+  document.getElementById('xiiBadge').textContent = 'ACTIVE';
+  document.getElementById('xiiBadge').className = 'panel-badge amber';
+
+  // Update live dot
+  document.getElementById('liveDot').style.background = 'var(--amber)';
+  document.getElementById('liveLabel').textContent = 'BREAK ACTIVE';
+
+  if (n === 1) applyBreak1();
+  if (n === 2) applyBreak2();
+  if (n === 3) applyBreak3();
+
+  // Update narrative
+  updateNarrative();
+
+  // Check if any breaks active
+  const anyBroken = state.breaks.some(b => b);
+  if (anyBroken) {
+    document.getElementById('resolveBtn').disabled = false;
+    document.getElementById('bondBadge').textContent = 'DEGRADED';
+    document.getElementById('bondBadge').className = 'panel-badge red';
+    document.getElementById('stageBadge').textContent = 'BREAKS ACTIVE';
+    document.getElementById('stageBadge').className = 'panel-badge red';
+  }
+}
+
+function triggerAllBreaks() {
+  [1, 2, 3].forEach((n, i) => {
+    setTimeout(() => triggerBreak(n), i * 600);
+  });
+  document.getElementById('allBreaksBtn').disabled = true;
+}
+
+function updateNarrative() {
+  const bar = document.getElementById('narrativeBar');
+  const broken = state.breaks.filter(Boolean).length;
+  const resolved = state.resolved.filter(Boolean).length;
+
+  if (resolved === 3) {
+    bar.className = 'narrative-bar green-resolved';
+    bar.innerHTML = `<strong>✓ All three breaks attested.</strong> Agent XII has written Verification Reports to the Hyperledger Fabric compliance chain for every infrastructure transition. The coupon event has cleared. Every chain-of-custody break is immutably evidenced — readable by BaFin auditors without access to any migrated system. DORA Art.11 events closed. This is what Qivalis can offer its members.`;
+  } else if (broken > 0 && resolved < 3) {
+    bar.className = 'narrative-bar red-alert';
+    const unanswered = `<strong>Critical question:</strong> who can prove what was on which chain, under which registrar, at which moment — to a regulator, under examination, years from now? Without Agent XII, the answer is: <strong>nobody.</strong>`;
+    bar.innerHTML = `<strong>${broken} of 3 infrastructure break${broken > 1 ? 's' : ''} active.</strong> ${broken === 3 ? 'Settlement halted. Register inaccessible. Payment rail switching. ' : ''}${unanswered}`;
+  }
+}
+
+// RESOLVE ALL
+function resolveAll() {
+  document.getElementById('resolveBtn').disabled = true;
+
+  const resolveBreak = (n, delay, vrType, fields) => {
+    setTimeout(() => {
+      state.resolved[n-1] = true;
+
+      // Update btn
+      document.getElementById('btn' + n).className = 'break-btn resolved-btn';
+
+      // Update rows
+      document.getElementById('row' + n).className = 'infra-row row-resolved';
+      document.getElementById('from' + n).className = 'infra-from';
+      document.getElementById('to' + n).className = 'infra-to highlight';
+
+      // Write VR
+      addVR(vrType, fields, n);
+
+      // Close DORA event
+      const msgs = [
+        'DORA Art.11 continuity event CLOSED: Registrar transfer Cashlink → DekaBank. Agent XII has attested pre-transfer ownership register state and post-reconstitution at DekaBank. Chain-of-custody evidence written to Fabric block.',
+        'DORA Art.11 + Art.17 events CLOSED: Infrastructure migration Polygon → SWIAT/RL1 attested. Pre-migration state root and post-migration genesis both recorded. Settlement resumed. Art.17 notification assessment: below notification threshold — attested and documented.',
+        'DORA Art.11 continuity event CLOSED: Payment rail transition attested. DLT coupon event cross-referenced against Pontes T2 settlement confirmation. Dual-record audit artefact written to Fabric chain. Coupon €8.125M cleared.'
+      ];
+      closeDoraEvent('RESOLVED', msgs[n-1]);
+
+      // Update narrative
+      updateNarrative();
+    }, delay);
+  };
+
+  // Update XII
+  document.getElementById('xiiOrb').className = 'xii-orb active';
+  document.getElementById('xiiState').textContent = 'Writing Verification Reports to Fabric chain...';
+  document.getElementById('xiiBadge').textContent = 'WRITING';
+  document.getElementById('xiiBadge').className = 'panel-badge amber';
+
+  resolveBreak(1, 500, 'REGISTRAR-TRANSFER', [
+    ['bond', 'Appia Bond Series I / DE000KFW1234', ''],
+    ['event', 'Registrar migration', ''],
+    ['from', 'Cashlink GmbH', ''],
+    ['to', 'DekaBank', 'green'],
+    ['owners', '847 bondholder records transferred', ''],
+    ['status', 'TRANSFER COMPLETE', 'green'],
+  ]);
+
+  resolveBreak(2, 1800, 'INFRA-MIGRATION', [
+    ['bond', 'Appia Bond Series I / DE000KFW1234', ''],
+    ['event', 'Blockchain infrastructure migration', ''],
+    ['from', 'Polygon (PoS) — US-domiciled', ''],
+    ['to', 'SWIAT / RL1 — EU-sovereign', 'green'],
+    ['smart_contract', 'Reconstituted — state verified', ''],
+    ['settlement', 'RESUMED', 'green'],
+  ]);
+
+  resolveBreak(3, 3100, 'PAYMENT-RAIL-CROSS-REF', [
+    ['bond', 'Appia Bond Series I / DE000KFW1234', ''],
+    ['event', 'Payment rail transition + coupon processing', ''],
+    ['rail_from', 'Bundesbank trigger solution', ''],
+    ['rail_to', 'Eurosystem Pontes / TARGET2', 'green'],
+    ['coupon', '€8,125,000', ''],
+    ['dlt_event', 'Confirmed on SWIAT/RL1', ''],
+    ['t2_confirm', 'Cleared via Pontes TARGET2', 'green'],
+    ['coupon_status', 'PAID AND ATTESTED', 'green'],
+  ]);
+
+  // Final resolution
+  setTimeout(() => {
+    document.getElementById('xiiOrb').className = 'xii-orb resolved';
+    document.getElementById('xiiState').textContent = '3 Verification Reports written — all events closed';
+    document.getElementById('xiiState').className = 'xii-state resolved';
+    document.getElementById('xiiBadge').textContent = 'COMPLETE';
+    document.getElementById('xiiBadge').className = 'panel-badge green';
+
+    document.getElementById('bondBadge').textContent = 'ATTESTED';
+    document.getElementById('bondBadge').className = 'panel-badge green';
+    document.getElementById('stageBadge').textContent = 'RESOLVED';
+    document.getElementById('stageBadge').className = 'panel-badge green';
+
+    document.getElementById('liveDot').style.background = 'var(--green)';
+    document.getElementById('liveLabel').textContent = 'SIMULATION COMPLETE';
+
+    document.getElementById('registrarValue').textContent = 'DekaBank';
+    document.getElementById('registrarValue').className = 'field-value resolved';
+    document.getElementById('registrarStatus').textContent = 'OK';
+    document.getElementById('registrarStatus').className = 'field-status status-ok';
+
+    document.getElementById('targetRegistrarStatus').textContent = 'LIVE';
+    document.getElementById('targetRegistrarStatus').className = 'field-status status-ok';
+
+    document.getElementById('chainValue').textContent = 'SWIAT / RL1';
+    document.getElementById('chainValue').className = 'field-value resolved';
+    document.getElementById('chainStatus').textContent = 'OK';
+    document.getElementById('chainStatus').className = 'field-status status-ok';
+
+    document.getElementById('railValue').textContent = 'Pontes / T2';
+    document.getElementById('railValue').className = 'field-value resolved';
+    document.getElementById('railStatus').textContent = 'OK';
+    document.getElementById('railStatus').className = 'field-status status-ok';
+
+    document.getElementById('settlementValue').textContent = 'OPERATIONAL';
+    document.getElementById('settlementValue').className = 'field-value resolved';
+    document.getElementById('settlementStatus').textContent = 'OK';
+    document.getElementById('settlementStatus').className = 'field-status status-ok';
+
+    document.getElementById('registerValue').textContent = 'ACCESSIBLE';
+    document.getElementById('registerValue').className = 'field-value resolved';
+    document.getElementById('registerStatus').textContent = 'OK';
+    document.getElementById('registerStatus').className = 'field-status status-ok';
+
+    document.getElementById('doraValue').textContent = 'COMPLIANT';
+    document.getElementById('doraValue').className = 'field-value resolved';
+    document.getElementById('doraStatus').textContent = 'CLR';
+    document.getElementById('doraStatus').className = 'field-status status-ok';
+
+    document.getElementById('attestValue').textContent = '3 VRs on Fabric';
+    document.getElementById('attestValue').className = 'field-value resolved';
+    document.getElementById('attestStatus').textContent = 'DONE';
+    document.getElementById('attestStatus').className = 'field-status status-ok';
+
+    document.getElementById('couponState').textContent = '✓ PAID — €8,125,000 CLEARED VIA PONTES/T2';
+    document.getElementById('couponState').style.background = 'var(--green-dim)';
+    document.getElementById('couponState').style.color = 'var(--green)';
+
+    document.getElementById('resolutionBanner').className = 'resolution-banner show';
+
+    state.allResolved = true;
+  }, 4200);
+}
+
+// RESET
+function resetDemo() {
+  location.reload();
+}
+
+</script>
+</body>
+</html>

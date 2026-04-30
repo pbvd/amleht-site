@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>amleht — Secure Access</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #080e1a;
+  --navy2: #0d1625;
+  --gold: #c9a84c;
+  --gold-dim: rgba(201,168,76,0.1);
+  --text: #b8cce0;
+  --text-dim: #3a5a74;
+  --text-bright: #e8f2ff;
+  --red: #cc3344;
+  --green: #00b87a;
+  --mono: 'JetBrains Mono', monospace;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--navy);
+  color: var(--text);
+  font-family: var(--mono);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* BACKGROUND */
+body::before {
+  content: '';
+  position: fixed;
+  top: -300px; right: -300px;
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(201,168,76,0.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  bottom: -200px; left: -200px;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(74,158,255,0.03) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* GATE CARD */
+.gate {
+  width: 100%;
+  max-width: 420px;
+  padding: 24px;
+  position: relative;
+  z-index: 10;
+  animation: fadeIn 0.8s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* BRAND */
+.brand {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.brand-name {
+  font-family: var(--serif);
+  font-size: 52px;
+  font-weight: 300;
+  color: var(--gold);
+  letter-spacing: -1px;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.brand-rule {
+  width: 40px;
+  height: 1px;
+  background: var(--gold);
+  margin: 12px auto;
+  opacity: 0.4;
+}
+
+.brand-label {
+  font-size: 8px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+/* CARD */
+.card {
+  background: var(--navy2);
+  border: 1px solid rgba(201,168,76,0.12);
+  padding: 32px;
+  margin-bottom: 16px;
+}
+
+.card-label {
+  font-size: 8px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.card-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255,255,255,0.06);
+}
+
+/* CLOCK */
+.clock-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 10px 14px;
+  background: rgba(0,0,0,0.2);
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+.clock-label {
+  font-size: 8px;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+}
+
+.clock-value {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.clock-expiry {
+  font-size: 8px;
+  color: var(--gold);
+}
+
+/* INPUT */
+.input-row {
+  display: flex;
+  gap: 0;
+  margin-bottom: 8px;
+}
+
+.passphrase-input {
+  flex: 1;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 14px 16px;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-right: none;
+  color: var(--text-bright);
+  outline: none;
+  letter-spacing: 2px;
+  transition: border-color 0.2s;
+}
+
+.passphrase-input:focus {
+  border-color: rgba(201,168,76,0.4);
+}
+
+.passphrase-input::placeholder {
+  color: var(--text-dim);
+  letter-spacing: 1px;
+  font-size: 11px;
+}
+
+.submit-btn {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding: 14px 20px;
+  background: var(--gold);
+  color: var(--navy);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.submit-btn:hover { background: #e8c060; }
+.submit-btn:active { transform: scale(0.98); }
+
+/* FEEDBACK */
+.feedback {
+  font-size: 9px;
+  letter-spacing: 1px;
+  padding: 8px 14px;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s;
+}
+
+.feedback.error {
+  background: rgba(204,51,68,0.1);
+  border: 1px solid rgba(204,51,68,0.2);
+  color: var(--red);
+}
+
+.feedback.success {
+  background: rgba(0,184,122,0.1);
+  border: 1px solid rgba(0,184,122,0.2);
+  color: var(--green);
+}
+
+.feedback.hidden { opacity: 0; }
+
+/* HINT */
+.hint {
+  font-size: 9px;
+  color: var(--text-dim);
+  text-align: center;
+  line-height: 1.7;
+  margin-top: 8px;
+}
+
+.hint a {
+  color: var(--gold);
+  text-decoration: none;
+  opacity: 0.7;
+}
+
+/* FOOTER */
+.gate-footer {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.footer-thelma {
+  font-family: var(--serif);
+  font-size: 12px;
+  font-style: italic;
+  color: var(--text-dim);
+  opacity: 0.5;
+}
+
+/* ATTEMPTS */
+.attempts-bar {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.attempt-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  transition: background 0.3s;
+}
+
+.attempt-dot.used { background: var(--red); }
+
+/* LOCKED STATE */
+.locked-msg {
+  display: none;
+  text-align: center;
+  padding: 20px;
+}
+
+.locked-msg.show { display: block; }
+
+.locked-icon {
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+
+.locked-text {
+  font-size: 10px;
+  color: var(--red);
+  letter-spacing: 1px;
+  line-height: 1.7;
+}
+
+.countdown {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--gold);
+  margin: 12px 0;
+}
+</style>
+</head>
+<body>
+
+<div class="gate">
+
+  <div class="brand">
+    <div class="brand-name">amleht</div>
+    <div class="brand-rule"></div>
+    <div class="brand-label">Secure Demo Access</div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Access Control</div>
+
+    <div class="clock-row">
+      <div>
+        <div class="clock-label">Current Time (UTC)</div>
+        <div class="clock-value" id="clockDisplay">--:--:--</div>
+      </div>
+      <div style="text-align:right">
+        <div class="clock-label">Passphrase rotates in</div>
+        <div class="clock-expiry" id="expiryDisplay">-- min</div>
+      </div>
+    </div>
+
+    <div id="inputSection">
+      <div class="attempts-bar" id="attemptsBar">
+        <div class="attempt-dot" id="d1"></div>
+        <div class="attempt-dot" id="d2"></div>
+        <div class="attempt-dot" id="d3"></div>
+        <div class="attempt-dot" id="d4"></div>
+        <div class="attempt-dot" id="d5"></div>
+      </div>
+
+      <div class="input-row">
+        <input
+          type="password"
+          id="passphraseInput"
+          class="passphrase-input"
+          placeholder="Enter access passphrase"
+          autocomplete="off"
+          autocorrect="off"
+          spellcheck="false"
+          maxlength="32"
+        />
+        <button class="submit-btn" onclick="verify()">ENTER →</button>
+      </div>
+
+      <div class="feedback hidden" id="feedback"></div>
+    </div>
+
+    <div class="locked-msg" id="lockedMsg">
+      <div class="locked-icon">⊘</div>
+      <div class="locked-text">
+        ACCESS SUSPENDED<br>
+        TOO MANY INCORRECT ATTEMPTS<br><br>
+        RESETS IN
+      </div>
+      <div class="countdown" id="lockCountdown">--:--</div>
+      <div class="locked-text">
+        Contact paul@amleht.eu<br>
+        to request access
+      </div>
+    </div>
+  </div>
+
+  <div class="hint">
+    Access is by invitation only.<br>
+    To request a passphrase contact
+    <a href="mailto:paul@amleht.eu">paul@amleht.eu</a>
+  </div>
+
+  <div class="gate-footer">
+    <div class="footer-thelma">In memory of Thelma.</div>
+  </div>
+
+</div>
+
+<script>
+// ============================================================
+// CONFIGURATION — change SALT to rotate the entire passphrase
+// history. Keep this value private.
+// ============================================================
+const SALT = "amleht-thelma-2026-sovereign";
+
+// How many failed attempts before lockout
+const MAX_ATTEMPTS = 5;
+// Lockout duration in minutes
+const LOCKOUT_MINUTES = 30;
+// Where to go on success
+const DEMO_LIBRARY_URL = "index.html";
+
+// ============================================================
+// PASSPHRASE GENERATION
+// Simple deterministic TOTP-style hourly rotation.
+// Uses SALT + current UTC hour slot to generate a 
+// human-readable passphrase from a wordlist.
+// ============================================================
+
+const WORDLIST = [
+  "amber","atlas","beacon","bridge","chain","citadel","compass",
+  "covenant","delta","dora","echo","fabric","falcon","forge",
+  "genesis","granite","harbor","hydra","integrity","iron",
+  "jasper","keystone","ledger","lumen","marble","meridian",
+  "nebius","nexus","onyx","oracle","parish","pillar","quorum",
+  "rampart","regent","relay","river","scion","sentinel","signal",
+  "silver","slate","sovereign","stone","stratum","tether","thelma",
+  "timber","token","tower","treaty","trident","trust","turret",
+  "unity","uplift","vault","vector","vernal","vertex","vigil",
+  "vision","volta","warden","weald","zenith","zephyr"
+];
+
+// Simple hash — no crypto API needed, works in all browsers
+function simpleHash(str) {
+  let hash = 0x811c9dc5;
+  for (let i = 0; i < str.length; i++) {
+    hash ^= str.charCodeAt(i);
+    hash = (hash * 0x01000193) >>> 0;
+  }
+  return hash;
+}
+
+function getCurrentSlot() {
+  const now = new Date();
+  // Slot = YYYY-MM-DD-HH in UTC
+  return `${now.getUTCFullYear()}-${String(now.getUTCMonth()+1).padStart(2,'0')}-${String(now.getUTCDate()).padStart(2,'0')}-${String(now.getUTCHours()).padStart(2,'0')}`;
+}
+
+function generatePassphrase(slot) {
+  const seed = simpleHash(SALT + slot);
+  const seed2 = simpleHash(SALT + slot + "b");
+  const w1 = WORDLIST[seed % WORDLIST.length];
+  const w2 = WORDLIST[seed2 % WORDLIST.length];
+  const num = (simpleHash(SALT + slot + "n") % 90) + 10; // 10-99
+  return `${w1}-${w2}-${num}`;
+}
+
+function getCurrentPassphrase() {
+  return generatePassphrase(getCurrentSlot());
+}
+
+// Export for Telegram bot script (called externally)
+window.amlehtPassphrase = getCurrentPassphrase;
+window.amlehtSlot = getCurrentSlot;
+
+// ============================================================
+// STATE — persisted in sessionStorage
+// ============================================================
+function getState() {
+  try {
+    return JSON.parse(sessionStorage.getItem('amleht_gate') || '{}');
+  } catch { return {}; }
+}
+
+function saveState(s) {
+  sessionStorage.setItem('amleht_gate', JSON.stringify(s));
+}
+
+// ============================================================
+// UI
+// ============================================================
+let attempts = 0;
+let locked = false;
+let lockUntil = null;
+
+function init() {
+  const s = getState();
+  attempts = s.attempts || 0;
+  lockUntil = s.lockUntil || null;
+
+  if (lockUntil && Date.now() < lockUntil) {
+    setLocked(true);
+  } else if (lockUntil && Date.now() >= lockUntil) {
+    // Lock expired — reset
+    attempts = 0;
+    lockUntil = null;
+    saveState({ attempts: 0, lockUntil: null });
+  }
+
+  updateAttemptDots();
+  startClock();
+
+  // Enter key support
+  document.getElementById('passphraseInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') verify();
+  });
+}
+
+function startClock() {
+  function tick() {
+    const now = new Date();
+    const hh = String(now.getUTCHours()).padStart(2,'0');
+    const mm = String(now.getUTCMinutes()).padStart(2,'0');
+    const ss = String(now.getUTCSeconds()).padStart(2,'0');
+    document.getElementById('clockDisplay').textContent = `${hh}:${mm}:${ss} UTC`;
+
+    // Minutes remaining in current hour
+    const minsLeft = 59 - now.getUTCMinutes();
+    const secsLeft = 59 - now.getUTCSeconds();
+    document.getElementById('expiryDisplay').textContent =
+      `${String(minsLeft).padStart(2,'0')}:${String(secsLeft).padStart(2,'0')}`;
+
+    // Update lock countdown if locked
+    if (locked && lockUntil) {
+      const remaining = Math.max(0, lockUntil - Date.now());
+      const lm = Math.floor(remaining / 60000);
+      const ls = Math.floor((remaining % 60000) / 1000);
+      document.getElementById('lockCountdown').textContent =
+        `${String(lm).padStart(2,'0')}:${String(ls).padStart(2,'0')}`;
+      if (remaining === 0) {
+        attempts = 0;
+        lockUntil = null;
+        locked = false;
+        saveState({ attempts: 0, lockUntil: null });
+        setLocked(false);
+        updateAttemptDots();
+      }
+    }
+  }
+  tick();
+  setInterval(tick, 1000);
+}
+
+function verify() {
+  if (locked) return;
+
+  const input = document.getElementById('passphraseInput').value.trim().toLowerCase();
+  const correct = getCurrentPassphrase().toLowerCase();
+
+  if (input === correct) {
+    showFeedback('success', '✓ ACCESS GRANTED — REDIRECTING');
+    document.getElementById('passphraseInput').disabled = true;
+    setTimeout(() => {
+      window.location.href = DEMO_LIBRARY_URL;
+    }, 800);
+    return;
+  }
+
+  // Wrong
+  attempts++;
+  saveState({ attempts, lockUntil });
+  updateAttemptDots();
+  document.getElementById('passphraseInput').value = '';
+
+  if (attempts >= MAX_ATTEMPTS) {
+    lockUntil = Date.now() + (LOCKOUT_MINUTES * 60 * 1000);
+    saveState({ attempts, lockUntil });
+    setLocked(true);
+    return;
+  }
+
+  const remaining = MAX_ATTEMPTS - attempts;
+  showFeedback('error', `✗ INCORRECT PASSPHRASE — ${remaining} attempt${remaining !== 1 ? 's' : ''} remaining`);
+
+  // Shake animation
+  const input_el = document.getElementById('passphraseInput');
+  input_el.style.borderColor = 'rgba(204,51,68,0.6)';
+  setTimeout(() => input_el.style.borderColor = '', 600);
+}
+
+function updateAttemptDots() {
+  for (let i = 1; i <= 5; i++) {
+    const dot = document.getElementById('d' + i);
+    dot.className = 'attempt-dot' + (i <= attempts ? ' used' : '');
+  }
+}
+
+function setLocked(isLocked) {
+  locked = isLocked;
+  document.getElementById('inputSection').style.display = isLocked ? 'none' : 'block';
+  const lockedMsg = document.getElementById('lockedMsg');
+  lockedMsg.className = 'locked-msg' + (isLocked ? ' show' : '');
+}
+
+function showFeedback(type, msg) {
+  const fb = document.getElementById('feedback');
+  fb.className = `feedback ${type}`;
+  fb.textContent = msg;
+  if (type === 'error') {
+    setTimeout(() => fb.className = 'feedback hidden', 4000);
+  }
+}
+
+init();
+</script>
+
+</body>
+</html>
