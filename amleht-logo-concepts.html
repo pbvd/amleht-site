@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>amleht.eu — Logo Concepts</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700&family=Outfit:wght@200;300;400;500;600;700&family=Sora:wght@200;300;400;500;600;700&family=Manrope:wght@200;300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&family=Archivo:wght@100;200;300;400;500;600;700;800;900&family=IBM+Plex+Sans:wght@100;200;300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --navy: #0a1628;
+    --navy-mid: #0f1f3d;
+    --navy-light: #162a4a;
+    --electric: #3b82f6;
+    --electric-light: #60a5fa;
+    --electric-glow: #93bbfd;
+    --white: #f8fafc;
+    --gray: #94a3b8;
+  }
+
+  body {
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    padding: 60px 40px;
+  }
+
+  h1 {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    font-size: 1.4rem;
+    color: var(--gray);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .subtitle {
+    color: var(--electric-light);
+    font-size: 0.95rem;
+    margin-bottom: 60px;
+    font-weight: 300;
+    letter-spacing: 0.03em;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .concept {
+    background: linear-gradient(135deg, var(--navy-mid) 0%, rgba(15,31,61,0.6) 100%);
+    border: 1px solid rgba(59,130,246,0.12);
+    border-radius: 16px;
+    padding: 48px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 220px;
+    position: relative;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .concept:hover {
+    border-color: rgba(59,130,246,0.3);
+    box-shadow: 0 0 40px rgba(59,130,246,0.08);
+  }
+
+  .concept-label {
+    position: absolute;
+    top: 16px;
+    left: 20px;
+    font-size: 0.7rem;
+    color: var(--electric);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+    opacity: 0.7;
+  }
+
+  .concept-desc {
+    position: absolute;
+    bottom: 16px;
+    left: 20px;
+    right: 20px;
+    font-size: 0.75rem;
+    color: var(--gray);
+    letter-spacing: 0.02em;
+    line-height: 1.5;
+  }
+
+  /* ===== CONCEPT A: Ultra-clean Sora ===== */
+  .logo-a {
+    font-family: 'Sora', sans-serif;
+    font-weight: 300;
+    font-size: 3.2rem;
+    letter-spacing: -0.02em;
+    color: var(--white);
+  }
+  .logo-a .dot-eu {
+    color: var(--electric);
+    font-weight: 400;
+  }
+
+  /* ===== CONCEPT B: Archivo Bold Contrast ===== */
+  .logo-b {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 800;
+    font-size: 3rem;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+  .logo-b .dot-eu {
+    font-weight: 300;
+    color: var(--electric);
+    text-transform: lowercase;
+  }
+
+  /* ===== CONCEPT C: Manrope Light + Glow ===== */
+  .logo-c {
+    font-family: 'Manrope', sans-serif;
+    font-weight: 200;
+    font-size: 3.4rem;
+    letter-spacing: 0.12em;
+    color: var(--white);
+  }
+  .logo-c .dot-eu {
+    color: var(--electric-light);
+    font-weight: 400;
+    text-shadow: 0 0 20px rgba(59,130,246,0.4);
+  }
+
+  /* ===== CONCEPT D: Outfit Medium + Separator ===== */
+  .logo-d {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 500;
+    font-size: 3rem;
+    letter-spacing: 0.04em;
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+  .logo-d .separator {
+    width: 1px;
+    height: 28px;
+    background: var(--electric);
+    margin: 0 14px;
+    opacity: 0.6;
+  }
+  .logo-d .eu-part {
+    color: var(--electric);
+    font-weight: 300;
+    font-size: 1.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  /* ===== CONCEPT E: Jakarta + Underline Accent ===== */
+  .logo-e-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .logo-e {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 600;
+    font-size: 3rem;
+    letter-spacing: -0.01em;
+    color: var(--white);
+  }
+  .logo-e .dot-eu {
+    color: var(--electric);
+    font-weight: 300;
+  }
+  .logo-e-line {
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--electric) 0%, transparent 100%);
+    margin-top: 6px;
+    border-radius: 1px;
+  }
+
+  /* ===== CONCEPT F: IBM Plex + Monospace Feel ===== */
+  .logo-f {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 400;
+    font-size: 2.8rem;
+    letter-spacing: 0.08em;
+    color: var(--white);
+  }
+  .logo-f .dot-eu {
+    color: var(--electric);
+    font-weight: 600;
+  }
+  .logo-f .bracket {
+    color: var(--electric);
+    font-weight: 200;
+    opacity: 0.5;
+  }
+
+  /* ===== Light background variants ===== */
+  .light-section {
+    margin-top: 60px;
+    margin-bottom: 20px;
+  }
+  .light-section h2 {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    font-size: 1rem;
+    color: var(--gray);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+  }
+
+  .concept.light {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border-color: rgba(10,22,40,0.08);
+  }
+  .concept.light:hover {
+    border-color: rgba(10,22,40,0.15);
+    box-shadow: 0 4px 30px rgba(0,0,0,0.06);
+  }
+  .concept.light .concept-label { color: var(--navy-light); }
+  .concept.light .concept-desc { color: #64748b; }
+
+  .logo-a-light {
+    font-family: 'Sora', sans-serif;
+    font-weight: 300;
+    font-size: 3.2rem;
+    letter-spacing: -0.02em;
+    color: var(--navy);
+  }
+  .logo-a-light .dot-eu { color: var(--electric); font-weight: 400; }
+
+  .logo-d-light {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 500;
+    font-size: 3rem;
+    letter-spacing: 0.04em;
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+  }
+  .logo-d-light .separator {
+    width: 1px;
+    height: 28px;
+    background: var(--electric);
+    margin: 0 14px;
+    opacity: 0.6;
+  }
+  .logo-d-light .eu-part {
+    color: var(--electric);
+    font-weight: 300;
+    font-size: 1.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  /* ===== Favicon preview ===== */
+  .favicon-section {
+    margin-top: 60px;
+  }
+  .favicon-section h2 {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    font-size: 1rem;
+    color: var(--gray);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+  }
+  .favicon-row {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .favicon-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .favicon-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.4rem;
+  }
+  .fav-dark {
+    background: var(--navy-mid);
+    border: 1px solid rgba(59,130,246,0.2);
+    color: var(--electric);
+  }
+  .fav-blue {
+    background: var(--electric);
+    color: var(--white);
+  }
+  .fav-gradient {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--electric) 100%);
+    color: var(--white);
+  }
+  .favicon-label {
+    font-size: 0.65rem;
+    color: var(--gray);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 800px) {
+    .grid { grid-template-columns: 1fr; }
+    body { padding: 30px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<h1>amleht.eu — Wordmark Logo Concepts</h1>
+<p class="subtitle">Dark navy + electric blue · Modern tech aesthetic · Six directions</p>
+
+<div class="grid">
+
+  <!-- Concept A -->
+  <div class="concept">
+    <span class="concept-label">Concept A — Sora Light</span>
+    <div class="logo-a">amleht<span class="dot-eu">.eu</span></div>
+    <div class="concept-desc">Ultra-clean, light weight. Confidence through restraint. The .eu pops in electric blue.</div>
+  </div>
+
+  <!-- Concept B -->
+  <div class="concept">
+    <span class="concept-label">Concept B — Archivo Bold</span>
+    <div class="logo-b">AMLEHT<span class="dot-eu">.eu</span></div>
+    <div class="concept-desc">Heavy uppercase presence. Weight contrast between brand name and TLD. Commands the room.</div>
+  </div>
+
+  <!-- Concept C -->
+  <div class="concept">
+    <span class="concept-label">Concept C — Manrope Ultra-Light</span>
+    <div class="logo-c">amleht<span class="dot-eu">.eu</span></div>
+    <div class="concept-desc">Expanded spacing, whisper-thin strokes. The .eu glows softly. Premium and ethereal.</div>
+  </div>
+
+  <!-- Concept D -->
+  <div class="concept">
+    <span class="concept-label">Concept D — Outfit + Separator</span>
+    <div class="logo-d">
+      amleht<span class="separator"></span><span class="eu-part">EU</span>
+    </div>
+    <div class="concept-desc">Vertical bar separates brand from sovereignty signal. EU becomes a distinct badge. Clean and structural.</div>
+  </div>
+
+  <!-- Concept E -->
+  <div class="concept">
+    <span class="concept-label">Concept E — Jakarta + Accent Line</span>
+    <div class="logo-e-wrap">
+      <div class="logo-e">amleht<span class="dot-eu">.eu</span></div>
+      <div class="logo-e-line"></div>
+    </div>
+    <div class="concept-desc">Semi-bold with a gradient underline that fades right. Grounded and forward-moving.</div>
+  </div>
+
+  <!-- Concept F -->
+  <div class="concept">
+    <span class="concept-label">Concept F — IBM Plex + Brackets</span>
+    <div class="logo-f"><span class="bracket">{</span> amleht<span class="dot-eu">.eu</span> <span class="bracket">}</span></div>
+    <div class="concept-desc">Subtle code brackets frame the brand. Technical DNA visible. Infrastructure company feel.</div>
+  </div>
+
+</div>
+
+<!-- Light background variants -->
+<div class="light-section">
+  <h2>On Light Backgrounds</h2>
+  <div class="grid">
+    <div class="concept light">
+      <span class="concept-label">Concept A — Light variant</span>
+      <div class="logo-a-light">amleht<span class="dot-eu">.eu</span></div>
+    </div>
+    <div class="concept light">
+      <span class="concept-label">Concept D — Light variant</span>
+      <div class="logo-d-light">
+        amleht<span class="separator"></span><span class="eu-part">EU</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Favicon concepts -->
+<div class="favicon-section">
+  <h2>Favicon / App Icon Concepts</h2>
+  <div class="favicon-row">
+    <div class="favicon-item">
+      <div class="favicon-box fav-dark" style="font-family:'Sora',sans-serif;">a</div>
+      <span class="favicon-label">Navy + Blue</span>
+    </div>
+    <div class="favicon-item">
+      <div class="favicon-box fav-blue" style="font-family:'Sora',sans-serif;">a</div>
+      <span class="favicon-label">Solid Blue</span>
+    </div>
+    <div class="favicon-item">
+      <div class="favicon-box fav-gradient" style="font-family:'Sora',sans-serif;">a</div>
+      <span class="favicon-label">Gradient</span>
+    </div>
+    <div class="favicon-item">
+      <div class="favicon-box fav-dark" style="font-family:'Archivo',sans-serif; text-transform:uppercase;">A</div>
+      <span class="favicon-label">Archivo Dark</span>
+    </div>
+    <div class="favicon-item">
+      <div class="favicon-box fav-blue" style="font-family:'Outfit',sans-serif;">a</div>
+      <span class="favicon-label">Outfit Blue</span>
+    </div>
+    <div class="favicon-item">
+      <div class="favicon-box fav-gradient" style="font-family:'IBM Plex Sans',sans-serif;">{a}</div>
+      <span class="favicon-label">Plex Bracket</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
