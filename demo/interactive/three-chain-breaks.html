@@ -771,8 +771,10 @@
   }
 
   function logout() {
-    sessionStorage.removeItem('amleht_auth');
-    localStorage.removeItem('amleht_auth');
+    /* gate.html is stateless — no auth key to clear here.
+       amleht_gate sessionStorage holds rate-limit state
+       (attempts, lockUntil); leaving it alone preserves
+       lockouts across timeouts so they cannot be bypassed. */
     document.body.innerHTML = `
       <div style="display:flex; align-items:center; justify-content:center;
                   min-height:100vh; background:var(--bg, #0D1829);
@@ -793,7 +795,7 @@
         </div>
       </div>`;
     document.getElementById('amleht-session-relogin')
-      .addEventListener('click', () => location.reload());
+      .addEventListener('click', () => { location.href = '../../gate.html'; });
   }
 
   ['mousemove','mousedown','keydown','touchstart','scroll','click']
