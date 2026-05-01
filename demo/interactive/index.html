@@ -3,26 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script id="amleht-gate-guard">
-/* amleht gate guard — runs before any page content renders.
-   Reads the auth flag set by /gate.html on successful passphrase
-   entry. Anything older than 60 minutes is treated as expired. */
-(function() {
-  let ok = false;
-  try {
-    const raw = sessionStorage.getItem('amleht_gate_verified');
-    if (raw) {
-      const v = JSON.parse(raw);
-      const age = Date.now() - v.verifiedAt;
-      ok = (typeof v.verifiedAt === 'number' && age >= 0 && age < 60 * 60 * 1000);
-    }
-  } catch (e) { /* ok stays false */ }
-  if (!ok) {
-    sessionStorage.removeItem('amleht_gate_verified');
-    window.location.replace('../../gate.html');
-  }
-})();
-</script>
 <title>amleht — Demo Library</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500;700&family=Mulish:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -575,6 +555,47 @@ header {
   color: var(--text-dim);
 }
 
+/* DOCUMENT card treatments */
+.read-btn {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 8px 20px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: var(--text-dim);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+  display: inline-block;
+}
+
+.read-btn:hover {
+  border-color: rgba(255,255,255,0.35);
+  color: var(--text);
+}
+
+.demo-status.document {
+  background: rgba(255,255,255,0.04);
+  color: var(--text-dim);
+  border: 1px solid rgba(255,255,255,0.1);
+  font-size: 8px;
+  letter-spacing: 1px;
+}
+
+.companion-note {
+  font-family: var(--serif);
+  font-size: 11px;
+  font-style: italic;
+  color: var(--text-dim);
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  opacity: 0.7;
+}
+
 /* TOPOLOGY SECTION */
 .topology {
   padding: 0 48px 80px;
@@ -889,11 +910,11 @@ footer {
       </div>
     </div>
 
-    <!-- THREE CHAIN BREAKS BRIEF -->
+    <!-- THREE CHAIN BREAKS BRIEF — COMPANION DOCUMENT -->
     <div class="demo-card reveal">
       <div class="demo-card-header">
-        <div class="demo-op-code">Intelligence Brief · SIG-037</div>
-        <div class="demo-status ready">● READY</div>
+        <div class="demo-op-code">📄 Intelligence Brief · SIG-037</div>
+        <div class="demo-status document">COMPANION DOC</div>
       </div>
       <div class="demo-card-body">
         <div class="demo-title">Three Chain Breaks</div>
@@ -906,13 +927,14 @@ footer {
           <span class="demo-tag">COMPLIANCE BRIEF</span>
           <span class="demo-tag">ONE-PAGER</span>
         </div>
+        <div class="companion-note">Read alongside Operation Appia — The Three Chain Breaks</div>
       </div>
       <div class="demo-card-footer">
         <div class="demo-sigs">
           <span class="demo-sig">SIG-037</span>
           <span class="demo-sig">FORENSIC</span>
         </div>
-        <a href="three-chain-breaks.html" class="launch-btn">Launch →</a>
+        <a href="three-chain-breaks.html" class="read-btn">READ BRIEF →</a>
       </div>
     </div>
 
@@ -940,7 +962,7 @@ footer {
           <span class="demo-sig">SIG-022</span>
           <span class="demo-sig">TIER I</span>
         </div>
-        <a href="gethsemane.html" class="launch-btn">Launch →</a>
+        <a href="gethsemane/index.html" class="launch-btn">Launch Demo →</a>
       </div>
     </div>
 
@@ -974,11 +996,11 @@ footer {
       </div>
     </div>
 
-    <!-- EXECUTIVE BRIEFING -->
+    <!-- EXECUTIVE BRIEFING — COMPANION DOCUMENT -->
     <div class="demo-card reveal">
       <div class="demo-card-header">
-        <div class="demo-op-code">Executive Suite · SIG-022 + SIG-037</div>
-        <div class="demo-status ready">● READY</div>
+        <div class="demo-op-code">📄 Executive Suite · SIG-022 + SIG-037</div>
+        <div class="demo-status document">COMPANION DOC</div>
       </div>
       <div class="demo-card-body">
         <div class="demo-title">The Compliance Layer Europe Has Not Built</div>
@@ -992,13 +1014,14 @@ footer {
           <span class="demo-tag">DNB</span>
           <span class="demo-tag">ANTHROPIC EMEA</span>
         </div>
+        <div class="companion-note">Strategic briefing — read before or after any demo conversation</div>
       </div>
       <div class="demo-card-footer">
         <div class="demo-sigs">
           <span class="demo-sig">SIG-022</span>
           <span class="demo-sig">SIG-037</span>
         </div>
-        <a href="guillaume-briefing-suite-v2.html" class="launch-btn">Launch →</a>
+        <a href="guillaume-briefing-suite-v2.html" class="read-btn">READ BRIEFING →</a>
       </div>
     </div>
 
@@ -1094,8 +1117,8 @@ footer {
   </div>
   <div class="footer-right">
     amleht.eu/demo<br>
-    Demo Library v1.0<br>
-    28 April 2026<br>
+    Demo Library v1.1<br>
+    1 May 2026<br>
     POC Enquiries: paul@amleht.eu
   </div>
 </footer>
