@@ -532,6 +532,13 @@ function verify() {
   const correct = getCurrentPassphrase().toLowerCase();
 
   if (input === correct) {
+    /* Stamp sessionStorage with verified-at and slot. Demos read
+       this and reject anything older than 60 minutes. Tab-scoped
+       so closing the browser ends the session. */
+    sessionStorage.setItem('amleht_gate_verified', JSON.stringify({
+      verifiedAt: Date.now(),
+      slot: getCurrentSlot()
+    }));
     showFeedback('success', '✓ ACCESS GRANTED — REDIRECTING');
     document.getElementById('passphraseInput').disabled = true;
     setTimeout(() => {

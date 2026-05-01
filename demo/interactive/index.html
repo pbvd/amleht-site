@@ -3,6 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script id="amleht-gate-guard">
+/* amleht gate guard — runs before any page content renders.
+   Reads the auth flag set by /gate.html on successful passphrase
+   entry. Anything older than 60 minutes is treated as expired. */
+(function() {
+  let ok = false;
+  try {
+    const raw = sessionStorage.getItem('amleht_gate_verified');
+    if (raw) {
+      const v = JSON.parse(raw);
+      const age = Date.now() - v.verifiedAt;
+      ok = (typeof v.verifiedAt === 'number' && age >= 0 && age < 60 * 60 * 1000);
+    }
+  } catch (e) { /* ok stays false */ }
+  if (!ok) {
+    sessionStorage.removeItem('amleht_gate_verified');
+    window.location.replace('../../gate.html');
+  }
+})();
+</script>
 <title>amleht — Demo Library</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500;700&family=Mulish:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>

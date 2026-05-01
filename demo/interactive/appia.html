@@ -3,6 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script id="amleht-gate-guard">
+/* amleht gate guard — runs before any page content renders.
+   Reads the auth flag set by /gate.html on successful passphrase
+   entry. Anything older than 60 minutes is treated as expired. */
+(function() {
+  let ok = false;
+  try {
+    const raw = sessionStorage.getItem('amleht_gate_verified');
+    if (raw) {
+      const v = JSON.parse(raw);
+      const age = Date.now() - v.verifiedAt;
+      ok = (typeof v.verifiedAt === 'number' && age >= 0 && age < 60 * 60 * 1000);
+    }
+  } catch (e) { /* ok stays false */ }
+  if (!ok) {
+    sessionStorage.removeItem('amleht_gate_verified');
+    window.location.replace('../../gate.html');
+  }
+})();
+</script>
 <title>Operation Appia — amleht Live Demo</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -1672,10 +1692,11 @@ function resetDemo() {
   }
 
   function logout() {
-    /* gate.html is stateless — no auth key to clear here.
-       amleht_gate sessionStorage holds rate-limit state
-       (attempts, lockUntil); leaving it alone preserves
-       lockouts across timeouts so they cannot be bypassed. */
+    /* Clear the auth flag so the user must re-enter the passphrase.
+       amleht_gate (rate-limit attempts/lockUntil) is left alone —
+       clearing it would let attackers bypass the 5-attempt lockout
+       by triggering the timeout. */
+    sessionStorage.removeItem('amleht_gate_verified');
     document.body.innerHTML = `
       <div style="display:flex; align-items:center; justify-content:center;
                   min-height:100vh; background:var(--bg, #0D1829);
