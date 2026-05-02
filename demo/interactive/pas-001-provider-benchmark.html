@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script id="amleht-gate-guard">
+/* amleht gate guard — runs before any page content renders.
+   Reads the auth flag set by /gate.html on successful passphrase
+   entry. Anything older than 60 minutes is treated as expired. */
+(function() {
+  let ok = false;
+  try {
+    const raw = sessionStorage.getItem('amleht_gate_verified');
+    if (raw) {
+      const v = JSON.parse(raw);
+      const age = Date.now() - v.verifiedAt;
+      ok = (typeof v.verifiedAt === 'number' && age >= 0 && age < 60 * 60 * 1000);
+    }
+  } catch (e) { /* ok stays false */ }
+  if (!ok) {
+    sessionStorage.removeItem('amleht_gate_verified');
+    window.location.replace('../../gate.html');
+  }
+})();
+</script>
+<title>The Benchmark That Should Have Existed — amleht</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0B1220;
+    --surface: #152236;
+    --surface-2: #1C2E45;
+    --gold: #FFCC00;
+    --amber: #D4A843;
+    --ice: #C8D8E8;
+    --text: #E8EEF5;
+    --muted: #7A96B0;
+    --dim: #3A5068;
+    --red: #C0392B;
+    --green: #27AE60;
+    --border: rgba(200,216,232,0.12);
+    --mono: 'JetBrains Mono', monospace;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Jost', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--navy);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 48px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(11,18,32,0.95);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(8px);
+  }
+  .topbar-left { display: flex; align-items: center; gap: 24px; }
+  .topbar-brand {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    font-weight: 500;
+  }
+  .topbar-doc {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .topbar-right {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-align: right;
+    line-height: 1.6;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 72px 48px 56px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(255,204,0,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .hero-title {
+    font-family: var(--serif);
+    font-size: clamp(32px, 5vw, 54px);
+    font-weight: 500;
+    line-height: 1.15;
+    color: var(--text);
+    margin-bottom: 12px;
+    max-width: 760px;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .hero-subtitle {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    font-weight: 500;
+  }
+  .badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 40px;
+  }
+  .badge {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    padding: 4px 10px;
+    border-radius: 2px;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+  .badge-gold { background: rgba(255,204,0,0.12); color: var(--gold); border: 1px solid rgba(255,204,0,0.3); }
+  .badge-red { background: rgba(192,57,43,0.12); color: #E74C3C; border: 1px solid rgba(192,57,43,0.3); }
+  .badge-ice { background: rgba(200,216,232,0.08); color: var(--ice); border: 1px solid var(--border); }
+  .badge-green { background: rgba(39,174,96,0.12); color: #2ECC71; border: 1px solid rgba(39,174,96,0.3); }
+
+  /* ── VERBATIM BLOCK ── */
+  .verbatim-block {
+    background: var(--surface);
+    border-left: 3px solid var(--gold);
+    padding: 24px 28px;
+    margin: 0 48px 0;
+    border-radius: 0 4px 4px 0;
+  }
+  .verbatim-meta {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .verbatim-who {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .verbatim-role {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+  .verbatim-text {
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--ice);
+    font-style: italic;
+  }
+  .verbatim-text mark {
+    background: rgba(255,204,0,0.12);
+    color: var(--gold);
+    font-style: normal;
+    padding: 1px 4px;
+    border-radius: 2px;
+  }
+  .verbatim-question {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--gold);
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── GOLD RULE ── */
+  .gold-rule {
+    height: 1px;
+    background: linear-gradient(to right, var(--gold), transparent);
+    margin: 48px 48px;
+    opacity: 0.4;
+  }
+
+  /* ── SECTION ── */
+  .section {
+    padding: 0 48px;
+    margin-bottom: 56px;
+  }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .section-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .section-title {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .section-body {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--ice);
+    max-width: 760px;
+  }
+  .section-body p { margin-bottom: 16px; }
+  .section-body strong { color: var(--text); font-weight: 600; }
+
+  /* ── THREE QUESTIONS ── */
+  .questions-grid {
+    display: grid;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .question-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--red);
+    padding: 20px 24px;
+    border-radius: 0 4px 4px 0;
+  }
+  .question-number {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: #E74C3C;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .question-text {
+    font-family: var(--serif);
+    font-size: 16px;
+    font-style: italic;
+    color: var(--ice);
+    line-height: 1.6;
+  }
+  .answer-text {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    line-height: 1.7;
+  }
+  .answer-text strong { color: var(--gold); }
+
+  /* ── BENCHMARK TABLE ── */
+  .benchmark-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 24px;
+    font-size: 13px;
+  }
+  .benchmark-table th {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding: 10px 16px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255,204,0,0.3);
+    background: rgba(255,204,0,0.05);
+  }
+  .benchmark-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--ice);
+    vertical-align: top;
+    line-height: 1.6;
+  }
+  .benchmark-table tr:last-child td { border-bottom: none; }
+  .benchmark-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .criterion-tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .reg-pill {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 8px;
+    padding: 2px 6px;
+    border-radius: 2px;
+    background: rgba(255,204,0,0.1);
+    color: var(--gold);
+    border: 1px solid rgba(255,204,0,0.2);
+    margin: 2px 2px 0 0;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .verdict-pass {
+    color: #2ECC71;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+  }
+  .verdict-flag {
+    color: #E74C3C;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+  }
+  .verdict-review {
+    color: var(--amber);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+  }
+
+  /* ── DEMO CTA ── */
+  .demo-cta {
+    background: var(--surface);
+    border: 1px solid rgba(255,204,0,0.25);
+    border-radius: 4px;
+    padding: 32px 36px;
+    margin-top: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .demo-cta-left { flex: 1; min-width: 280px; }
+  .demo-cta-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .demo-cta-title {
+    font-family: var(--serif);
+    font-size: 20px;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .demo-cta-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .demo-btn {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 12px 24px;
+    background: var(--gold);
+    color: var(--navy);
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+  }
+  .demo-btn:hover { opacity: 0.85; }
+
+  /* ── THELMA PRINCIPLE ── */
+  .thelma-block {
+    background: linear-gradient(135deg, rgba(255,204,0,0.06), rgba(255,204,0,0.02));
+    border: 1px solid rgba(255,204,0,0.2);
+    border-radius: 4px;
+    padding: 28px 32px;
+    margin-top: 8px;
+  }
+  .thelma-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .thelma-text {
+    font-family: var(--serif);
+    font-size: 17px;
+    font-style: italic;
+    color: var(--ice);
+    line-height: 1.7;
+  }
+
+  /* ── AGENT XII BLOCK ── */
+  .agent-xii-block {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--gold);
+    padding: 24px 28px;
+    border-radius: 0 0 4px 4px;
+    margin-top: 24px;
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+  .agent-xii-header {
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    font-size: 10px;
+  }
+  .agent-xii-line {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 10px;
+    gap: 16px;
+  }
+  .agent-xii-line:last-child { border-bottom: none; }
+  .agent-xii-key { color: var(--ice); }
+  .agent-xii-val { color: var(--muted); text-align: right; }
+
+  /* ── FOOTER ── */
+  .footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 48px;
+    margin-top: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .footer-left {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--dim);
+    letter-spacing: 0.08em;
+    line-height: 1.8;
+  }
+  .footer-right {
+    font-family: var(--serif);
+    font-size: 13px;
+    font-style: italic;
+    color: var(--dim);
+  }
+
+  /* ── REVEAL ANIMATION ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    animation: reveal 0.6s ease forwards;
+  }
+  @keyframes reveal {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .reveal:nth-child(1) { animation-delay: 0.1s; }
+  .reveal:nth-child(2) { animation-delay: 0.2s; }
+  .reveal:nth-child(3) { animation-delay: 0.3s; }
+  .reveal:nth-child(4) { animation-delay: 0.4s; }
+
+  @media (max-width: 768px) {
+    .topbar, .hero, .section, .footer { padding-left: 24px; padding-right: 24px; }
+    .verbatim-block { margin: 0 24px; }
+    .gold-rule { margin: 32px 24px; }
+    .topbar { flex-direction: column; align-items: flex-start; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-brand">amleht</div>
+    <div class="topbar-doc">Intelligence Brief · Provider Assessment Series · PAS-001</div>
+  </div>
+  <div class="topbar-right">
+    02 MAY 2026 · AMSTERDAM<br>
+    INDEPENDENT ASSESSMENT · DORA ART.28 · CONFIDENTIAL
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-label">In response to a public signal in European financial infrastructure</div>
+  <h1 class="hero-title">The Benchmark<br><em>That Should Have Existed</em></h1>
+  <div class="hero-subtitle">An Independent Provider Assessment Framework for European Financial Infrastructure</div>
+  <div class="badge-row">
+    <span class="badge badge-gold">DORA ART.28 · ICT THIRD-PARTY RISK</span>
+    <span class="badge badge-gold">NIS2 ART.21 · SUPPLY CHAIN</span>
+    <span class="badge badge-ice">MiFID II · OPERATIONAL RESILIENCE</span>
+    <span class="badge badge-ice">EU AI ACT · CONFORMITY</span>
+    <span class="badge badge-red">CONCENTRATION RISK · JURISDICTION</span>
+    <span class="badge badge-green">ASSESSED ON BEHALF OF INSTITUTIONS</span>
+  </div>
+</div>
+
+<!-- TRIGGERING SIGNAL -->
+<div style="padding: 40px 48px 0;">
+  <div style="font-family: var(--mono); font-size: 10px; color: var(--gold); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 16px;">00 · The Signal That Prompted This Brief</div>
+</div>
+
+<div class="verbatim-block reveal">
+  <div class="verbatim-meta">
+    <span class="verbatim-who">Clarisse Hagège</span>
+    <span class="verbatim-role">CEO & Founder, Dfns · MPC Alliance Board Member · Paris</span>
+    <span class="verbatim-role">Published on LinkedIn · Addressed to Jan-Oliver Sell, Qivalis · and all 12 member banks</span>
+  </div>
+  <div class="verbatim-text">
+    "Positioning a single US-Israeli provider as the default for systemic European infrastructure goes beyond a technical decision. It raises fundamental questions around <mark>jurisdiction, operational resilience, concentration risk, and long-term control.</mark>"
+    <br><br>
+    <mark>"Why was there no benchmark including European providers? Why promote a single vendor across multiple use cases?"</mark>
+    <br><br>
+    "This is not about one vendor versus another. It is about <mark>the direction we choose collectively.</mark>"
+  </div>
+  <div class="verbatim-question">
+    Three questions. One forensic response. That is what this brief provides.
+  </div>
+</div>
+
+<div class="gold-rule"></div>
+
+<!-- SECTION 01 — THE THREE QUESTIONS -->
+<div class="section reveal">
+  <div class="section-header">
+    <span class="section-num">01 ·</span>
+    <span class="section-title">Three Questions. Three Answers.</span>
+  </div>
+  <div class="section-body">
+    <p>Clarisse did not ask a commercial question. She asked a structural one — about process, governance, and institutional responsibility. Each question has a direct answer from an independent assessor operating under the Thelma Principle: assessed exclusively on behalf of institutions.</p>
+  </div>
+
+  <div class="questions-grid" style="margin-top: 24px;">
+    <div class="question-card">
+      <div class="question-number">Question One</div>
+      <div class="question-text">"Why was there no benchmark including European providers?"</div>
+      <div class="answer-text">
+        <strong>The benchmark exists.</strong> DORA Article 28 mandates that regulated institutions maintain a register of ICT third-party service providers and conduct documented risk assessments before any critical dependency is established. The framework for evaluating any provider — European or otherwise — against jurisdiction, operational resilience, concentration risk, and contractual control is already in law. What was missing was an independent party applying it without commercial interest in the outcome.
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="question-number">Question Two</div>
+      <div class="question-text">"Why promote a single vendor across multiple use cases?"</div>
+      <div class="answer-text">
+        <strong>Concentration risk is a DORA Art.28(8) concern, not an opinion.</strong> Where an institution — or a consortium of institutions — becomes critically dependent on a single ICT third-party provider, the competent authority must be notified and ongoing monitoring demonstrated. Multi-vendor diversity is not a preference; it is a regulatory expectation. An independent assessor flags single-vendor concentration before contracts are signed, not after.
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="question-number">Question Three</div>
+      <div class="question-text">"This is not about one vendor versus another. It is about the direction we choose collectively."</div>
+      <div class="answer-text">
+        <strong>Correct — and that is precisely why assessment cannot come from a vendor.</strong> The direction is set by institutions exercising informed, independent judgment. That judgment requires a compliance layer that sits above infrastructure providers, assesses them impartially, and reports exclusively to the institution. Not to the provider selected. Not to the consortium lead. To the institution.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="gold-rule"></div>
+
+<!-- SECTION 02 — SEAL FRAMEWORK -->
+<div class="section reveal">
+  <div class="section-header">
+    <span class="section-num">02 ·</span>
+    <span class="section-title">The Benchmark Already Exists — The EC Published It</span>
+  </div>
+  <div class="section-body">
+    <p>The European Commission answered Clarisse's question before she asked it. In April 2026, the Commission awarded €180 million of cloud infrastructure contracts using a published, scored, procurement-grade sovereignty standard called <strong>SEAL — Sovereignty Effectiveness Assurance Levels</strong>. It is not internal guidance. It is not a think-tank framework. It is the standard the Commission itself applied to its own critical infrastructure procurement.</p>
+    <p>SEAL runs from 0 to 4. SEAL-2 was the minimum threshold for eligibility. Three of four awarded providers reached SEAL-3. The framework covers eight dimensions. <strong>Supply chain sovereignty carries the highest scoring weight at 20%.</strong></p>
+    <p>amleht applies this framework — alongside DORA Art.28 — to any ICT infrastructure provider on behalf of a regulated institution. It is not our benchmark. It is the EC's. We are the independent party applying it.</p>
+  </div>
+
+  <!-- SEAL LADDER -->
+  <div style="margin-top: 32px; display: grid; gap: 10px; max-width: 760px;">
+
+    <div style="background: rgba(192,57,43,0.08); border: 1px solid rgba(192,57,43,0.25); border-left: 4px solid #C0392B; padding: 16px 20px; border-radius: 0 4px 4px 0;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <span style="font-family:var(--mono);font-size:10px;color:#E74C3C;letter-spacing:0.15em;font-weight:600;">SEAL-0 · NO SOVEREIGNTY</span>
+        <span style="font-family:var(--mono);font-size:9px;color:var(--muted);">INELIGIBLE FOR EU CRITICAL INFRASTRUCTURE</span>
+      </div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.6;">Operations under full non-EU control. CLOUD Act or equivalent foreign jurisdiction applies. No enforceable EU law protection over data or operations. <strong style="color:#E74C3C;">US-incorporated providers with US-domiciled infrastructure default to this tier.</strong></div>
+    </div>
+
+    <div style="background: rgba(212,168,67,0.08); border: 1px solid rgba(212,168,67,0.25); border-left: 4px solid var(--amber); padding: 16px 20px; border-radius: 0 4px 4px 0;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <span style="font-family:var(--mono);font-size:10px;color:var(--amber);letter-spacing:0.15em;font-weight:600;">SEAL-2 · DATA SOVEREIGNTY</span>
+        <span style="font-family:var(--mono);font-size:9px;color:var(--muted);">MINIMUM EC ELIGIBILITY THRESHOLD</span>
+      </div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.6;">EU law is enforceable over data at rest and in transit. However material non-EU dependencies remain — in supply chain, tooling, or operational control. Meets minimum bar but does not eliminate foreign influence on critical operations.</div>
+    </div>
+
+    <div style="background: rgba(39,174,96,0.08); border: 1px solid rgba(39,174,96,0.25); border-left: 4px solid #27AE60; padding: 16px 20px; border-radius: 0 4px 4px 0;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <span style="font-family:var(--mono);font-size:10px;color:#2ECC71;letter-spacing:0.15em;font-weight:600;">SEAL-3 · DIGITAL RESILIENCE</span>
+        <span style="font-family:var(--mono);font-size:9px;color:#2ECC71;">ACHIEVED BY 3 OF 4 EC-AWARDED PROVIDERS</span>
+      </div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.6;">EU actors exercise meaningful operational control. Non-EU influence is marginal and documented. Supply chain provenance verified. Technology openness demonstrated. Security operations under EU governance. <strong style="color:#2ECC71;">This is the target tier for systemic European financial infrastructure.</strong></div>
+    </div>
+
+    <div style="background: rgba(255,204,0,0.06); border: 1px solid rgba(255,204,0,0.2); border-left: 4px solid var(--gold); padding: 16px 20px; border-radius: 0 4px 4px 0;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <span style="font-family:var(--mono);font-size:10px;color:var(--gold);letter-spacing:0.15em;font-weight:600;">SEAL-4 · FULL DIGITAL SOVEREIGNTY</span>
+        <span style="font-family:var(--mono);font-size:9px;color:var(--muted);">COMPLETE EU CONTROL · NO NON-EU DEPENDENCIES</span>
+      </div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.6;">Complete EU control across all eight dimensions. No critical non-EU dependencies anywhere in the stack. The highest achievable tier. Currently rare — represents the long-term target for European sovereign infrastructure.</div>
+    </div>
+  </div>
+
+  <!-- SEAL DIMENSIONS NOTE -->
+  <div style="margin-top: 20px; max-width: 760px; background: var(--surface); border: 1px solid var(--border); padding: 16px 20px; border-radius: 4px;">
+    <div style="font-family:var(--mono);font-size:9px;color:var(--gold);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:10px;">SEAL Eight Assessment Dimensions · Supply Chain Sovereignty = 20% Weighting (Highest)</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;">
+      <span style="font-family:var(--mono);font-size:9px;padding:4px 10px;background:rgba(255,204,0,0.12);color:var(--gold);border:1px solid rgba(255,204,0,0.25);border-radius:2px;">Strategic Ownership</span>
+      <span style="font-family:var(--mono);font-size:9px;padding:4px 10px;background:rgba(255,204,0,0.12);color:var(--gold);border:1px solid rgba(255,204,0,0.25);border-radius:2px;">Legal Jurisdiction</span>
+      <span style="font-family:var(--mono);font-size:9px;padding:4px 10px;background:rgba(255,204,0,0.12);color:var(--gold);border:1px solid rgba(255,204,0,0.25);border-radius:2px;font-weight:600;">Supply Chain Sovereignty ★ 20%</span>
+      <span style="font-family:var(--mono);font-size:9px;padding:4px 10px;background:rgba(255,204,0,0.12);color:var(--gold);border:1px solid rgba(255,204,0,0.25);border-radius:2px;">Technology Openness</span>
+      <span style="font-family:var(--mono);font-size:9px;padding:4px 10px;background:rgba(255,204,0,0.12);color:var(--gold);border:1px solid rgba(255,204,0,0.25);border-radius:2px;">Data Residency</span>
+      <span style="font-family:var(--mono);font-size:9px;padding:4px 10px;background:rgba(255,204,0,0.12);color:var(--gold);border:1px solid rgba(255,204,0,0.25);border-radius:2px;">Security Operations</span>
+      <span style="font-family:var(--mono);font-size:9px;padding:4px 10px;background:rgba(255,204,0,0.12);color:var(--gold);border:1px solid rgba(255,204,0,0.25);border-radius:2px;">Operational Control</span>
+      <span style="font-family:var(--mono);font-size:9px;padding:4px 10px;background:rgba(255,204,0,0.12);color:var(--gold);border:1px solid rgba(255,204,0,0.25);border-radius:2px;">Portability & Exit</span>
+    </div>
+    <div style="margin-top: 12px; font-size: 12px; color: var(--muted); line-height: 1.7;">
+      Source: European Commission Cloud Sovereignty Framework — used to award €180M in critical infrastructure contracts, 2026. Public domain. amleht applies SEAL criteria alongside DORA Art.28 in all provider assessments.
+    </div>
+  </div>
+
+  <!-- PROVIDER COMPARISON TABLE -->
+  <div style="margin-top: 32px; max-width: 900px;">
+    <div style="font-family:var(--mono);font-size:10px;color:var(--gold);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:16px;">SEAL Applied — EC-Awarded Providers and the SEAL-0 Profile</div>
+
+    <table class="benchmark-table">
+      <thead>
+        <tr>
+          <th style="width:26%;">Provider</th>
+          <th style="width:20%;">Jurisdiction</th>
+          <th style="width:18%;">SEAL Tier</th>
+          <th style="width:12%;">CLOUD Act</th>
+          <th style="width:24%;">Note</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div style="font-weight:600;color:var(--text);">Post Telecom + OVHcloud + CleverCloud</div>
+            <div style="font-size:11px;color:var(--muted);">EC Sovereign Cloud — Awarded</div>
+          </td>
+          <td style="font-size:12px;color:var(--muted);">Luxembourg · France · EU</td>
+          <td><span style="font-family:var(--mono);font-size:11px;color:#2ECC71;font-weight:600;">● SEAL-3</span><div style="font-size:10px;color:var(--muted);margin-top:2px;">Digital Resilience</div></td>
+          <td style="font-family:var(--mono);font-size:10px;color:#2ECC71;">NOT EXPOSED</td>
+          <td style="font-size:12px;color:var(--muted);">Full EU supply chain. EC procurement eligible.</td>
+        </tr>
+        <tr>
+          <td>
+            <div style="font-weight:600;color:var(--text);">StackIT (Schwarz Group)</div>
+            <div style="font-size:11px;color:var(--muted);">EC Sovereign Cloud — Awarded</div>
+          </td>
+          <td style="font-size:12px;color:var(--muted);">Germany · EU</td>
+          <td><span style="font-family:var(--mono);font-size:11px;color:#2ECC71;font-weight:600;">● SEAL-3</span><div style="font-size:10px;color:var(--muted);margin-top:2px;">Digital Resilience</div></td>
+          <td style="font-family:var(--mono);font-size:10px;color:#2ECC71;">NOT EXPOSED</td>
+          <td style="font-size:12px;color:var(--muted);">German sovereign infrastructure. GDPR-native.</td>
+        </tr>
+        <tr>
+          <td>
+            <div style="font-weight:600;color:var(--text);">Scaleway (Iliad Group)</div>
+            <div style="font-size:11px;color:var(--muted);">EC Sovereign Cloud — Awarded</div>
+          </td>
+          <td style="font-size:12px;color:var(--muted);">France · EU</td>
+          <td><span style="font-family:var(--mono);font-size:11px;color:#2ECC71;font-weight:600;">● SEAL-3</span><div style="font-size:10px;color:var(--muted);margin-top:2px;">Digital Resilience</div></td>
+          <td style="font-family:var(--mono);font-size:10px;color:#2ECC71;">NOT EXPOSED</td>
+          <td style="font-size:12px;color:var(--muted);">Iliad-owned. EU-indigenous. amleht Rail 2 substrate.</td>
+        </tr>
+        <tr>
+          <td>
+            <div style="font-weight:600;color:var(--text);">Proximus + S3NS (Thales/Google) + Mistral</div>
+            <div style="font-size:11px;color:var(--muted);">EC Sovereign Cloud — Awarded</div>
+          </td>
+          <td style="font-size:12px;color:var(--muted);">Belgium · France · EU operated</td>
+          <td><span style="font-family:var(--mono);font-size:11px;color:var(--amber);font-weight:600;">● SEAL-2</span><div style="font-size:10px;color:var(--muted);margin-top:2px;">Data Sovereignty</div></td>
+          <td style="font-family:var(--mono);font-size:10px;color:var(--amber);">MITIGATED</td>
+          <td style="font-size:12px;color:var(--muted);">Google tech, EU-operated. Non-EU supply chain partially present. Pragmatic sovereignty model.</td>
+        </tr>
+        <tr style="border-top: 2px solid rgba(255,204,0,0.2);">
+          <td>
+            <div style="font-weight:600;color:var(--gold);">Nebius B.V.</div>
+            <div style="font-size:11px;color:var(--muted);">amleht sovereign inference layer</div>
+          </td>
+          <td style="font-size:12px;color:var(--muted);">Netherlands · EU incorporated</td>
+          <td><span style="font-family:var(--mono);font-size:11px;color:#2ECC71;font-weight:600;">● SEAL-3</span><div style="font-size:10px;color:var(--muted);margin-top:2px;">amleht assessment</div></td>
+          <td style="font-family:var(--mono);font-size:10px;color:#2ECC71;">NOT EXPOSED</td>
+          <td style="font-size:12px;color:var(--muted);">Dutch law. EU-resident data processing only. Purpose-built sovereign AI infrastructure.</td>
+        </tr>
+        <tr style="background: rgba(192,57,43,0.06); border-top: 2px solid rgba(192,57,43,0.3);">
+          <td>
+            <div style="font-weight:600;color:#E74C3C;">SEAL-0 Reference Profile</div>
+            <div style="font-size:11px;color:var(--muted);">Applied to any non-EU-incorporated provider — generic pattern</div>
+          </td>
+          <td style="font-size:12px;color:var(--muted);">Non-EU incorporation</td>
+          <td><span style="font-family:var(--mono);font-size:11px;color:#E74C3C;font-weight:600;">● SEAL-0</span><div style="font-size:10px;color:var(--muted);margin-top:2px;">No Sovereignty</div></td>
+          <td style="font-family:var(--mono);font-size:10px;color:#E74C3C;">FULLY EXPOSED</td>
+          <td style="font-size:12px;color:var(--muted);">Foreign jurisdiction (e.g. US CLOUD Act) applies. Non-EU incorporation. EC framework: ineligible for critical EU infrastructure at SEAL-2+.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div style="margin-top: 14px; font-family:var(--mono); font-size:10px; color:var(--muted); line-height:1.8; padding: 12px 16px; background: rgba(192,57,43,0.06); border-left: 3px solid #C0392B; border-radius: 0 4px 4px 0;">
+      <strong style="color:#E74C3C;">CLOUD Act Note:</strong> The US Clarifying Lawful Overseas Use of Data Act compels US-incorporated companies to produce data held anywhere in the world on request from US authorities — regardless of where that data physically resides or what EU law says. This is not a risk to be mitigated. It is a jurisdictional fact. The EC SEAL framework treats US CLOUD Act exposure as a SOV-2 risk factor that prevents any provider from achieving SEAL-2 or above without full EU operational isolation.
+    </div>
+  </div>
+
+  <div class="gold-rule" style="margin: 32px 0;"></div>
+
+  <!-- DORA ART.28 TABLE -->
+  <div style="font-family:var(--mono);font-size:10px;color:var(--gold);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:16px;">SEAL Applied Alongside DORA Art.28 — The Combined Assessment</div>
+  <div class="section-body" style="margin-bottom: 20px;">
+    <p>SEAL defines the sovereignty tier. DORA Art.28 defines the contractual and operational obligations. Together they form the complete independent provider assessment amleht delivers on behalf of regulated institutions.</p>
+  </div>
+
+  <table class="benchmark-table">
+    <thead>
+      <tr>
+        <th style="width: 24%;">Assessment Criterion</th>
+        <th style="width: 20%;">SEAL Dimension</th>
+        <th style="width: 36%;">What Is Assessed</th>
+        <th style="width: 10%;">Regulatory Basis</th>
+        <th style="width: 10%;">Verdict</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <span class="criterion-tag">01 · Jurisdiction & Ownership</span>
+          Legal domicile and strategic control
+        </td>
+        <td style="font-family:var(--mono);font-size:10px;color:var(--gold);">Strategic Ownership<br>Legal Jurisdiction</td>
+        <td>Incorporation jurisdiction · CLOUD Act exposure · Foreign government access risk · EU law enforceability · Beneficial ownership chain</td>
+        <td>
+          <span class="reg-pill">DORA Art.28</span>
+          <span class="reg-pill">GDPR Art.44</span>
+        </td>
+        <td><span class="verdict-pass">● SEAL-3+</span><br><span style="font-size:9px;color:var(--muted);">or</span><br><span class="verdict-flag">● SEAL-0</span></td>
+      </tr>
+      <tr>
+        <td>
+          <span class="criterion-tag">02 · Supply Chain</span>
+          Provenance of all components and sub-processors
+        </td>
+        <td style="font-family:var(--mono);font-size:10px;color:var(--gold);">Supply Chain Sovereignty<br>★ Highest weight</td>
+        <td>Sub-processor jurisdiction mapping · SBOM availability · Open source dependency audit · Hardware provenance · Non-EU component exposure percentage</td>
+        <td>
+          <span class="reg-pill">DORA Art.9</span>
+          <span class="reg-pill">NIS2 Art.21</span>
+        </td>
+        <td><span class="verdict-pass">● VERIFIED</span><br><span style="font-size:9px;color:var(--muted);">or</span><br><span class="verdict-flag">● EXPOSURE</span></td>
+      </tr>
+      <tr>
+        <td>
+          <span class="criterion-tag">03 · Concentration Risk</span>
+          Single-provider dependency at institution and systemic level
+        </td>
+        <td style="font-family:var(--mono);font-size:10px;color:var(--gold);">Operational Control<br>Portability & Exit</td>
+        <td>Critical functions served by this provider · Substitutability score · Exit feasibility · Cross-institution systemic exposure · Key and data portability</td>
+        <td>
+          <span class="reg-pill">DORA Art.28(8)</span>
+          <span class="reg-pill">EBA SREP</span>
+        </td>
+        <td><span class="verdict-pass">● DIVERSIFIED</span><br><span style="font-size:9px;color:var(--muted);">or</span><br><span class="verdict-flag">● CONCENTRATED</span></td>
+      </tr>
+      <tr>
+        <td>
+          <span class="criterion-tag">04 · Operational Resilience</span>
+          Continuity architecture and tested recovery
+        </td>
+        <td style="font-family:var(--mono);font-size:10px;color:var(--gold);">Security Operations<br>Operational Control</td>
+        <td>RTO/RPO tested · Multi-region EU failover · ICT incident SLA (4-hour DORA Art.19 window) · Chaos engineering evidence · Business continuity at scale</td>
+        <td>
+          <span class="reg-pill">DORA Art.11</span>
+          <span class="reg-pill">DORA Art.19</span>
+          <span class="reg-pill">NIS2 Art.21</span>
+        </td>
+        <td><span class="verdict-pass">● RESILIENT</span><br><span style="font-size:9px;color:var(--muted);">or</span><br><span class="verdict-review">● REVIEW</span></td>
+      </tr>
+      <tr>
+        <td>
+          <span class="criterion-tag">05 · Contractual Control</span>
+          Institution's enforceable rights
+        </td>
+        <td style="font-family:var(--mono);font-size:10px;color:var(--gold);">Legal Jurisdiction<br>Technology Openness</td>
+        <td>Audit rights explicitly granted · Sub-contractor disclosure · Data deletion on exit · EU law enforceability of SLA · Unilateral termination · Regulatory access clauses</td>
+        <td>
+          <span class="reg-pill">DORA Art.30</span>
+          <span class="reg-pill">MiFID II Art.16</span>
+        </td>
+        <td><span class="verdict-pass">● COMPLIANT</span><br><span style="font-size:9px;color:var(--muted);">or</span><br><span class="verdict-flag">● GAP</span></td>
+      </tr>
+      <tr>
+        <td>
+          <span class="criterion-tag">06 · AI Conformity</span>
+          Where AI is embedded in the provider stack
+        </td>
+        <td style="font-family:var(--mono);font-size:10px;color:var(--gold);">Security Operations<br>Data Residency</td>
+        <td>EU AI Act risk tier of embedded systems · Human oversight mechanisms · Algorithmic transparency · GDPR Art.22 automated decision-making · Bias and drift monitoring</td>
+        <td>
+          <span class="reg-pill">EU AI Act Annex III</span>
+          <span class="reg-pill">GDPR Art.22</span>
+        </td>
+        <td><span class="verdict-pass">● CONFORMANT</span><br><span style="font-size:9px;color:var(--muted);">or</span><br><span class="verdict-review">● ASSESS</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="margin-top: 16px; font-family: var(--mono); font-size: 10px; color: var(--muted); line-height: 1.8; max-width: 760px;">
+    Every assessment result is written immutably to the amleht Hyperledger Fabric compliance chain by Agent XII. The institution holds the chain-attested Verification Report. The provider does not. The SEAL tier achieved is stated in the report header.
+  </div>
+</div>
+
+<div class="gold-rule"></div>
+
+<!-- SECTION 03 — DEMO CTA -->
+<div class="section reveal">
+  <div class="section-header">
+    <span class="section-num">03 ·</span>
+    <span class="section-title">See the Framework in Operation</span>
+  </div>
+  <div class="section-body">
+    <p>Operation Gethsemane demonstrates what happens when a consortium member attempts to corrupt the shared compliance ledger — and how Agent XII detects, isolates, and chain-attests the breach without any human intervention. It is the adversarial test of the framework above.</p>
+    <p>The question it answers is not "which provider is better." It is: <strong>can the institution trust the integrity of its compliance chain regardless of which provider is running underneath it?</strong></p>
+  </div>
+
+  <div class="demo-cta">
+    <div class="demo-cta-left">
+      <div class="demo-cta-label">Interactive Demo · Operation Gethsemane · SIG-022</div>
+      <div class="demo-cta-title">Consortium Integrity — The Judas Variant</div>
+      <div class="demo-cta-desc">A 13-bank consortium scenario. A rogue participant attempts ledger manipulation. Agent XII detects, attests, and isolates — read-only, immutable, chain-verified. No provider can corrupt what they cannot write to.</div>
+    </div>
+    <a href="gethsemane/index.html" class="demo-btn">Launch Demo →</a>
+  </div>
+</div>
+
+<div class="gold-rule"></div>
+
+<!-- SECTION 04 — THELMA PRINCIPLE -->
+<div class="section reveal">
+  <div class="section-header">
+    <span class="section-num">04 ·</span>
+    <span class="section-title">The Independence Principle</span>
+  </div>
+  <div class="section-body">
+    <p>Clarisse's open letter identified a structural problem: the absence of an independent assessor. That absence is not an accident — it is the default state when compliance services are offered by parties with commercial relationships to the providers they assess.</p>
+    <p>amleht was built with one structural constraint that resolves this:</p>
+  </div>
+
+  <div class="thelma-block" style="margin-top: 24px; max-width: 760px;">
+    <div class="thelma-label">The Thelma Principle — Foundational · Non-Negotiable</div>
+    <div class="thelma-text">
+      amleht assesses ICT third-party providers exclusively on behalf of EU financial institution clients. amleht does not accept advisory, remediation, consultancy, or certification engagements from providers it assesses or may assess.
+      <br><br>
+      This is not a policy. It is a structural characteristic of the business. It does not bend. It does not have exceptions.
+    </div>
+  </div>
+
+  <div class="agent-xii-block" style="max-width: 760px;">
+    <div class="agent-xii-header">Agent XII · Chain Attestation · Verification Report Structure</div>
+    <div class="agent-xii-line">
+      <span class="agent-xii-key">Assessed on behalf of</span>
+      <span class="agent-xii-val">EU financial institution (regulated entity)</span>
+    </div>
+    <div class="agent-xii-line">
+      <span class="agent-xii-key">Assessed provider</span>
+      <span class="agent-xii-val">Any ICT third-party (cloud, MPC custody, AI inference, etc.)</span>
+    </div>
+    <div class="agent-xii-line">
+      <span class="agent-xii-key">Chain write access</span>
+      <span class="agent-xii-val">READ-ONLY · IntegrityMSP only · No provider access</span>
+    </div>
+    <div class="agent-xii-line">
+      <span class="agent-xii-key">Verification Report destination</span>
+      <span class="agent-xii-val">Institution holds the report · Provider does not</span>
+    </div>
+    <div class="agent-xii-line">
+      <span class="agent-xii-key">Recursive trust model</span>
+      <span class="agent-xii-val">XII writes to the chain it verifies · Intentional architecture</span>
+    </div>
+    <div class="agent-xii-line">
+      <span class="agent-xii-key">Regulatory mapping</span>
+      <span class="agent-xii-val">DORA Art.28 TPRM · Art.11 Continuity · Art.19 Notification</span>
+    </div>
+  </div>
+</div>
+
+<div class="gold-rule"></div>
+
+<!-- SECTION 05 — THE ASK -->
+<div class="section reveal">
+  <div class="section-header">
+    <span class="section-num">05 ·</span>
+    <span class="section-title">What We Are Asking</span>
+  </div>
+  <div class="section-body">
+    <p>We are not asking any institution to choose amleht over any provider. We are asking a different question entirely.</p>
+    <p>You have infrastructure decisions to make — or to review. Before those decisions are made, or in the course of reviewing them, would an independent compliance assessment of any provider in your stack — run on your behalf, reported to you, chain-attested for your regulators — be useful?</p>
+    <p>If the answer is yes: <strong>the benchmark already exists. We built it. You can see it working.</strong></p>
+    <p>That is the only ask.</p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-left">
+    amleht B.V. · Amsterdam · amleht.eu<br>
+    PAS-001 · Provider Assessment Series · 02 May 2026<br>
+    Sovereign inference: Nebius B.V. Netherlands · Hyperledger Fabric chain attestation: Agent XII
+  </div>
+  <div class="footer-right">In memory of Thelma.</div>
+</div>
+
+<script id="amleht-session-timeout">
+/* amleht Session Timeout — 60 min idle, 5 min warning */
+/* (?debug=fast → 1 min idle, 0.5 min warning) */
+(function() {
+  const FAST = new URLSearchParams(window.location.search).get('debug') === 'fast';
+  const IDLE_MINUTES    = FAST ? 1   : 60;
+  const WARNING_MINUTES = FAST ? 0.5 : 5;
+  const IDLE_MS    = IDLE_MINUTES    * 60 * 1000;
+  const WARNING_MS = WARNING_MINUTES * 60 * 1000;
+  const WARN_LABEL = FAST ? '30 seconds' : `${WARNING_MINUTES} minutes`;
+  if (FAST) console.warn('[amleht] session timeout in DEBUG fast mode — 1 min idle');
+
+  let idleTimer, warningTimer, warningShown = false;
+
+  function resetTimers() {
+    clearTimeout(idleTimer);
+    clearTimeout(warningTimer);
+    warningShown = false;
+    const banner = document.getElementById('amleht-session-warning');
+    if (banner) banner.remove();
+    warningTimer = setTimeout(showWarning, IDLE_MS - WARNING_MS);
+    idleTimer = setTimeout(logout, IDLE_MS);
+  }
+
+  function showWarning() {
+    if (warningShown) return;
+    warningShown = true;
+    const banner = document.createElement('div');
+    banner.id = 'amleht-session-warning';
+    banner.style.cssText = `
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      background: var(--surface, #152236); border: 1px solid var(--amber, #FFCC00);
+      color: var(--text, #c8d8e8); font-family: var(--mono, 'IBM Plex Mono', 'JetBrains Mono', monospace);
+      font-size: 12px; padding: 14px 24px; border-radius: 4px;
+      z-index: 9999; display: flex; align-items: center; gap: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.6);
+    `;
+    banner.innerHTML = `
+      <span style="color:var(--amber, #FFCC00);">⚠</span>
+      <span>Session expires in <strong>${WARN_LABEL}</strong> due to inactivity.</span>
+      <button id="amleht-session-extend"
+        style="background:var(--amber, #FFCC00); color:var(--bg, #0D1829); border:none; padding:6px 14px;
+               font-family:var(--mono, 'IBM Plex Mono', 'JetBrains Mono', monospace); font-size:11px;
+               cursor:pointer; border-radius:2px; font-weight:600;">
+        Extend Session
+      </button>
+    `;
+    document.body.appendChild(banner);
+    document.getElementById('amleht-session-extend')
+      .addEventListener('click', resetTimers);
+  }
+
+  function logout() {
+    /* Clear the auth flag so the user must re-enter the passphrase.
+       amleht_gate (rate-limit attempts/lockUntil) is left alone —
+       clearing it would let attackers bypass the 5-attempt lockout
+       by triggering the timeout. */
+    sessionStorage.removeItem('amleht_gate_verified');
+    document.body.innerHTML = `
+      <div style="display:flex; align-items:center; justify-content:center;
+                  min-height:100vh; background:var(--bg, #0D1829);
+                  font-family:var(--mono, 'IBM Plex Mono', 'JetBrains Mono', monospace);
+                  color:var(--text, #c8d8e8); text-align:center; flex-direction:column; gap:16px;">
+        <div style="color:var(--amber, #FFCC00); font-size:11px; letter-spacing:0.15em;">SESSION EXPIRED</div>
+        <div style="font-size:13px; color:var(--text-dim, #5a7a94);">
+          This session was closed after ${IDLE_MINUTES} minutes of inactivity.
+        </div>
+        <button id="amleht-session-relogin"
+          style="margin-top:8px; background:var(--amber, #FFCC00); color:var(--bg, #0D1829); border:none;
+                 padding:10px 24px; font-family:var(--mono, 'IBM Plex Mono', 'JetBrains Mono', monospace);
+                 font-size:12px; cursor:pointer; border-radius:2px; font-weight:600;">
+          Log In Again
+        </button>
+        <div style="font-size:10px; color:var(--border, #2A3F5F); margin-top:32px;">
+          <em>In memory of Thelma</em>
+        </div>
+      </div>`;
+    document.getElementById('amleht-session-relogin')
+      .addEventListener('click', () => { location.href = '../../gate.html'; });
+  }
+
+  ['mousemove','mousedown','keydown','touchstart','scroll','click']
+    .forEach(e => document.addEventListener(e, resetTimers, true));
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', resetTimers);
+  } else {
+    resetTimers();
+  }
+})();
+</script>
+</body>
+</html>
