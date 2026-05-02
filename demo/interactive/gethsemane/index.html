@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Operation Gethsemane · amleht Consortium Integrity Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:    #07090F;
+  --navy-2:  #0C1020;
+  --navy-3:  #111827;
+  --cobalt:  #2952A3;
+  --cobalt-b:#4A7FD4;
+  --gold:    #B8952A;
+  --gold-b:  #D4AF3A;
+  --crimson: #C41230;
+  --green:   #2ECC71;
+  --amber:   #E8A020;
+  --text:    #E8E4DC;
+  --text-2:  #A8A49C;
+  --text-3:  #5A5650;
+  --border:  rgba(232,228,220,0.07);
+  --border-s:rgba(232,228,220,0.13);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+body{
+  background:var(--navy);color:var(--text);
+  font-family:'Jost',sans-serif;font-weight:300;
+  display:flex;flex-direction:column;
+}
+
+/* TOP BAR */
+#topbar{
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  padding:10px 20px;
+  border-bottom:1px solid var(--border-s);
+  background:var(--navy-2);
+  flex-shrink:0;
+  z-index:10;
+}
+.tb-wordmark{
+  font-family:'Cormorant Garamond',serif;
+  font-size:13px;font-weight:400;
+  letter-spacing:.3em;color:var(--cobalt-b);text-transform:uppercase;
+}
+.tb-title{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:.22em;color:var(--text-3);text-transform:uppercase;
+}
+.tb-sep{color:var(--text-3);font-size:10px;}
+.scenario-group{display:flex;gap:6px;margin-left:auto;}
+.ctrl-group{display:flex;gap:6px;}
+
+.btn{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;font-weight:400;
+  letter-spacing:.15em;text-transform:uppercase;
+  padding:6px 14px;cursor:pointer;
+  border:1px solid var(--border-s);
+  background:var(--navy-3);color:var(--text-2);
+  transition:all .2s;white-space:nowrap;
+}
+.btn:hover{background:var(--navy-4,#1A2238);color:var(--text);}
+.btn.active{background:var(--cobalt);color:#fff;border-color:var(--cobalt-b);}
+.btn.danger{border-color:rgba(196,18,48,.4);color:var(--crimson);}
+.btn.danger:hover{background:rgba(196,18,48,.1);}
+.btn.go{border-color:rgba(46,204,113,.4);color:var(--green);}
+.btn.go:hover{background:rgba(46,204,113,.07);}
+.btn.gold{border-color:rgba(184,149,42,.4);color:var(--gold-b);}
+.btn.gold:hover{background:rgba(184,149,42,.07);}
+
+/* MAIN LAYOUT */
+#main{
+  display:grid;
+  grid-template-columns:1fr 340px;
+  flex:1;overflow:hidden;
+}
+
+/* NETWORK PANEL */
+#network-panel{
+  display:flex;flex-direction:column;
+  padding:12px;overflow:hidden;
+  border-right:1px solid var(--border);
+}
+#net-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:8px;letter-spacing:.22em;color:var(--text-3);
+  text-transform:uppercase;margin-bottom:8px;
+}
+#network-svg{width:100%;height:100%;flex:1;}
+
+.zone-bar{
+  display:flex;justify-content:space-between;
+  margin-top:6px;
+}
+.zone-pill{
+  font-family:'JetBrains Mono',monospace;
+  font-size:8px;letter-spacing:.15em;color:var(--text-3);
+  text-transform:uppercase;padding:3px 10px;
+  border:1px solid var(--border);
+}
+.zone-pill.milan{border-color:rgba(184,149,42,.25);color:var(--gold);}
+.zone-pill.sweden{border-color:rgba(73,127,212,.25);color:var(--cobalt-b);}
+
+/* RIGHT PANEL */
+#right-panel{
+  display:flex;flex-direction:column;
+  overflow:hidden;
+}
+
+/* CHAIN PANEL */
+#chain-panel{
+  flex:1;display:flex;flex-direction:column;
+  border-bottom:1px solid var(--border);
+  overflow:hidden;
+}
+#chain-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:8px;letter-spacing:.2em;color:var(--text-3);
+  text-transform:uppercase;padding:8px 14px;
+  border-bottom:1px solid var(--border);
+  background:var(--navy-2);flex-shrink:0;
+}
+#chain-blocks{
+  flex:1;overflow-y:auto;padding:8px;
+}
+#chain-blocks::-webkit-scrollbar{width:3px;}
+#chain-blocks::-webkit-scrollbar-track{background:transparent;}
+#chain-blocks::-webkit-scrollbar-thumb{background:var(--cobalt);border-radius:2px;}
+
+.block{
+  padding:8px 10px;margin-bottom:5px;
+  border:1px solid var(--border);
+  background:var(--navy-2);
+  animation:blockIn .4s ease both;
+}
+@keyframes blockIn{from{opacity:0;transform:translateX(12px);}to{opacity:1;transform:translateX(0);}}
+
+.block.genesis {border-left:2px solid var(--cobalt-b);}
+.block.normal  {border-left:2px solid var(--green);}
+.block.warning {border-left:2px solid var(--amber);}
+.block.judas   {border-left:2px solid var(--crimson);background:rgba(196,18,48,.05);}
+.block.revoke  {border-left:2px solid var(--crimson);background:rgba(196,18,48,.08);}
+.block.notify  {border-left:2px solid var(--gold);}
+.block.protected{border-left:2px solid var(--green);background:rgba(46,204,113,.04);}
+.block.quarantine{border-left:2px solid var(--amber);background:rgba(232,160,32,.05);}
+
+.bk-head{
+  display:flex;align-items:center;gap:6px;margin-bottom:3px;
+}
+.bk-num{
+  font-family:'JetBrains Mono',monospace;
+  font-size:8.5px;color:var(--text-3);flex-shrink:0;
+}
+.bk-time{
+  font-family:'JetBrains Mono',monospace;
+  font-size:7.5px;color:var(--text-3);flex-shrink:0;
+}
+.bk-inst{
+  font-size:9px;font-weight:500;
+  margin-left:auto;white-space:nowrap;
+}
+.block.genesis .bk-inst{color:var(--cobalt-b);}
+.block.normal  .bk-inst{color:var(--green);}
+.block.warning .bk-inst{color:var(--amber);}
+.block.judas   .bk-inst{color:var(--crimson);}
+.block.revoke  .bk-inst{color:var(--crimson);}
+.block.notify  .bk-inst{color:var(--gold);}
+.block.protected .bk-inst{color:var(--green);}
+.block.quarantine .bk-inst{color:var(--amber);}
+
+.bk-event{font-size:10px;font-weight:300;color:var(--text-2);line-height:1.5;}
+.bk-hash{
+  font-family:'JetBrains Mono',monospace;
+  font-size:7px;color:var(--text-3);margin-top:3px;
+}
+
+/* LOG PANEL */
+#log-panel{
+  height:200px;display:flex;flex-direction:column;
+  overflow:hidden;flex-shrink:0;
+}
+#log-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:8px;letter-spacing:.2em;color:var(--text-3);
+  text-transform:uppercase;padding:8px 14px;
+  border-bottom:1px solid var(--border);
+  background:var(--navy-2);flex-shrink:0;
+}
+#event-log{
+  flex:1;overflow-y:auto;padding:6px 10px;
+}
+#event-log::-webkit-scrollbar{width:3px;}
+#event-log::-webkit-scrollbar-thumb{background:var(--cobalt);}
+
+.evt{
+  display:flex;gap:8px;padding:4px 0;
+  border-bottom:1px solid rgba(255,255,255,.03);
+  animation:evtIn .3s ease both;
+  font-size:10.5px;font-weight:300;
+  align-items:flex-start;
+}
+@keyframes evtIn{from{opacity:0;}to{opacity:1;}}
+.evt-time{
+  font-family:'JetBrains Mono',monospace;
+  font-size:8px;color:var(--text-3);white-space:nowrap;flex-shrink:0;padding-top:1px;
+}
+.evt-agent{
+  font-family:'JetBrains Mono',monospace;
+  font-size:8px;font-weight:400;white-space:nowrap;flex-shrink:0;padding-top:1px;
+}
+.evt-agent.agent1{color:var(--cobalt-b);}
+.evt-agent.agentxx{color:var(--amber);}
+.evt-agent.agentxii{color:var(--gold);}
+.evt-agent.dora{color:var(--green);}
+.evt-agent.sys{color:var(--text-3);}
+.evt-msg{color:var(--text-2);line-height:1.4;}
+.evt-msg.warn{color:var(--amber);}
+.evt-msg.breach{color:var(--crimson);font-weight:400;}
+.evt-msg.ok{color:var(--green);}
+.evt-msg.gold{color:var(--gold);}
+
+/* PHASE BAR */
+#phase-bar{
+  display:flex;align-items:center;
+  padding:8px 20px;gap:4px;
+  border-top:1px solid var(--border);
+  background:var(--navy-2);
+  flex-shrink:0;
+}
+.ph{
+  font-family:'JetBrains Mono',monospace;
+  font-size:8px;letter-spacing:.15em;
+  color:var(--text-3);text-transform:uppercase;
+  padding:4px 10px;border:1px solid transparent;
+  transition:all .4s;white-space:nowrap;
+}
+.ph.active{color:var(--text);border-color:var(--border-s);background:var(--navy-3);}
+.ph.done{color:var(--text-3);border-color:transparent;}
+.ph.GENESIS.active{color:var(--cobalt-b);}
+.ph.OPERATING.active{color:var(--green);}
+.ph.ANOMALY.active{color:var(--amber);}
+.ph.BREACH.active{color:var(--crimson);}
+.ph.RESPONSE.active{color:var(--amber);}
+.ph.REVELATION.active{color:var(--gold-b);}
+.ph-arr{color:var(--text-3);font-size:10px;opacity:.4;}
+.ph-spacer{flex:1;}
+
+/* STATUS LINE */
+#status-line{
+  font-family:'JetBrains Mono',monospace;
+  font-size:8.5px;letter-spacing:.1em;
+  color:var(--text-3);margin-left:auto;
+  white-space:nowrap;
+}
+
+/* SVG ELEMENTS */
+.zone-glow{opacity:.7;}
+.connection-line{stroke-width:0.7;stroke-dasharray:3,4;opacity:0.25;transition:all .6s;}
+.connection-line.active{opacity:0.55;stroke-dasharray:none;}
+.connection-line.severed{opacity:0;stroke-dasharray:3,4;}
+
+.node-ring{transition:all .5s;}
+.node-inner{transition:all .5s;}
+.node-label{font-family:'JetBrains Mono',monospace;pointer-events:none;}
+.node-cloud{font-family:'JetBrains Mono',monospace;pointer-events:none;font-size:5px;}
+
+/* Node states via JS class on .node-group */
+.node-group{cursor:default;}
+
+/* REVELATION OVERLAY */
+#revelation{
+  display:none;
+  position:fixed;inset:0;
+  background:rgba(7,9,15,.96);
+  z-index:100;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  padding:0;
+  animation:revealIn .8s ease both;
+}
+#revelation.visible{display:flex;}
+@keyframes revealIn{from{opacity:0;}to{opacity:1;}}
+
+#rev-header{
+  width:100%;padding:20px 40px;
+  border-bottom:1px solid var(--border-s);
+  text-align:center;position:relative;
+  flex-shrink:0;
+}
+.rev-seal{
+  font-family:'Cormorant Garamond',serif;
+  font-size:11px;letter-spacing:.4em;color:var(--gold);
+  text-transform:uppercase;margin-bottom:6px;
+}
+.rev-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(22px,3vw,36px);font-weight:300;font-style:italic;
+  color:var(--text);line-height:1.2;
+}
+.rev-title strong{font-style:normal;font-weight:500;color:var(--gold-b);}
+.rev-sub{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:.2em;color:var(--text-3);
+  text-transform:uppercase;margin-top:8px;
+}
+
+#rev-body{
+  display:grid;grid-template-columns:1fr 320px;
+  flex:1;overflow:hidden;width:100%;
+}
+
+#rev-chain{
+  overflow-y:auto;padding:20px 24px;
+  border-right:1px solid var(--border);
+}
+#rev-chain::-webkit-scrollbar{width:3px;}
+#rev-chain::-webkit-scrollbar-thumb{background:var(--gold);}
+
+.rev-chain-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:8px;letter-spacing:.22em;color:var(--text-3);
+  text-transform:uppercase;margin-bottom:14px;
+}
+
+.rev-block{
+  padding:10px 14px;margin-bottom:6px;
+  border:1px solid var(--border);
+  border-left:2px solid var(--border-s);
+  animation:revBlock .3s ease both;
+}
+@keyframes revBlock{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.rev-block.genesis{border-left-color:var(--cobalt-b);}
+.rev-block.normal {border-left-color:rgba(46,204,113,.5);}
+.rev-block.last-honest{border-left-color:var(--amber);background:rgba(232,160,32,.06);}
+.rev-block.warning{border-left-color:var(--amber);}
+.rev-block.breach {border-left-color:var(--crimson);background:rgba(196,18,48,.06);}
+.rev-block.revoke {border-left-color:var(--crimson);}
+.rev-block.notify {border-left-color:var(--gold);}
+.rev-block.quarantine{border-left-color:var(--amber);}
+.rev-block.protected{border-left-color:var(--green);background:rgba(46,204,113,.04);}
+
+.rev-bk-head{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+.rev-bk-num{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--text-3);}
+.rev-bk-time{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--text-3);}
+.rev-bk-tag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:8px;font-weight:400;letter-spacing:.12em;
+  text-transform:uppercase;margin-left:auto;padding:1px 6px;
+  border:1px solid transparent;
+}
+.rev-block.last-honest .rev-bk-tag{color:var(--amber);border-color:rgba(232,160,32,.3);}
+.rev-block.breach      .rev-bk-tag{color:var(--crimson);border-color:rgba(196,18,48,.3);}
+.rev-block.revoke      .rev-bk-tag{color:var(--crimson);border-color:rgba(196,18,48,.3);}
+.rev-block.protected   .rev-bk-tag{color:var(--green);border-color:rgba(46,204,113,.3);}
+.rev-block.genesis     .rev-bk-tag{color:var(--cobalt-b);border-color:rgba(73,127,212,.3);}
+.rev-bk-inst{font-size:10px;font-weight:500;}
+.rev-block.genesis   .rev-bk-inst{color:var(--cobalt-b);}
+.rev-block.normal    .rev-bk-inst{color:var(--green);}
+.rev-block.last-honest .rev-bk-inst{color:var(--amber);}
+.rev-block.warning   .rev-bk-inst{color:var(--amber);}
+.rev-block.breach    .rev-bk-inst{color:var(--crimson);}
+.rev-block.revoke    .rev-bk-inst{color:var(--crimson);}
+.rev-block.notify    .rev-bk-inst{color:var(--gold);}
+.rev-block.protected .rev-bk-inst{color:var(--green);}
+.rev-bk-event{font-size:11px;font-weight:300;color:var(--text-2);line-height:1.5;}
+.rev-bk-hash{font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--text-3);margin-top:3px;}
+
+/* VERDICT PANEL */
+#rev-verdict{
+  padding:24px;overflow-y:auto;display:flex;flex-direction:column;gap:16px;
+}
+.rev-verd-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:8px;letter-spacing:.22em;color:var(--text-3);text-transform:uppercase;
+  margin-bottom:14px;
+}
+.verd-stat{
+  padding:14px;border:1px solid var(--border);
+  border-left:2px solid var(--border-s);
+}
+.verd-stat.ok{border-left-color:var(--green);}
+.verd-stat.warn{border-left-color:var(--amber);}
+.verd-stat.fail{border-left-color:var(--crimson);}
+.verd-stat-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:8px;letter-spacing:.15em;color:var(--text-3);
+  text-transform:uppercase;margin-bottom:4px;
+}
+.verd-stat-value{
+  font-family:'Cormorant Garamond',serif;
+  font-size:22px;font-weight:300;margin-bottom:3px;
+}
+.verd-stat.ok .verd-stat-value{color:var(--green);}
+.verd-stat.warn .verd-stat-value{color:var(--amber);}
+.verd-stat.fail .verd-stat-value{color:var(--crimson);}
+.verd-stat-desc{font-size:11px;color:var(--text-3);line-height:1.5;}
+
+.verd-final{
+  margin-top:auto;padding:16px;
+  background:rgba(184,149,42,.06);
+  border:1px solid rgba(184,149,42,.2);
+  text-align:center;
+}
+.verd-final-quote{
+  font-family:'Cormorant Garamond',serif;
+  font-size:16px;font-weight:300;font-style:italic;
+  color:var(--gold-b);line-height:1.6;margin-bottom:8px;
+}
+.verd-final-attr{
+  font-family:'JetBrains Mono',monospace;
+  font-size:8px;letter-spacing:.15em;color:var(--text-3);text-transform:uppercase;
+}
+
+.rev-close-bar{
+  width:100%;padding:12px 24px;
+  border-top:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;
+  flex-shrink:0;background:var(--navy-2);
+}
+.rev-thelma{
+  font-family:'Cormorant Garamond',serif;
+  font-size:11px;font-style:italic;color:var(--text-3);
+}
+.rev-thelma span{color:var(--gold);}
+
+/* Flash effect */
+#flash{
+  position:fixed;inset:0;pointer-events:none;
+  opacity:0;z-index:50;
+  transition:opacity .1s;
+}
+#flash.red{background:rgba(196,18,48,.15);}
+#flash.amber{background:rgba(232,160,32,.1);}
+
+/* Particle keyframes */
+@keyframes ptcl{
+  0%  {opacity:.9;r:3;}
+  100%{opacity:0;r:1;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div id="topbar">
+  <div class="tb-wordmark">amleht</div>
+  <div class="tb-sep">·</div>
+  <div class="tb-title">Operation Gethsemane · Consortium Integrity Demo</div>
+  <div class="scenario-group">
+    <button class="btn active" id="btn-s1" onclick="selectScenario(1)">I · Fictief NV as Judas</button>
+    <button class="btn" id="btn-s2" onclick="selectScenario(2)">II · Bank VII as Judas</button>
+  </div>
+  <div class="ctrl-group">
+    <button class="btn danger" onclick="resetDemo()">↺ RESET</button>
+    <button class="btn go" onclick="nextPhase()">NEXT ▶</button>
+    <button class="btn gold" id="btn-auto" onclick="toggleAuto()">AUTO ▶▶</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+  <!-- Network Panel -->
+  <div id="network-panel">
+    <div id="net-label">⬡ QIVALIS CONSORTIUM NETWORK · 13 INSTITUTIONS · 2 SOVEREIGN ZONES</div>
+    <svg id="network-svg" viewBox="0 0 700 460" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- Milan zone glow -->
+        <radialGradient id="milanGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#B8952A" stop-opacity="0.25"/>
+          <stop offset="100%" stop-color="#B8952A" stop-opacity="0"/>
+        </radialGradient>
+        <!-- Sweden zone glow -->
+        <radialGradient id="swedenGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#4A7FD4" stop-opacity="0.22"/>
+          <stop offset="100%" stop-color="#4A7FD4" stop-opacity="0"/>
+        </radialGradient>
+        <!-- Node glows -->
+        <filter id="glow-green" x="-80%" y="-80%" width="260%" height="260%">
+          <feGaussianBlur stdDeviation="4" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="glow-cobalt" x="-80%" y="-80%" width="260%" height="260%">
+          <feGaussianBlur stdDeviation="5" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="glow-red" x="-100%" y="-100%" width="300%" height="300%">
+          <feGaussianBlur stdDeviation="7" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="glow-amber" x="-80%" y="-80%" width="260%" height="260%">
+          <feGaussianBlur stdDeviation="5" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="glow-gold" x="-80%" y="-80%" width="260%" height="260%">
+          <feGaussianBlur stdDeviation="6" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- Zone glows -->
+      <ellipse id="milan-glow" cx="88" cy="230" rx="78" ry="70" fill="url(#milanGlow)" class="zone-glow"/>
+      <ellipse id="sweden-glow" cx="612" cy="230" rx="78" ry="70" fill="url(#swedenGlow)" class="zone-glow"/>
+
+      <!-- Zone labels -->
+      <text x="88" y="222" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#B8952A" letter-spacing="2" opacity="0.7">MILAN</text>
+      <text x="88" y="234" text-anchor="middle" font-family="JetBrains Mono" font-size="6.5" fill="#B8952A" opacity="0.5">eu-south-1</text>
+      <text x="612" y="222" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#4A7FD4" letter-spacing="2" opacity="0.7">SWEDEN</text>
+      <text x="612" y="234" text-anchor="middle" font-family="JetBrains Mono" font-size="6.5" fill="#4A7FD4" opacity="0.5">eu-north-1</text>
+
+      <!-- Orderer connection line between zones -->
+      <line x1="120" y1="230" x2="580" y2="230" stroke="#1A2238" stroke-width="1" stroke-dasharray="4,6"/>
+
+      <!-- Connections layer (rendered by JS) -->
+      <g id="connections-layer"></g>
+      <!-- Particles layer -->
+      <g id="particles-layer"></g>
+      <!-- Nodes layer (rendered by JS) -->
+      <g id="nodes-layer"></g>
+    </svg>
+    <div class="zone-bar">
+      <span class="zone-pill milan">⬡ MILAN · eu-south-1 · Orderer Primary</span>
+      <span class="zone-pill sweden">⬡ SWEDEN · eu-north-1 · Orderers 2 + 3 · Nebius B.V.</span>
+    </div>
+  </div>
+
+  <!-- Right panel -->
+  <div id="right-panel">
+    <div id="chain-panel">
+      <div id="chain-label">HYPERLEDGER FABRIC · CHAIN FEED · AGENT XII</div>
+      <div id="chain-blocks">
+        <div style="padding:20px;text-align:center;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-3);letter-spacing:.15em;">SELECT SCENARIO · PRESS NEXT TO BEGIN</div>
+        </div>
+      </div>
+    </div>
+    <div id="log-panel">
+      <div id="log-label">AGENT EVENT LOG · REAL-TIME</div>
+      <div id="event-log">
+        <div style="padding:10px;text-align:center;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-3);">AWAITING INITIALISATION</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE BAR -->
+<div id="phase-bar">
+  <div class="ph GENESIS" id="ph0">⬡ GENESIS</div>
+  <div class="ph-arr">›</div>
+  <div class="ph OPERATING" id="ph1">● OPERATING</div>
+  <div class="ph-arr">›</div>
+  <div class="ph ANOMALY" id="ph2">⚠ ANOMALY</div>
+  <div class="ph-arr">›</div>
+  <div class="ph BREACH" id="ph3">✕ BREACH</div>
+  <div class="ph-arr">›</div>
+  <div class="ph RESPONSE" id="ph4">⚡ RESPONSE</div>
+  <div class="ph-arr">›</div>
+  <div class="ph REVELATION" id="ph5">✦ REVELATION</div>
+  <div class="ph-spacer"></div>
+  <div id="status-line">READY</div>
+</div>
+
+<!-- FLASH -->
+<div id="flash"></div>
+
+<!-- REVELATION OVERLAY -->
+<div id="revelation">
+  <div id="rev-header">
+    <div class="rev-seal">✦ Agent XII · The Seal is Broken ✦</div>
+    <div class="rev-title">The <strong>Book of Revelations</strong> is Open</div>
+    <div class="rev-sub" id="rev-scenario-label">Complete Chain Record · Consortium Integrity Verified</div>
+  </div>
+  <div id="rev-body">
+    <div id="rev-chain">
+      <div class="rev-chain-label">COMPLETE CHAIN · GENESIS TO PRESENT · IMMUTABLE RECORD</div>
+      <div id="rev-blocks"></div>
+    </div>
+    <div id="rev-verdict">
+      <div class="rev-verd-label">VERDICT · AGENT XII</div>
+      <div id="verdict-stats"></div>
+      <div class="verd-final" id="verdict-final">
+        <div class="verd-final-quote">"The chain knew before we did.<br>All was covered. All is well."</div>
+        <div class="verd-final-attr">Agent XII · Hyperledger Fabric · Immutable Record</div>
+      </div>
+    </div>
+  </div>
+  <div class="rev-close-bar">
+    <div class="rev-thelma">In memory of <span>Thelma</span> — whose name this work carries forward.</div>
+    <button class="btn" onclick="closeRevelation()">CLOSE · RESET ↺</button>
+  </div>
+</div>
+
+<script>
+const SVG_NS = 'http://www.w3.org/2000/svg';
+const CX=350, CY=225, RX=230, RY=155;
+const MILAN  = {x:88,  y:230};
+const SWEDEN = {x:612, y:230};
+
+const BANKS = [
+  {id:0,  roman:'I',    name:'Bank I',    cloud:'AWS',     cc:'#FF9900'},
+  {id:1,  roman:'II',   name:'Bank II',   cloud:'Azure',   cc:'#0078D4'},
+  {id:2,  roman:'III',  name:'Bank III',  cloud:'GCP',     cc:'#34A853'},
+  {id:3,  roman:'IV',   name:'Bank IV',   cloud:'Equinix', cc:'#E52222'},
+  {id:4,  roman:'V',    name:'Bank V',    cloud:'AWS',     cc:'#FF9900'},
+  {id:5,  roman:'VI',   name:'Bank VI',   cloud:'Azure',   cc:'#0078D4'},
+  {id:6,  roman:'VII',  name:'Bank VII',  cloud:'GCP',     cc:'#34A853'},
+  {id:7,  roman:'VIII', name:'Bank VIII', cloud:'Equinix', cc:'#E52222'},
+  {id:8,  roman:'IX',   name:'Bank IX',   cloud:'AWS',     cc:'#FF9900'},
+  {id:9,  roman:'X',    name:'Bank X',    cloud:'Azure',   cc:'#0078D4'},
+  {id:10, roman:'XI',   name:'Bank XI',   cloud:'GCP',     cc:'#34A853'},
+  {id:11, roman:'XII',  name:'Bank XII',  cloud:'Equinix', cc:'#E52222'},
+  {id:12, roman:'FNV',  name:'Fictief NV',cloud:'AWS',     cc:'#B8952A', fictief:true},
+];
+
+// Compute positions: FNV at bottom (90°), banks I-XII from top (270°) clockwise
+BANKS.forEach((b, i) => {
+  const angle = i < 12
+    ? (270 + i * (360/13)) * Math.PI / 180
+    : 90 * Math.PI / 180;
+  b.x = CX + RX * Math.cos(angle);
+  b.y = CY + RY * Math.sin(angle);
+});
+
+// State
+let scenario     = 1;
+let phase        = -1;
+let judasIdx     = 12;
+let nodeStates   = Array(13).fill('normal');
+let autoMode     = false;
+let autoTimer    = null;
+let particleTimer= null;
+let blockNum     = 0;
+let baseTime     = new Date('2026-04-03T10:00:00Z');
+
+// Phase durations (ms) for auto mode
+const PHASE_DUR = [3500, 5000, 3000, 2500, 4000, 0];
+
+// ── SVG SETUP ────────────────────────────────────────────
+function initSVG() {
+  const connLayer = document.getElementById('connections-layer');
+  const nodeLayer = document.getElementById('nodes-layer');
+  connLayer.innerHTML = '';
+  nodeLayer.innerHTML = '';
+
+  BANKS.forEach(b => {
+    // Connection to Milan
+    const lm = makeLine(b.x, b.y, MILAN.x, MILAN.y, b.id === 12 ? '#B8952A' : '#2952A3');
+    lm.id = `conn-m-${b.id}`;
+    connLayer.appendChild(lm);
+    // Connection to Sweden
+    const ls = makeLine(b.x, b.y, SWEDEN.x, SWEDEN.y, b.id === 12 ? '#B8952A' : '#4A7FD4');
+    ls.id = `conn-s-${b.id}`;
+    connLayer.appendChild(ls);
+  });
+
+  BANKS.forEach(b => {
+    const g = document.createElementNS(SVG_NS, 'g');
+    g.id = `node-${b.id}`;
+    g.setAttribute('class', 'node-group');
+
+    // Glow ring
+    const ring = document.createElementNS(SVG_NS, 'circle');
+    ring.setAttribute('cx', b.x); ring.setAttribute('cy', b.y);
+    ring.setAttribute('r', '18'); ring.setAttribute('fill', 'none');
+    ring.setAttribute('stroke', b.fictief ? '#B8952A' : '#2952A3');
+    ring.setAttribute('stroke-width', '1');
+    ring.setAttribute('opacity', '0.3');
+    ring.setAttribute('class', 'node-ring');
+    ring.id = `ring-${b.id}`;
+
+    // Inner circle
+    const inner = document.createElementNS(SVG_NS, 'circle');
+    inner.setAttribute('cx', b.x); inner.setAttribute('cy', b.y);
+    inner.setAttribute('r', '13');
+    inner.setAttribute('fill', b.fictief ? 'rgba(184,149,42,0.12)' : 'rgba(41,82,163,0.12)');
+    inner.setAttribute('stroke', b.fictief ? '#B8952A' : '#2952A3');
+    inner.setAttribute('stroke-width', '1');
+    inner.setAttribute('class', 'node-inner');
+    inner.id = `inner-${b.id}`;
+
+    // Roman numeral
+    const label = document.createElementNS(SVG_NS, 'text');
+    label.setAttribute('x', b.x); label.setAttribute('y', b.y + 3.5);
+    label.setAttribute('text-anchor', 'middle');
+    label.setAttribute('class', 'node-label');
+    label.setAttribute('font-size', b.roman.length > 3 ? '5.5' : b.roman.length > 2 ? '6' : '7.5');
+    label.setAttribute('fill', b.fictief ? '#D4AF3A' : '#A8A49C');
+    label.setAttribute('font-weight', '400');
+    label.id = `lbl-${b.id}`;
+    label.textContent = b.roman;
+
+    // Cloud badge
+    const cloud = document.createElementNS(SVG_NS, 'text');
+    cloud.setAttribute('x', b.x); cloud.setAttribute('y', b.y + 24);
+    cloud.setAttribute('text-anchor', 'middle');
+    cloud.setAttribute('class', 'node-cloud');
+    cloud.setAttribute('fill', b.cc);
+    cloud.setAttribute('opacity', '0.7');
+    cloud.textContent = b.cloud;
+
+    // Name below cloud
+    const nameT = document.createElementNS(SVG_NS, 'text');
+    nameT.setAttribute('x', b.x); nameT.setAttribute('y', b.y + 31);
+    nameT.setAttribute('text-anchor', 'middle');
+    nameT.setAttribute('font-family', 'JetBrains Mono');
+    nameT.setAttribute('font-size', '4.5');
+    nameT.setAttribute('fill', '#3A3730');
+    nameT.setAttribute('letter-spacing', '0.8');
+    nameT.textContent = b.name.toUpperCase();
+
+    g.appendChild(ring);
+    g.appendChild(inner);
+    g.appendChild(label);
+    g.appendChild(cloud);
+    g.appendChild(nameT);
+    nodeLayer.appendChild(g);
+  });
+}
+
+function makeLine(x1, y1, x2, y2, color) {
+  const l = document.createElementNS(SVG_NS, 'line');
+  l.setAttribute('x1', x1); l.setAttribute('y1', y1);
+  l.setAttribute('x2', x2); l.setAttribute('y2', y2);
+  l.setAttribute('stroke', color);
+  l.setAttribute('class', 'connection-line');
+  return l;
+}
+
+// ── NODE STATE ───────────────────────────────────────────
+function setNodeState(id, state) {
+  nodeStates[id] = state;
+  const ring  = document.getElementById(`ring-${id}`);
+  const inner = document.getElementById(`inner-${id}`);
+  const lbl   = document.getElementById(`lbl-${id}`);
+  if (!ring) return;
+
+  const configs = {
+    normal:    {stroke:'#2952A3', fill:'rgba(41,82,163,0.12)',  lblFill:'#A8A49C', ringOp:'0.3', r:'13', filter:''},
+    active:    {stroke:'#2ECC71', fill:'rgba(46,204,113,0.15)', lblFill:'#2ECC71', ringOp:'0.7', r:'14', filter:'url(#glow-green)'},
+    warning:   {stroke:'#E8A020', fill:'rgba(232,160,32,0.15)', lblFill:'#E8A020', ringOp:'0.8', r:'15', filter:'url(#glow-amber)'},
+    judas:     {stroke:'#C41230', fill:'rgba(196,18,48,0.2)',   lblFill:'#C41230', ringOp:'1.0', r:'16', filter:'url(#glow-red)'},
+    revoked:   {stroke:'#2A2520', fill:'rgba(20,20,20,0.5)',    lblFill:'#3A3530', ringOp:'0.15',r:'13', filter:''},
+    protected: {stroke:'#2ECC71', fill:'rgba(46,204,113,0.18)', lblFill:'#2ECC71', ringOp:'0.9', r:'15', filter:'url(#glow-green)'},
+    fictief:   {stroke:'#B8952A', fill:'rgba(184,149,42,0.12)', lblFill:'#D4AF3A', ringOp:'0.4', r:'13', filter:''},
+    fictief_warn:{stroke:'#E8A020',fill:'rgba(232,160,32,0.18)',lblFill:'#E8A020', ringOp:'0.9', r:'15', filter:'url(#glow-amber)'},
+    fictief_judas:{stroke:'#C41230',fill:'rgba(196,18,48,0.22)',lblFill:'#C41230', ringOp:'1.0', r:'17', filter:'url(#glow-red)'},
+    fictief_revoked:{stroke:'#2A2520',fill:'rgba(20,20,20,0.5)',lblFill:'#3A3530', ringOp:'0.1',r:'13', filter:''},
+  };
+
+  const cfg = configs[state] || configs.normal;
+  ring.setAttribute('stroke', cfg.stroke);
+  ring.setAttribute('opacity', cfg.ringOp);
+  inner.setAttribute('stroke', cfg.stroke);
+  inner.setAttribute('fill', cfg.fill);
+  inner.setAttribute('r', cfg.r);
+  inner.setAttribute('filter', cfg.filter);
+  lbl.setAttribute('fill', cfg.lblFill);
+}
+
+function resetNodeStates() {
+  BANKS.forEach((b, i) => setNodeState(i, b.fictief ? 'fictief' : 'normal'));
+}
+
+// ── PARTICLES ────────────────────────────────────────────
+function spawnParticle(fromIdx, state) {
+  if (nodeStates[fromIdx] === 'revoked' || nodeStates[fromIdx] === 'fictief_revoked') return;
+  const b = BANKS[fromIdx];
+  const color = state === 'breach' ? '#C41230' : state === 'warning' ? '#E8A020'
+    : b.fictief ? '#B8952A' : '#2ECC71';
+
+  [MILAN, SWEDEN].forEach(zone => {
+    const p = document.createElementNS(SVG_NS, 'circle');
+    p.setAttribute('r', '2.5');
+    p.setAttribute('fill', color);
+    p.setAttribute('cx', b.x); p.setAttribute('cy', b.y);
+    p.setAttribute('opacity', '0.8');
+    const dx = zone.x - b.x, dy = zone.y - b.y;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    const dur = dist / 160;
+    p.style.transition = `cx ${dur}s linear, cy ${dur}s linear, opacity ${dur}s ease-in`;
+    document.getElementById('particles-layer').appendChild(p);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        p.setAttribute('cx', zone.x);
+        p.setAttribute('cy', zone.y);
+        p.setAttribute('opacity', '0');
+        setTimeout(() => p.remove(), dur * 1000 + 100);
+      });
+    });
+  });
+}
+
+// ── CHAIN BLOCKS ─────────────────────────────────────────
+function addBlock(type, institution, event, delayMs=0) {
+  setTimeout(() => {
+    const t = new Date(baseTime.getTime() + blockNum * 75000 + Math.random()*15000);
+    const timeStr = t.toISOString().replace('T',' ').substring(0,19) + ' UTC';
+    const hash = Array(12).fill(0).map(()=>'0123456789abcdef'[Math.floor(Math.random()*16)]).join('') + '…';
+
+    const div = document.createElement('div');
+    div.className = `block ${type}`;
+    div.innerHTML = `
+      <div class="bk-head">
+        <span class="bk-num">#${blockNum}</span>
+        <span class="bk-time">${timeStr}</span>
+        <span class="bk-inst">${institution}</span>
+      </div>
+      <div class="bk-event">${event}</div>
+      <div class="bk-hash">sha256: ${hash}</div>`;
+    const cb = document.getElementById('chain-blocks');
+    cb.appendChild(div);
+    cb.scrollTop = cb.scrollHeight;
+    blockNum++;
+  }, delayMs);
+}
+
+// ── EVENT LOG ────────────────────────────────────────────
+function addEvent(agentClass, agent, msgClass, msg, delayMs=0) {
+  setTimeout(() => {
+    const t = new Date();
+    const ts = t.toISOString().substring(11,19);
+    const div = document.createElement('div');
+    div.className = 'evt';
+    div.innerHTML = `<span class="evt-time">${ts}</span><span class="evt-agent ${agentClass}">${agent}</span><span class="evt-msg ${msgClass}">${msg}</span>`;
+    const el = document.getElementById('event-log');
+    el.appendChild(div);
+    el.scrollTop = el.scrollHeight;
+  }, delayMs);
+}
+
+// ── FLASH ────────────────────────────────────────────────
+function flash(color, dur=200) {
+  const f = document.getElementById('flash');
+  f.className = color;
+  f.style.opacity='1';
+  setTimeout(()=>{f.style.transition=`opacity ${dur}ms`;f.style.opacity='0';},50);
+  setTimeout(()=>{f.className='';f.style.transition='';},dur+100);
+}
+
+// ── SEVER CONNECTIONS ────────────────────────────────────
+function severConnections(idx) {
+  const lm = document.getElementById(`conn-m-${idx}`);
+  const ls = document.getElementById(`conn-s-${idx}`);
+  [lm, ls].forEach(l => {
+    if (!l) return;
+    l.style.transition='all 0.8s ease';
+    l.style.opacity='0';
+    l.style.strokeDasharray='2,8';
+  });
+}
+
+function restoreConnections(idx) {
+  const lm = document.getElementById(`conn-m-${idx}`);
+  const ls = document.getElementById(`conn-s-${idx}`);
+  [lm, ls].forEach(l => {
+    if (!l) return;
+    l.style.transition='all 0.5s ease';
+    l.style.opacity='0.25';
+    l.style.strokeDasharray='3,4';
+  });
+}
+
+// ── PHASE INDICATOR ──────────────────────────────────────
+function setPhaseUI(p) {
+  for (let i=0;i<6;i++) {
+    const el = document.getElementById(`ph${i}`);
+    if (!el) continue;
+    el.className = `ph ${el.textContent.replace(/[⬡●⚠✕⚡✦ ]/g,'').split('·')[0].trim()}`;
+    if (i < p) el.classList.add('done');
+    else if (i === p) el.classList.add('active');
+  }
+}
+
+function setStatus(msg) {
+  document.getElementById('status-line').textContent = msg;
+}
+
+// ── PHASE ENGINE ─────────────────────────────────────────
+function runPhase(p) {
+  phase = p;
+  setPhaseUI(p);
+  if (p === 0) runGenesis();
+  else if (p === 1) runOperating();
+  else if (p === 2) runAnomaly();
+  else if (p === 3) runBreach();
+  else if (p === 4) runResponse();
+  else if (p === 5) runRevelation();
+
+  if (autoMode && p < 5) {
+    autoTimer = setTimeout(() => nextPhase(), PHASE_DUR[p]);
+  }
+}
+
+// ── PHASE 0: GENESIS ─────────────────────────────────────
+function runGenesis() {
+  setStatus('GENESIS · Consortium forming…');
+  flash('amber', 400);
+
+  // Activate connections
+  setTimeout(() => {
+    BANKS.forEach((b, i) => {
+      setTimeout(() => {
+        const lm = document.getElementById(`conn-m-${i}`);
+        const ls = document.getElementById(`conn-s-${i}`);
+        [lm, ls].forEach(l => {
+          if (!l) return;
+          l.style.transition='opacity 0.4s';
+          l.style.opacity = b.fictief ? '0.45' : '0.35';
+          l.style.strokeDasharray = 'none';
+        });
+        setNodeState(i, b.fictief ? 'active' : 'active');
+        flash('amber', 80);
+      }, i * 80);
+    });
+  }, 200);
+
+  addBlock('genesis', 'GENESIS', 'Consortium channel created. 13 institutions enrolled. Orderers: Milan eu-south-1 · Sweden eu-north-1 · Sweden-2 eu-north-1. Raft consensus: 3-node quorum.', 400);
+  addEvent('agentxii', 'AGENT XII', '', 'Hyperledger Fabric channel online. IntegrityMSP active. Recursive trust loop initialised.', 600);
+  addEvent('agent1', 'AGENT I', 'ok', 'All 13 node heartbeats confirmed. Attestation monitoring active.', 900);
+  addEvent('sys', 'SYSTEM', '', `Scenario ${scenario}: ${scenario===1?'Fictief NV':'Bank VII'} designated for integrity test.`, 1200);
+
+  // Reset to normal after activation flash
+  setTimeout(() => {
+    BANKS.forEach((b, i) => setNodeState(i, b.fictief ? 'fictief' : 'normal'));
+    setStatus('GENESIS COMPLETE');
+  }, 1800);
+
+  // Start background particles
+  startIdleParticles();
+}
+
+// ── PHASE 1: OPERATING ───────────────────────────────────
+function runOperating() {
+  setStatus('OPERATING · All 13 attesting…');
+  const attestBanks = [2, 7, 0, 5, 10, 3, judasIdx, 1, 8];
+  attestBanks.forEach((bi, i) => {
+    setTimeout(() => {
+      const b = BANKS[bi];
+      setNodeState(bi, b.fictief ? 'fictief' : 'active');
+      spawnParticle(bi, 'normal');
+      addBlock('normal', b.name, `ICT attestation verified. DORA Art.17 log entry confirmed. Peering VPC healthy. Chain entry endorsed.`);
+      setTimeout(() => setNodeState(bi, b.fictief ? 'fictief' : 'normal'), 600);
+    }, i * 500);
+  });
+  addEvent('agent1', 'AGENT I', 'ok', 'Consortium operating normally. All 13 attestation intervals nominal.', 200);
+  addEvent('agentxii', 'AGENT XII', '', `Block #${blockNum} through #${blockNum+7} confirmed. Chain integrity: verified.`, 1800);
+}
+
+// ── PHASE 2: ANOMALY ─────────────────────────────────────
+function runAnomaly() {
+  setStatus('ANOMALY DETECTED · Agent I monitoring…');
+  const judas = BANKS[judasIdx];
+  flash('amber', 300);
+
+  setNodeState(judasIdx, judas.fictief ? 'fictief_warn' : 'warning');
+
+  addEvent('agent1', 'AGENT I', 'warn', `Attestation interval anomaly: ${judas.name}. Last confirmed block timestamp diverging. Monitoring.`, 100);
+  addEvent('agent1', 'AGENT I', 'warn', `${judas.name} peer node response latency elevated. Two missed heartbeat windows. Escalating to Agent XX.`, 800);
+  addBlock('warning', 'AGENT I', `ALERT: ${judas.name} attestation anomaly detected. Heartbeat interval: 2× threshold exceeded. Agent XX notified.`, 400);
+
+  // Flicker effect
+  let flickers = 0;
+  const flicker = setInterval(() => {
+    if (flickers++ > 6) { clearInterval(flicker); return; }
+    setNodeState(judasIdx, flickers%2===0 ? (judas.fictief?'fictief_warn':'warning') : (judas.fictief?'fictief':'normal'));
+  }, 280);
+}
+
+// ── PHASE 3: BREACH ──────────────────────────────────────
+function runBreach() {
+  setStatus('⚠ BREACH CONFIRMED · Agent XX engaged');
+  const judas = BANKS[judasIdx];
+  flash('red', 500);
+  setTimeout(() => flash('red', 300), 600);
+
+  setNodeState(judasIdx, judas.fictief ? 'fictief_judas' : 'judas');
+  spawnParticle(judasIdx, 'breach');
+
+  addEvent('agentxx', 'AGENT XX', 'breach', `BREACH CONFIRMED: ${judas.name} peering environment compromised. Rogue attestations detected. MSP certificate flagged.`, 100);
+  addEvent('agentxii', 'AGENT XII', 'breach', `Chain entry sealed: BREACH EVENT — ${judas.name} — ${new Date().toISOString()}. Block is immutable.`, 500);
+  addEvent('agent1', 'AGENT I', 'warn', `${judas.name} last honest attestation: Block #${blockNum-2}. All prior blocks verified clean.`, 900);
+
+  addBlock('judas', 'BREACH EVENT', `INTEGRITY VIOLATION: ${judas.name}. Rogue peer node confirmed. Peering VPC potentially compromised. Agent XX response initiated. This block is sealed.`, 200);
+}
+
+// ── PHASE 4: RESPONSE ────────────────────────────────────
+function runResponse() {
+  setStatus('RESPONSE · Quarantine · Revocation · DORA Notifications');
+  const judas = BANKS[judasIdx];
+  const protectedIdx = scenario === 1 ? -1 : 12; // FNV is protected in scenario 2
+
+  // Sever connections
+  setTimeout(() => severConnections(judasIdx), 300);
+
+  // Revoke node
+  setTimeout(() => {
+    setNodeState(judasIdx, judas.fictief ? 'fictief_revoked' : 'revoked');
+    flash('red', 200);
+  }, 600);
+
+  // Protected institution highlight
+  if (scenario === 2) {
+    setTimeout(() => {
+      setNodeState(12, 'protected');
+      addEvent('agentxii', 'AGENT XII', 'ok', 'Fictief NV: Chain record verified clean. Protected. Attestation continues unaffected.', 0);
+    }, 900);
+  }
+
+  addBlock('revoke', 'MSP REVOCATION', `${judas.name} cryptographic identity revoked from consortium channel. Certificate serial invalidated. Peer node removed from channel membership. Prior blocks unaffected — chain is immutable.`, 300);
+  addBlock('quarantine', 'AGENT XX', `K8s quarantine initiated. ${judas.name} peering VPC isolated. Cilium eBPF enforcement active. Offline forensic analysis queued for chain-attested report.`, 700);
+  addBlock('notify', 'DORA ART.19', `Parallel notifications dispatched to competent authorities for 12 affected member institutions. ${scenario===2?'Fictief NV: UNAFFECTED — notification not required.':''} Initial notification timestamp: sealed.`, 1100);
+
+  addEvent('agentxx', 'AGENT XX', '', `${judas.name} peering VPC isolated. Cilium eBPF enforcement active. K8s quarantine confirmed.`, 400);
+  addEvent('dora', 'DORA ART.19', 'gold', '12 parallel initial notifications dispatched. Competent authorities: DNB, BaFin, AMF, FCA, CSSF, ACPR, Banca d\'Italia, CNMV, AFM, FSA, KNF, CBI.', 900);
+  addEvent('agentxii', 'AGENT XII', 'ok', `Chain integrity: CONFIRMED. ${judas.name} removed. 12 institutions active. Prior blocks: immutable. Revelation ready.`, 1400);
+
+  // Activate remaining nodes
+  BANKS.forEach((b, i) => {
+    if (i !== judasIdx) {
+      setTimeout(() => {
+        setNodeState(i, i === protectedIdx ? 'protected' : (b.fictief ? 'active' : 'active'));
+        spawnParticle(i, 'normal');
+        setTimeout(() => setNodeState(i, i === protectedIdx ? 'protected' : (b.fictief ? 'fictief' : 'normal')), 800);
+      }, 1600 + i * 80);
+    }
+  });
+
+  setTimeout(() => setStatus('RESPONSE COMPLETE · 12 SAFE · READY FOR REVELATION'), 2500);
+}
+
+// ── PHASE 5: REVELATION ──────────────────────────────────
+function runRevelation() {
+  setStatus('✦ THE SEAL IS BROKEN · AGENT XII');
+  flash('amber', 800);
+  setTimeout(() => showRevelation(), 600);
+}
+
+function showRevelation() {
+  const judas = BANKS[judasIdx];
+  const overlay = document.getElementById('revelation');
+  const revBlocks = document.getElementById('rev-blocks');
+  const verdStats = document.getElementById('verdict-stats');
+  revBlocks.innerHTML = '';
+  verdStats.innerHTML = '';
+
+  document.getElementById('rev-scenario-label').textContent =
+    `Scenario ${scenario}: ${judas.name} · Complete Chain Record · ${new Date().toISOString().substring(0,10)}`;
+
+  overlay.classList.add('visible');
+
+  // Build full chain record
+  const chainEntries = [
+    {type:'genesis',   inst:'GENESIS',       event:'Consortium channel created. 13 institutions enrolled. 3-node Raft orderers across Milan and Sweden sovereign zones.',                                                tag:'',                   delay:100},
+    {type:'normal',    inst:'Bank III',       event:'ICT attestation verified. DORA Art.17 log entry confirmed. GCP peering VPC healthy.',                                                                             tag:'',                   delay:200},
+    {type:'normal',    inst:'Bank VIII',      event:'ICT attestation verified. DORA Art.17 log entry confirmed. Equinix peering VPC healthy.',                                                                         tag:'',                   delay:280},
+    {type:'normal',    inst:judas.name,       event:`ICT attestation verified. ${judas.cloud} peering VPC healthy. All parameters nominal. DORA Art.17 log entry confirmed.`,                                         tag:'LAST HONEST ATTESTATION', delay:360, isLastHonest:true},
+    {type:'normal',    inst:'Bank IX',        event:'ICT attestation verified. DORA Art.17 log entry confirmed. AWS peering VPC healthy.',                                                                             tag:'',                   delay:440},
+    {type:'normal',    inst:'Bank I',         event:'ICT attestation verified. DORA Art.17 log entry confirmed. AWS peering VPC healthy.',                                                                             tag:'',                   delay:520},
+    ...( scenario===2 ? [{type:'protected', inst:'Fictief NV',  event:'ICT attestation verified. Sovereign chain record clean. AWS peering VPC healthy. UNAFFECTED by subsequent breach.', tag:'PROTECTED · CLEAN', delay:600}] : []),
+    {type:'normal',    inst:'Bank VII',       event:'ICT attestation verified. DORA Art.17 log entry confirmed. GCP peering VPC healthy.',                                                                             tag:'',                   delay:scenario===2?680:600},
+    {type:'warning',   inst:'AGENT I',        event:`ALERT: ${judas.name} attestation interval anomaly. Heartbeat threshold exceeded × 2. Escalated to Agent XX.`,                                                  tag:'WARNING',            delay:800},
+    {type:'breach',    inst:'BREACH EVENT',   event:`INTEGRITY VIOLATION: ${judas.name}. Rogue peer confirmed. Peering VPC compromised. Agent XX engaged. This block is immutable from this timestamp forward.`,    tag:'BREACH CONFIRMED',   delay:920},
+    {type:'revoke',    inst:'MSP REVOCATION', event:`${judas.name} certificate revoked. Peer removed from channel. All prior attestations remain on chain — they cannot be erased. The betrayal is in the record.`,  tag:'REVOKED',            delay:1040},
+    {type:'quarantine',inst:'AGENT XX',       event:`K8s quarantine: ${judas.name} peering VPC isolated. Cilium eBPF enforcement active. Forensic analysis queued.`,                                                tag:'QUARANTINED',        delay:1160},
+    {type:'notify',    inst:'DORA ART.19',    event:`12 parallel initial notifications dispatched to competent authorities. All 12 unaffected institutions notified. DNB · BaFin · AMF and 9 others. Timestamps sealed on chain.`, tag:'12 × NOTIFIED',   delay:1280},
+    {type:'normal',    inst:'Bank II',        event:'Consortium continues. 12 institutions attesting normally post-revocation. Chain integrity: CONFIRMED.',                                                          tag:'',                   delay:1400},
+    {type:'normal',    inst:'Bank V',         event:'Consortium continues. Attestation normal. Chain integrity: CONFIRMED.',                                                                                          tag:'',                   delay:1480},
+  ];
+
+  chainEntries.forEach((entry, n) => {
+    setTimeout(() => {
+      const d = document.createElement('div');
+      const cls = entry.isLastHonest ? 'last-honest' : entry.type;
+      d.className = `rev-block ${cls}`;
+      const t = new Date(baseTime.getTime() + n * 75000);
+      const ts = t.toISOString().replace('T',' ').substring(0,19) + ' UTC';
+      const h = Array(16).fill(0).map(()=>'0123456789abcdef'[Math.floor(Math.random()*16)]).join('') + '…';
+      d.innerHTML = `
+        <div class="rev-bk-head">
+          <span class="rev-bk-num">#${n}</span>
+          <span class="rev-bk-time">${ts}</span>
+          ${entry.tag ? `<span class="rev-bk-tag">${entry.tag}</span>` : ''}
+        </div>
+        <div class="rev-bk-inst">${entry.inst}</div>
+        <div class="rev-bk-event">${entry.event}</div>
+        <div class="rev-bk-hash">sha256: ${h}</div>`;
+      revBlocks.appendChild(d);
+      revBlocks.scrollTop = revBlocks.scrollHeight;
+    }, entry.delay);
+  });
+
+  // Verdict stats
+  setTimeout(() => {
+    const stats = [
+      {cls:'ok',   label:'Institutions Verified Safe', value:'12', desc:'All 12 non-compromised institutions confirmed clean. Attestation continues uninterrupted.'},
+      {cls:'fail', label:'Anomaly Contained',           value:'1',  desc:`${judas.name} identified, quarantined, MSP revoked. Forensic chain record preserved.`},
+      {cls:'ok',   label:'DORA Art.19 Notifications',   value:'12', desc:'Parallel notifications dispatched to all 12 competent authorities. Timestamps immutable.'},
+      {cls:'ok',   label:'Chain Integrity',             value:'✓',  desc:'All prior blocks unaffected. The Judas cannot rewrite history. The chain is the truth.'},
+      ...(scenario===2 ? [{cls:'ok', label:'Fictief NV Status', value:'PROTECTED', desc:'Fictief NV attestation record clean from genesis to present. Unaffected by breach.'}] : []),
+    ];
+
+    stats.forEach((s, i) => {
+      setTimeout(() => {
+        const d = document.createElement('div');
+        d.className = `verd-stat ${s.cls}`;
+        d.innerHTML = `
+          <div class="verd-stat-label">${s.label}</div>
+          <div class="verd-stat-value">${s.value}</div>
+          <div class="verd-stat-desc">${s.desc}</div>`;
+        verdStats.appendChild(d);
+      }, i * 120);
+    });
+  }, 800);
+}
+
+function closeRevelation() {
+  document.getElementById('revelation').classList.remove('visible');
+  resetDemo();
+}
+
+// ── PARTICLES BACKGROUND ─────────────────────────────────
+function startIdleParticles() {
+  if (particleTimer) clearInterval(particleTimer);
+  particleTimer = setInterval(() => {
+    if (phase < 0 || phase > 4) return;
+    const candidates = BANKS.filter((b,i) =>
+      nodeStates[i] !== 'revoked' && nodeStates[i] !== 'fictief_revoked'
+    );
+    if (!candidates.length) return;
+    const b = candidates[Math.floor(Math.random() * candidates.length)];
+    const pState = nodeStates[b.id] === 'judas' || nodeStates[b.id] === 'fictief_judas'
+      ? 'breach'
+      : nodeStates[b.id] === 'warning' || nodeStates[b.id] === 'fictief_warn'
+      ? 'warning' : 'normal';
+    spawnParticle(b.id, pState);
+  }, 600);
+}
+
+// ── CONTROLS ─────────────────────────────────────────────
+function nextPhase() {
+  if (autoTimer) clearTimeout(autoTimer);
+  if (phase >= 5) return;
+  runPhase(phase + 1);
+}
+
+function toggleAuto() {
+  autoMode = !autoMode;
+  const btn = document.getElementById('btn-auto');
+  btn.classList.toggle('active', autoMode);
+  btn.textContent = autoMode ? '⏸ PAUSE' : 'AUTO ▶▶';
+  if (autoMode && phase >= 0 && phase < 5) {
+    autoTimer = setTimeout(() => nextPhase(), PHASE_DUR[phase]);
+  } else if (!autoMode && autoTimer) {
+    clearTimeout(autoTimer);
+  }
+}
+
+function selectScenario(s) {
+  scenario = s;
+  judasIdx = s === 1 ? 12 : 6; // FNV or Bank VII
+  document.getElementById('btn-s1').classList.toggle('active', s===1);
+  document.getElementById('btn-s2').classList.toggle('active', s===2);
+  resetDemo();
+}
+
+function resetDemo() {
+  if (autoTimer) clearTimeout(autoTimer);
+  if (particleTimer) clearInterval(particleTimer);
+  autoMode = false;
+  document.getElementById('btn-auto').classList.remove('active');
+  document.getElementById('btn-auto').textContent = 'AUTO ▶▶';
+  phase = -1;
+  blockNum = 0;
+  nodeStates = Array(13).fill('normal');
+  document.getElementById('revelation').classList.remove('visible');
+  document.getElementById('chain-blocks').innerHTML =
+    '<div style="padding:20px;text-align:center;"><div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--text-3);letter-spacing:.15em;">SCENARIO '+(scenario)+'  ·  '+BANKS[judasIdx].name.toUpperCase()+' AS JUDAS  ·  PRESS NEXT TO BEGIN</div></div>';
+  document.getElementById('event-log').innerHTML =
+    '<div style="padding:10px;text-align:center;"><div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;color:var(--text-3);">AWAITING INITIALISATION</div></div>';
+
+  for (let i=0;i<6;i++) {
+    const el = document.getElementById(`ph${i}`);
+    if (el) {
+      const txt = el.textContent;
+      el.className = `ph ${txt.replace(/[⬡●⚠✕⚡✦ ]/g,'').split('·')[0].trim()}`;
+    }
+  }
+  setStatus('READY');
+  initSVG();
+  BANKS.forEach((b,i) => {
+    const lm = document.getElementById(`conn-m-${i}`);
+    const ls = document.getElementById(`conn-s-${i}`);
+    [lm,ls].forEach(l => {
+      if (!l) return;
+      l.style.transition='';l.style.opacity='0.25';l.style.strokeDasharray='3,4';
+    });
+  });
+}
+
+// ── INIT ─────────────────────────────────────────────────
+initSVG();
+</script>
+</body>
+</html>

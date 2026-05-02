@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Operation Gethsemane · Infra 2.0 | amleht Dual-Rail CLOS Failover</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap');
+
+  :root {
+    --bg: #05060a;
+    --bg2: #080c12;
+    --bg3: #0c1018;
+    --border: #141c2a;
+    --border2: #1e2d42;
+    --amber: #d4a843;
+    --amber-d: #8a6f2a;
+    --amber-bg: rgba(212,168,67,0.07);
+    --green: #2dd472;
+    --green-bg: rgba(45,212,114,0.08);
+    --red: #ff4757;
+    --red-bg: rgba(255,71,87,0.08);
+    --blue: #3d9eff;
+    --blue-bg: rgba(61,158,255,0.08);
+    --orange: #ff8c42;
+    --orange-bg: rgba(255,140,66,0.08);
+    --t1: #e2e8f8;
+    --t2: #6b7a99;
+    --t3: #374060;
+    --mono: 'JetBrains Mono', monospace;
+    --display: 'Syne', sans-serif;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--t1);
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── GRID BACKGROUND ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(61,158,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(61,158,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 32px 60px; }
+
+  /* ── HEADER ── */
+  .hdr {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 48px;
+  }
+
+  .hdr-l { display: flex; align-items: center; gap: 20px; }
+
+  .amleht {
+    font-family: var(--display);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--amber);
+    letter-spacing: .08em;
+  }
+
+  .op-badge {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    color: var(--t3);
+    border: 1px solid var(--border2);
+    padding: 3px 8px;
+    border-radius: 2px;
+  }
+
+  .hdr-r { display: flex; align-items: center; gap: 12px; }
+
+  .live-indicator {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    color: var(--green);
+  }
+
+  .live-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse-green 2s infinite;
+  }
+
+  @keyframes pulse-green {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(45,212,114,.6); }
+    50% { box-shadow: 0 0 0 6px rgba(45,212,114,0); }
+  }
+
+  .ts { font-size: 10px; color: var(--t3); }
+
+  /* ── HERO ── */
+  .hero { margin-bottom: 52px; }
+
+  .hero-eyebrow {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .20em;
+    color: var(--amber-d);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .hero h1 {
+    font-family: var(--display);
+    font-size: 42px;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -.02em;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, var(--t1) 0%, rgba(212,168,67,.8) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--t2);
+    max-width: 600px;
+    line-height: 1.7;
+    margin-bottom: 28px;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+    width: fit-content;
+  }
+
+  .hm-item {
+    padding: 10px 20px;
+    border-right: 1px solid var(--border);
+  }
+  .hm-item:last-child { border-right: none; }
+  .hm-label { font-size: 9px; font-weight: 600; letter-spacing: .12em; color: var(--t3); text-transform: uppercase; margin-bottom: 3px; }
+  .hm-value { font-size: 12px; font-weight: 500; color: var(--amber); }
+
+  /* ── TOPOLOGY ── */
+  .topology-section { margin-bottom: 40px; }
+
+  .sec-hdr { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+  .sec-num { font-size: 10px; font-weight: 600; color: var(--t3); border: 1px solid var(--border2); padding: 3px 7px; border-radius: 2px; }
+  .sec-title { font-family: var(--display); font-size: 13px; font-weight: 600; color: var(--t2); letter-spacing: .06em; text-transform: uppercase; }
+  .sec-line { flex: 1; height: 1px; background: var(--border); }
+
+  .topology {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .topology::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(212,168,67,.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* ── NODES ── */
+  .topo-grid {
+    display: grid;
+    grid-template-columns: 1fr 60px 1fr 60px 1fr;
+    gap: 0;
+    align-items: center;
+  }
+
+  .node {
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    padding: 18px;
+    position: relative;
+    transition: all .4s ease;
+  }
+
+  .node.healthy { border-color: rgba(45,212,114,.3); box-shadow: 0 0 20px rgba(45,212,114,.06); }
+  .node.failed  { border-color: rgba(255,71,87,.4);  box-shadow: 0 0 20px rgba(255,71,87,.1); }
+  .node.control { border-color: rgba(212,168,67,.25); box-shadow: 0 0 20px rgba(212,168,67,.05); }
+
+  .node-badge {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .14em;
+    padding: 3px 7px;
+    border-radius: 2px;
+    margin-bottom: 10px;
+    display: inline-block;
+  }
+
+  .nb-control { background: var(--amber-bg); color: var(--amber); border: 1px solid rgba(212,168,67,.25); }
+  .nb-rail1   { background: var(--blue-bg);  color: var(--blue);  border: 1px solid rgba(61,158,255,.25); }
+  .nb-rail2   { background: var(--green-bg); color: var(--green); border: 1px solid rgba(45,212,114,.25); }
+  .nb-failed  { background: var(--red-bg);   color: var(--red);   border: 1px solid rgba(255,71,87,.3); }
+
+  .node-title {
+    font-family: var(--display);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--t1);
+    margin-bottom: 6px;
+  }
+
+  .node-detail { font-size: 10px; color: var(--t2); line-height: 1.6; }
+  .node-detail .hl { color: var(--t1); }
+  .node-detail .g  { color: var(--green); }
+  .node-detail .r  { color: var(--red); }
+  .node-detail .a  { color: var(--amber); }
+  .node-detail .b  { color: var(--blue); }
+
+  .status-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .sd-green { background: var(--green); animation: pulse-green 2s infinite; }
+  .sd-red   { background: var(--red);   animation: pulse-red 1.5s infinite; }
+  .sd-amber { background: var(--amber); }
+
+  @keyframes pulse-red {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255,71,87,.6); }
+    50% { box-shadow: 0 0 0 5px rgba(255,71,87,0); }
+  }
+
+  .status-label { font-size: 10px; font-weight: 600; letter-spacing: .10em; }
+  .sl-green { color: var(--green); }
+  .sl-red   { color: var(--red); }
+  .sl-amber { color: var(--amber); }
+
+  /* ── CONNECTORS ── */
+  .connector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .conn-line {
+    width: 100%;
+    height: 2px;
+    position: relative;
+  }
+
+  .conn-line.active { background: linear-gradient(90deg, transparent, var(--green), transparent); }
+  .conn-line.failed { background: linear-gradient(90deg, transparent, var(--red), transparent); }
+  .conn-line.ew     { background: linear-gradient(90deg, transparent, var(--amber), transparent); }
+
+  .conn-label { font-size: 9px; color: var(--t3); letter-spacing: .08em; }
+
+  /* ── FAILOVER ANIMATION ── */
+  .failover-flash {
+    position: absolute;
+    inset: 0;
+    border-radius: 4px;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  .node.failed .failover-flash {
+    background: rgba(255,71,87,.05);
+    animation: flash-red 2s ease infinite;
+  }
+
+  @keyframes flash-red {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+  }
+
+  /* ── TEST RESULTS ── */
+  .results-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+
+  .result-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: border-color .3s;
+  }
+
+  .rc-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .rc-step {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    color: var(--t3);
+    border: 1px solid var(--border2);
+    padding: 2px 6px;
+    border-radius: 2px;
+  }
+
+  .rc-title { font-size: 12px; font-weight: 600; color: var(--t1); }
+
+  .rc-body { padding: 14px 16px; }
+
+  .rc-metric { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--border); }
+  .rc-metric:last-child { border-bottom: none; }
+  .rc-key { font-size: 10px; color: var(--t2); }
+  .rc-val { font-size: 11px; font-weight: 600; }
+  .rv-green { color: var(--green); }
+  .rv-red   { color: var(--red); }
+  .rv-amber { color: var(--amber); }
+  .rv-blue  { color: var(--blue); }
+  .rv-dim   { color: var(--t2); }
+
+  /* ── AGENT XII STUB ── */
+  .chain-block {
+    background: var(--bg2);
+    border: 1px solid rgba(212,168,67,.2);
+    border-left: 3px solid var(--amber);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+
+  .chain-hdr {
+    padding: 12px 18px;
+    background: rgba(212,168,67,.04);
+    border-bottom: 1px solid rgba(212,168,67,.15);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .chain-title {
+    font-family: var(--display);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--amber);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+
+  .chain-block-id {
+    font-size: 10px;
+    color: var(--amber-d);
+    font-weight: 600;
+  }
+
+  .chain-body {
+    padding: 18px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .chain-field { display: flex; flex-direction: column; gap: 3px; }
+  .chain-field.full { grid-column: 1 / -1; }
+  .cf-key { font-size: 9px; font-weight: 600; letter-spacing: .12em; color: var(--t3); text-transform: uppercase; }
+  .cf-val { font-size: 11px; color: var(--t1); font-weight: 500; word-break: break-all; }
+  .cf-val.g { color: var(--green); }
+  .cf-val.r { color: var(--red); }
+  .cf-val.a { color: var(--amber); }
+  .cf-val.b { color: var(--blue); }
+
+  /* ── DORA VERDICT ── */
+  .dora-verdict {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 14px;
+  }
+
+  .dv-item { display: flex; flex-direction: column; gap: 6px; }
+  .dv-label { font-size: 9px; font-weight: 600; letter-spacing: .14em; color: var(--t3); text-transform: uppercase; }
+  .dv-value { font-family: var(--display); font-size: 18px; font-weight: 700; }
+  .dv-sub { font-size: 10px; color: var(--t2); line-height: 1.5; }
+
+  /* ── RESPONSE EXCERPT ── */
+  .response-block {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 40px;
+  }
+
+  .rb-hdr {
+    padding: 10px 16px;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .rb-title { font-size: 10px; font-weight: 600; letter-spacing: .10em; color: var(--green); text-transform: uppercase; }
+  .rb-model { font-size: 10px; color: var(--t3); }
+
+  .rb-body {
+    padding: 16px;
+    font-size: 12px;
+    color: var(--t2);
+    line-height: 1.75;
+    border-left: 2px solid var(--green);
+    margin: 16px;
+    padding-left: 14px;
+  }
+
+  .rb-body strong { color: var(--t1); font-weight: 500; }
+
+  /* ── REPLAY BUTTON ── */
+  .replay-section { display: flex; justify-content: center; margin-bottom: 40px; }
+
+  .replay-btn {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    padding: 14px 32px;
+    background: transparent;
+    border: 1px solid var(--amber);
+    color: var(--amber);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all .2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .replay-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--amber);
+    transform: translateX(-100%);
+    transition: transform .3s ease;
+    z-index: -1;
+  }
+
+  .replay-btn:hover { color: var(--bg); }
+  .replay-btn:hover::before { transform: translateX(0); }
+
+  /* ── FOOTER ── */
+  .footer {
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .footer-l { font-size: 10px; color: var(--t3); line-height: 1.7; }
+  .footer-l em { color: var(--amber-d); font-style: italic; }
+  .footer-r { font-size: 10px; color: var(--t3); text-align: right; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero          { animation: fadeUp .6s ease .1s both; }
+  .topology      { animation: fadeUp .5s ease .2s both; }
+  .results-grid  { animation: fadeUp .5s ease .3s both; }
+  .chain-block   { animation: fadeUp .5s ease .4s both; }
+  .dora-verdict  { animation: fadeUp .5s ease .45s both; }
+  .response-block{ animation: fadeUp .5s ease .5s both; }
+
+  /* ── DATA STREAM ── */
+  .data-stream {
+    font-size: 10px;
+    color: var(--t3);
+    padding: 8px 16px;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 20px;
+    overflow: hidden;
+  }
+
+  .ds-item { white-space: nowrap; }
+  .ds-item span { color: var(--amber-d); }
+
+  @media(max-width:800px) {
+    .topo-grid { grid-template-columns: 1fr; }
+    .results-grid { grid-template-columns: 1fr; }
+    .chain-body { grid-template-columns: 1fr; }
+    .dora-verdict { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="hdr">
+    <div class="hdr-l">
+      <div class="amleht">amleht</div>
+      <div class="op-badge">OPERATION GETHSEMANE · INFRA 2.0</div>
+    </div>
+    <div class="hdr-r">
+      <div class="live-indicator">
+        <div class="live-dot"></div>
+        DIGITAL TWIN ACTIVE
+      </div>
+      <div class="ts">2026-04-12T11:46:10Z</div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">v2.0 · Dual-Rail CLOS Sovereign Inference Fabric · Laptop Digital Twin</div>
+    <h1>When Rail 1 Falls,<br>Rail 2 Stands.</h1>
+    <p class="hero-sub">
+      Live failover demonstration of the amleht dual-rail CLOS architecture. Rail 1 (Nebius B.V., Helsinki) taken offline. Rail 2 (Scaleway, Paris) absorbs automatically. Agent XII attestation stub written. DORA Art. 11 concentration risk: resolved by architecture.
+    </p>
+    <div class="hero-meta">
+      <div class="hm-item">
+        <div class="hm-label">Test Start</div>
+        <div class="hm-value">11:46:10 UTC</div>
+      </div>
+      <div class="hm-item">
+        <div class="hm-label">Test End</div>
+        <div class="hm-value">11:46:15 UTC</div>
+      </div>
+      <div class="hm-item">
+        <div class="hm-label">Duration</div>
+        <div class="hm-value">5.24 seconds</div>
+      </div>
+      <div class="hm-item">
+        <div class="hm-label">Failover</div>
+        <div class="hm-value" style="color:var(--green)">CONFIRMED</div>
+      </div>
+      <div class="hm-item">
+        <div class="hm-label">Commit</div>
+        <div class="hm-value">bf0fc99</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOPOLOGY -->
+  <div class="topology-section">
+    <div class="sec-hdr">
+      <div class="sec-num">01</div>
+      <div class="sec-title">Live Topology — Failover State</div>
+      <div class="sec-line"></div>
+    </div>
+
+    <div class="topology">
+      <div class="topo-grid">
+
+        <!-- CONTROL PLANE -->
+        <div class="node control">
+          <div class="failover-flash"></div>
+          <div class="node-badge nb-control">CONTROL PLANE</div>
+          <div class="node-title">amleht</div>
+          <div class="node-detail">
+            <div>12 Agents · MCP Hub</div>
+            <div class="hl">AWS eu-north-1</div>
+            <div>Stockholm, Sweden</div>
+          </div>
+          <div class="status-row">
+            <div class="status-dot sd-amber"></div>
+            <div class="status-label sl-amber">OPERATIONAL</div>
+          </div>
+        </div>
+
+        <!-- CONNECTOR: CP → ROUTER -->
+        <div class="connector">
+          <div class="conn-line active"></div>
+          <div class="conn-label">N-S</div>
+        </div>
+
+        <!-- LITELLM ROUTER -->
+        <div class="node healthy" style="border-color:rgba(212,168,67,.3)">
+          <div class="node-badge nb-control">AGENT ZERO · ROUTER</div>
+          <div class="node-title">LiteLLM Proxy</div>
+          <div class="node-detail">
+            <div><span class="b">localhost:4000</span></div>
+            <div>Laptop Digital Twin</div>
+            <div>v1.83.4 · amleht conda</div>
+            <div style="margin-top:6px"><span class="g">✓</span> rail_1_nebius registered</div>
+            <div><span class="g">✓</span> rail_2_scaleway registered</div>
+          </div>
+          <div class="status-row">
+            <div class="status-dot sd-green"></div>
+            <div class="status-label sl-green">HTTP 200 · HEALTHY</div>
+          </div>
+        </div>
+
+        <!-- CONNECTOR: ROUTER → RAILS -->
+        <div class="connector">
+          <div class="conn-line active"></div>
+          <div class="conn-label">E-W</div>
+        </div>
+
+        <!-- RAILS COLUMN -->
+        <div style="display:flex;flex-direction:column;gap:12px;">
+
+          <!-- RAIL 1 - FAILED -->
+          <div class="node failed">
+            <div class="failover-flash"></div>
+            <div class="node-badge nb-failed">RAIL 1 · DOWN</div>
+            <div class="node-title">Nebius B.V.</div>
+            <div class="node-detail">
+              <div><span class="hl">Helsinki · Finland</span></div>
+              <div>DeepSeek-V3-0324</div>
+              <div>Netherlands B.V. · EU</div>
+              <div style="margin-top:6px"><span class="r">✗</span> 401 AuthenticationError</div>
+              <div><span class="r">✗</span> Latency: 393.1ms → FAIL</div>
+            </div>
+            <div class="status-row">
+              <div class="status-dot sd-red"></div>
+              <div class="status-label sl-red">UNHEALTHY · SIMULATED FAILURE</div>
+            </div>
+          </div>
+
+          <!-- RAIL 2 - LIVE -->
+          <div class="node healthy">
+            <div class="node-badge nb-rail2">RAIL 2 · ABSORBING</div>
+            <div class="node-title">Scaleway · Iliad</div>
+            <div class="node-detail">
+              <div><span class="hl">Paris · France</span></div>
+              <div>mistral-nemo-instruct-2407</div>
+              <div>France SAS · CNIL · EU</div>
+              <div style="margin-top:6px"><span class="g">✓</span> Responding: 2329ms</div>
+              <div><span class="g">✓</span> Failover absorbed</div>
+            </div>
+            <div class="status-row">
+              <div class="status-dot sd-green"></div>
+              <div class="status-label sl-green">HEALTHY · CARRYING FULL LOAD</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TEST RESULTS -->
+  <div class="topology-section">
+    <div class="sec-hdr">
+      <div class="sec-num">02</div>
+      <div class="sec-title">Test Results — Real Data · Commit bf0fc99</div>
+      <div class="sec-line"></div>
+    </div>
+
+    <div class="results-grid">
+
+      <!-- Step 1: Rail 1 Direct -->
+      <div class="result-card" style="border-color:rgba(255,71,87,.2)">
+        <div class="rc-header">
+          <div class="rc-step">STEP 2</div>
+          <div class="rc-title">Rail 1 Direct Call</div>
+        </div>
+        <div class="rc-body">
+          <div class="rc-metric">
+            <div class="rc-key">Requested</div>
+            <div class="rc-val rv-blue">rail_1_nebius</div>
+          </div>
+          <div class="rc-metric">
+            <div class="rc-key">Result</div>
+            <div class="rc-val rv-red">FAILED</div>
+          </div>
+          <div class="rc-metric">
+            <div class="rc-key">Status Code</div>
+            <div class="rc-val rv-red">401</div>
+          </div>
+          <div class="rc-metric">
+            <div class="rc-key">Latency</div>
+            <div class="rc-val rv-dim">393.1ms</div>
+          </div>
+          <div class="rc-metric">
+            <div class="rc-key">Error</div>
+            <div class="rc-val rv-red">AuthenticationError</div>
+          </div>
+          <div class="rc-metric">
+            <div class="rc-key">Timestamp</div>
+            <div class="rc-val rv-dim">11:46:11Z</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Rail 2 Direct -->
+      <div class="result-card" style="border-color:rgba(45,212,114,.2)">
+        <div class="rc-header">
+          <div class="rc-step">STEP 3</div>
+          <div class="rc-title">Rail 2 Direct Call</div>
+        </div>
+        <div class="rc-body">
+          <div class="rc-metric">
+            <div class="rc-key">Requested</div>
+            <div class="rc-val rv-green">rail_2_scaleway</div>
+          </div>
+          <div class="rc-metric">
+            <div class="rc-key">Result</div>
+            <div class="rc-val rv-green">OK</div>
+          </div>
+          <div class="rc-metric">
+            <div class="rc-key">Status Code</div>
+            <div class="rc-val rv-green">200</div>
+          </div>
+          <div class="rc-metric">
+            <div class="rc-key">Latency</div>
+            <div class="rc-val rv-amber">2375.9ms</div>
+          </div>
+          <div class="rc-metric">
+            <div class="rc-key">Model</div>
+            <div class="rc-val rv-green">mistral-nemo</div>
+          </div>
+          <div class="rc-metric">
+            <div class="rc-key">Timestamp</div>
+            <div class="rc-val rv-dim">11:46:13Z</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Failover -->
+      <div class="result-card" style="border-color:rgba(212,168,67,.3)">
+        <div class="rc-header">
+          <div class="rc-step">STEP 4</div>
+          <div class="rc-title">Rail 1 → Failover</div>
+        </div>
+        <div class="rc-body">
+          <div class="rc-metric">
+            <div class="rc-key">Requested</div>
+            <div class="rc-val rv-blue">rail_1_nebius</div>
+          </div>
+          <div class="rc-metric">
+            <div class="rc-key">Responded By</div>
+            <div class="rc-val rv-green">rail_2_scaleway</div>
+          </div>
+          <div class="rc-metric">
+            <div class="rc-key">Result</div>
+            <div class="rc-val rv-green">OK</div>
+          </div>
+          <div class="rc-metric">
+            <div class="rc-key">Latency</div>
+            <div class="rc-val rv-amber">2329.5ms</div>
+          </div>
+          <div class="rc-metric">
+            <div class="rc-key">Failover Invoked</div>
+            <div class="rc-val rv-amber">YES</div>
+          </div>
+          <div class="rc-metric">
+            <div class="rc-key">Timestamp</div>
+            <div class="rc-val rv-dim">11:46:15Z</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- AGENT XII STUB -->
+  <div class="topology-section">
+    <div class="sec-hdr">
+      <div class="sec-num">03</div>
+      <div class="sec-title">Agent XII Attestation Stub — Chain Record</div>
+      <div class="sec-line"></div>
+    </div>
+
+    <div class="chain-block">
+      <div class="chain-hdr">
+        <div class="chain-title">Agent XII · Ledger Integrity · Verification Report</div>
+        <div class="chain-block-id">BLOCK-STUB-1775994375 · spine: amleht-laptop-digital-twin</div>
+      </div>
+      <div class="chain-body">
+        <div class="chain-field">
+          <div class="cf-key">Event</div>
+          <div class="cf-val a">DUAL_RAIL_CLOS_FAILOVER_TEST</div>
+        </div>
+        <div class="chain-field">
+          <div class="cf-key">Timestamp</div>
+          <div class="cf-val">2026-04-12T11:46:15.963573+00:00</div>
+        </div>
+        <div class="chain-field">
+          <div class="cf-key">Rail Primary</div>
+          <div class="cf-val r">rail_1_nebius (DeepSeek-V3-0324) · DOWN</div>
+        </div>
+        <div class="chain-field">
+          <div class="cf-key">Rail Failover</div>
+          <div class="cf-val g">rail_2_scaleway (mistral-nemo-instruct-2407) · UP</div>
+        </div>
+        <div class="chain-field">
+          <div class="cf-key">Failover Invoked</div>
+          <div class="cf-val g">true</div>
+        </div>
+        <div class="chain-field">
+          <div class="cf-key">Responding Model</div>
+          <div class="cf-val g">mistral-nemo-instruct-2407</div>
+        </div>
+        <div class="chain-field full">
+          <div class="cf-key">Response Hash (SHA-256)</div>
+          <div class="cf-val" style="color:var(--t2);font-size:10px">ba7f38a803805aca34ff346608bf22097ca2b755f374f769c02626a9000f7450</div>
+        </div>
+        <div class="chain-field full">
+          <div class="cf-key">DORA Art. 11 Concentration Risk Assessment</div>
+          <div class="cf-val r">ELEVATED — single rail operational, failover required</div>
+        </div>
+        <div class="chain-field">
+          <div class="cf-key">Spine Node</div>
+          <div class="cf-val b">amleht-laptop-digital-twin</div>
+        </div>
+        <div class="chain-field">
+          <div class="cf-key">Chain Block Stub</div>
+          <div class="cf-val a">BLOCK-STUB-1775994375</div>
+        </div>
+      </div>
+      <div class="data-stream">
+        <div class="ds-item"><span>NOTE:</span> Digital twin attestation stub. Production: Hyperledger Fabric · IntegrityMSP · Nebius orderer VM · Go binary deployed 9 Mar 2026</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DORA VERDICT -->
+  <div class="topology-section">
+    <div class="sec-hdr">
+      <div class="sec-num">04</div>
+      <div class="sec-title">DORA Art. 11 Verdict</div>
+      <div class="sec-line"></div>
+    </div>
+
+    <div class="dora-verdict">
+      <div class="dv-item">
+        <div class="dv-label">Concentration Risk</div>
+        <div class="dv-value" style="color:var(--green)">RESOLVED</div>
+        <div class="dv-sub">Two independent EU-sovereign providers. Netherlands B.V. + France SAS. Two DPAs. Zero shared failure domain.</div>
+      </div>
+      <div class="dv-item">
+        <div class="dv-label">Failover Performance</div>
+        <div class="dv-value" style="color:var(--amber)">2.33s</div>
+        <div class="dv-sub">Rail 1 failed at 393ms. Rail 2 absorbed at 2329ms. Compliance workflow uninterrupted. Chain record continuous.</div>
+      </div>
+      <div class="dv-item">
+        <div class="dv-label">Audit Evidence</div>
+        <div class="dv-value" style="color:var(--green)">WRITTEN</div>
+        <div class="dv-sub">agent_xii_stub.json + failover_test_results.json committed bf0fc99 · GitHub + GitLab · 12 Apr 2026</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RAIL 2 RESPONSE EXCERPT -->
+  <div class="topology-section">
+    <div class="sec-hdr">
+      <div class="sec-num">05</div>
+      <div class="sec-title">Rail 2 Failover Response — What Mistral Said</div>
+      <div class="sec-line"></div>
+    </div>
+
+    <div class="response-block">
+      <div class="rb-hdr">
+        <div class="rb-title">✓ Rail 2 Absorbed · mistral-nemo-instruct-2407 · Scaleway Paris · 2329ms</div>
+        <div class="rb-model">Requested: rail_1_nebius → Responded: rail_2_scaleway</div>
+      </div>
+      <div class="rb-body">
+        <strong>DORA Article 11 — Concentration Risk:</strong> To mitigate concentration risk, data should be distributed across multiple systems and locations. This can be achieved through replication, backup, or other methods of data distribution... <strong>Concentration Risk</strong> refers to the risk that a significant portion of an organisation's data is stored in a single location or system, making it vulnerable to a single point of failure. This risk can manifest as single system failure, security breach, or compliance issues...
+        <br><br>
+        <span style="color:var(--amber);font-size:11px">— The model that caught the failover explained why the failover matters. This is the demonstration.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- REPLAY -->
+  <div class="replay-section">
+    <button class="replay-btn" onclick="replayAnimation()">⟳ Replay Failover Animation</button>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-l">
+      In memory of <em>Thelma</em> — the Thelma Principle: structural impartiality, always on behalf of the institution.<br>
+      amleht · Amsterdam · EU-Sovereign · Operation Gethsemane Infra 2.0 · Digital Twin v2.0
+    </div>
+    <div class="footer-r">
+      Qivalis Pre-Presentation Demo · 12 April 2026<br>
+      <span style="opacity:.5">AMLEHT-INF-SPEC-002 v0.2 · commit bf0fc99</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function replayAnimation() {
+  const nodes = document.querySelectorAll('.node');
+  const sections = document.querySelectorAll('.topology-section, .hero, .dora-verdict, .response-block');
+
+  nodes.forEach(n => {
+    n.style.animation = 'none';
+    n.offsetHeight;
+    n.style.animation = '';
+  });
+
+  sections.forEach((s, i) => {
+    s.style.opacity = '0';
+    s.style.transform = 'translateY(14px)';
+    setTimeout(() => {
+      s.style.transition = 'opacity .5s ease, transform .5s ease';
+      s.style.opacity = '1';
+      s.style.transform = 'translateY(0)';
+    }, i * 120);
+  });
+}
+
+// Animate the failover sequence on load
+window.addEventListener('load', () => {
+  // Pulse the failed node more aggressively at start
+  const failedNode = document.querySelector('.node.failed');
+  if (failedNode) {
+    setTimeout(() => {
+      failedNode.style.boxShadow = '0 0 40px rgba(255,71,87,.25)';
+      setTimeout(() => {
+        failedNode.style.transition = 'box-shadow 1s ease';
+        failedNode.style.boxShadow = '0 0 20px rgba(255,71,87,.1)';
+      }, 800);
+    }, 1200);
+  }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Operation Gethsemane · Infra 3.0 · On the Third Day | amleht</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Syne:wght@400;500;600;700;800&display=swap');
+
+  :root {
+    --bg:       #04050a;
+    --bg2:      #07090f;
+    --bg3:      #0a0d16;
+    --bg4:      #0e1320;
+    --border:   #111928;
+    --border2:  #192438;
+    --amber:    #d4a843;
+    --amber-d:  #8a6f2a;
+    --amber-bg: rgba(212,168,67,0.06);
+    --green:    #2dd472;
+    --green-bg: rgba(45,212,114,0.07);
+    --red:      #ff4757;
+    --red-bg:   rgba(255,71,87,0.07);
+    --blue:     #3d9eff;
+    --blue-bg:  rgba(61,158,255,0.07);
+    --gold:     #f0d060;
+    --t1:       #dde4f5;
+    --t2:       #5a6680;
+    --t3:       #2e3850;
+    --mono:     'JetBrains Mono', monospace;
+    --serif:    'Cormorant Garamond', serif;
+    --display:  'Syne', sans-serif;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--t1);
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── STARFIELD ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(212,168,67,0.03) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(61,158,255,0.03) 0%, transparent 50%),
+      radial-gradient(ellipse at 60% 80%, rgba(45,212,114,0.02) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(61,158,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(61,158,255,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap { position: relative; z-index: 1; max-width: 1060px; margin: 0 auto; padding: 0 32px 80px; }
+
+  /* ── HEADER ── */
+  .hdr {
+    padding: 24px 0 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 60px;
+  }
+
+  .hdr-l { display: flex; align-items: center; gap: 20px; }
+  .mark { font-family: var(--display); font-size: 15px; font-weight: 700; color: var(--amber); letter-spacing: .10em; }
+  .op-id { font-size: 9px; font-weight: 600; letter-spacing: .18em; color: var(--t3); border: 1px solid var(--border2); padding: 3px 8px; border-radius: 2px; text-transform: uppercase; }
+  .hdr-r { font-size: 10px; color: var(--t3); text-align: right; line-height: 1.6; }
+
+  /* ── EPIGRAPH ── */
+  .epigraph {
+    text-align: center;
+    margin-bottom: 64px;
+    padding: 48px 0;
+  }
+
+  .ep-overline {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: .22em;
+    color: var(--amber-d);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .ep-quote {
+    font-family: var(--serif);
+    font-size: 42px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--t1);
+    line-height: 1.25;
+    margin-bottom: 16px;
+    letter-spacing: -.01em;
+  }
+
+  .ep-sub {
+    font-family: var(--serif);
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--t2);
+    font-style: italic;
+  }
+
+  .ep-line {
+    width: 60px;
+    height: 1px;
+    background: var(--amber-d);
+    margin: 24px auto;
+    opacity: .4;
+  }
+
+  /* ── STATE MACHINE ── */
+  .state-machine { margin-bottom: 60px; }
+
+  .sm-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 32px;
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    overflow: hidden;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .sm-btn {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    padding: 12px 24px;
+    background: transparent;
+    border: none;
+    border-right: 1px solid var(--border2);
+    color: var(--t3);
+    cursor: pointer;
+    transition: all .25s;
+    text-transform: uppercase;
+  }
+
+  .sm-btn:last-child { border-right: none; }
+  .sm-btn:hover { color: var(--t1); background: var(--bg3); }
+  .sm-btn.active-1 { color: var(--green); background: var(--green-bg); }
+  .sm-btn.active-2 { color: var(--red); background: var(--red-bg); }
+  .sm-btn.active-3 { color: var(--gold); background: rgba(240,208,96,0.07); }
+
+  /* ── STATE DISPLAY ── */
+  .state-display {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    min-height: 420px;
+    position: relative;
+    transition: border-color .4s ease;
+  }
+
+  .state-display.s1 { border-color: rgba(45,212,114,.15); }
+  .state-display.s2 { border-color: rgba(255,71,87,.2); }
+  .state-display.s3 { border-color: rgba(240,208,96,.15); }
+
+  .state-panel { display: none; }
+  .state-panel.active { display: block; animation: stateIn .4s ease both; }
+
+  @keyframes stateIn {
+    from { opacity:0; transform: translateY(8px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+
+  /* State header */
+  .sp-hdr {
+    padding: 20px 28px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .sp-act {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .sp-act-num {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: .18em;
+    color: var(--t3);
+    text-transform: uppercase;
+  }
+
+  .sp-act-title {
+    font-family: var(--display);
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .sp-ts { font-size: 11px; color: var(--t3); }
+
+  .sp-risk {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    padding: 6px 14px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+
+  .risk-low      { background: var(--green-bg); color: var(--green); border: 1px solid rgba(45,212,114,.25); }
+  .risk-elevated { background: var(--red-bg);   color: var(--red);   border: 1px solid rgba(255,71,87,.25); }
+  .risk-resolved { background: rgba(240,208,96,.08); color: var(--gold); border: 1px solid rgba(240,208,96,.25); }
+
+  /* State body */
+  .sp-body { padding: 28px; }
+
+  /* Rail rows */
+  .rail-row {
+    display: grid;
+    grid-template-columns: 140px 1fr 100px 80px;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+
+  .rr-label {
+    padding: 16px;
+    background: var(--bg3);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    justify-content: center;
+  }
+
+  .rrl-tag {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+
+  .rrl-name { font-size: 11px; font-weight: 600; color: var(--t1); }
+
+  .rr-detail {
+    padding: 16px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    justify-content: center;
+  }
+
+  .rrd-provider { font-size: 11px; color: var(--t1); font-weight: 500; }
+  .rrd-meta { font-size: 10px; color: var(--t2); }
+
+  .rr-latency {
+    padding: 16px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    justify-content: center;
+  }
+
+  .rl-label { font-size: 9px; color: var(--t3); letter-spacing: .10em; text-transform: uppercase; }
+  .rl-value { font-size: 14px; font-weight: 600; }
+
+  .rr-status {
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .status-badge {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    padding: 4px 8px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  .sb-up       { background: var(--green-bg); color: var(--green); border: 1px solid rgba(45,212,114,.25); }
+  .sb-down     { background: var(--red-bg);   color: var(--red);   border: 1px solid rgba(255,71,87,.3); animation: blink-red 1.5s infinite; }
+  .sb-absorb   { background: rgba(212,168,67,.08); color: var(--amber); border: 1px solid rgba(212,168,67,.25); animation: blink-amber 1s infinite; }
+  .sb-restored { background: rgba(240,208,96,.08); color: var(--gold); border: 1px solid rgba(240,208,96,.3); }
+
+  @keyframes blink-red   { 0%,100%{opacity:1} 50%{opacity:.5} }
+  @keyframes blink-amber { 0%,100%{opacity:1} 50%{opacity:.7} }
+
+  /* Router row */
+  .router-row {
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: 3px;
+    padding: 14px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .rtr-l { font-size: 11px; color: var(--t2); }
+  .rtr-l strong { color: var(--t1); font-weight: 500; }
+  .rtr-r { font-size: 11px; }
+
+  /* Event log */
+  .event-log {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 14px 16px;
+    font-size: 11px;
+    color: var(--t2);
+    line-height: 1.7;
+    margin-top: 16px;
+  }
+
+  .el-line { display: flex; gap: 12px; }
+  .el-ts { color: var(--t3); flex-shrink: 0; }
+  .el-msg { }
+  .el-g { color: var(--green); }
+  .el-r { color: var(--red); }
+  .el-a { color: var(--amber); }
+  .el-gold { color: var(--gold); }
+
+  /* ── TRANSITION ARROWS ── */
+  .transitions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 48px;
+  }
+
+  .tr-state {
+    text-align: center;
+    padding: 16px 24px;
+  }
+
+  .trs-num {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .16em;
+    color: var(--t3);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .trs-label {
+    font-family: var(--display);
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .trs-risk { font-size: 9px; margin-top: 4px; }
+
+  .tr-arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 0 16px;
+  }
+
+  .tra-line { width: 60px; height: 1px; }
+  .tra-label { font-size: 9px; color: var(--t3); letter-spacing: .08em; white-space: nowrap; }
+
+  /* ── VERIFICATION REPORT ── */
+  .vr-section { margin-bottom: 48px; }
+
+  .vr-block {
+    background: var(--bg2);
+    border: 1px solid rgba(212,168,67,.2);
+    border-top: 2px solid var(--amber);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .vr-hdr {
+    padding: 20px 28px;
+    border-bottom: 1px solid rgba(212,168,67,.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    background: rgba(212,168,67,.03);
+  }
+
+  .vr-hdr-l { display: flex; flex-direction: column; gap: 4px; }
+
+  .vr-tag {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .18em;
+    color: var(--amber-d);
+    text-transform: uppercase;
+  }
+
+  .vr-title {
+    font-family: var(--display);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--amber);
+  }
+
+  .vr-subtitle { font-size: 11px; color: var(--t2); }
+
+  .vr-hdr-r {
+    text-align: right;
+    font-size: 10px;
+    color: var(--t3);
+    line-height: 1.7;
+  }
+
+  .vr-body { padding: 28px; }
+
+  .vr-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: var(--border); border-radius: 3px; overflow: hidden; margin-bottom: 24px; }
+
+  .vr-cell {
+    background: var(--bg3);
+    padding: 16px 18px;
+  }
+
+  .vrc-label { font-size: 9px; font-weight: 600; letter-spacing: .12em; color: var(--t3); text-transform: uppercase; margin-bottom: 6px; }
+  .vrc-value { font-size: 13px; font-weight: 600; color: var(--t1); margin-bottom: 4px; }
+  .vrc-sub { font-size: 10px; color: var(--t2); }
+  .vrc-g { color: var(--green); }
+  .vrc-a { color: var(--amber); }
+  .vrc-r { color: var(--red); }
+  .vrc-gold { color: var(--gold); }
+
+  /* Evidence table */
+  .evidence-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 12px; }
+  .evidence-table thead tr { background: var(--bg3); border-bottom: 1px solid var(--border2); }
+  .evidence-table th { padding: 10px 14px; text-align: left; font-size: 9px; font-weight: 600; letter-spacing: .12em; color: var(--t3); text-transform: uppercase; }
+  .evidence-table tbody tr { border-bottom: 1px solid var(--border); }
+  .evidence-table tbody tr:last-child { border-bottom: none; }
+  .evidence-table tbody tr:hover { background: var(--bg3); }
+  .evidence-table td { padding: 10px 14px; color: var(--t2); vertical-align: top; }
+  .evidence-table td.mono { font-size: 11px; color: var(--amber); }
+  .evidence-table td.g { color: var(--green); }
+  .evidence-table td.r { color: var(--red); }
+  .evidence-table td.gold { color: var(--gold); }
+
+  /* Hash block */
+  .hash-block {
+    background: var(--bg);
+    border: 1px solid var(--border2);
+    border-radius: 3px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .hb-label { font-size: 9px; font-weight: 600; letter-spacing: .12em; color: var(--t3); text-transform: uppercase; flex-shrink: 0; padding-top: 2px; }
+  .hb-value { font-size: 11px; color: var(--t2); word-break: break-all; line-height: 1.6; }
+  .hb-value span { color: var(--amber); }
+
+  /* DORA verdict */
+  .dora-verdict {
+    background: rgba(45,212,114,.04);
+    border: 1px solid rgba(45,212,114,.15);
+    border-left: 3px solid var(--green);
+    border-radius: 3px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+  }
+
+  .dv-title { font-size: 10px; font-weight: 700; letter-spacing: .14em; color: var(--green); text-transform: uppercase; margin-bottom: 8px; }
+  .dv-body { font-size: 12px; color: var(--t2); line-height: 1.7; }
+  .dv-body strong { color: var(--t1); font-weight: 500; }
+
+  /* Signature */
+  .vr-signature {
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .sig-l { font-family: var(--serif); font-size: 14px; font-style: italic; color: var(--t2); line-height: 1.7; }
+  .sig-l em { color: var(--amber-d); }
+  .sig-r { font-size: 10px; color: var(--t3); text-align: right; line-height: 1.8; }
+  .sig-r .commit { color: var(--amber-d); }
+
+  /* ── CLOSING ── */
+  .closing {
+    text-align: center;
+    padding: 48px 0 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .closing-text {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--t2);
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+
+  .closing-text span { color: var(--gold); }
+
+  .closing-sub { font-size: 10px; color: var(--t3); letter-spacing: .12em; }
+
+  /* ── AUTO PLAY ── */
+  .autoplay-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .ap-btn {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    padding: 8px 20px;
+    background: transparent;
+    border: 1px solid var(--amber);
+    color: var(--amber);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all .2s;
+    text-transform: uppercase;
+  }
+
+  .ap-btn:hover { background: var(--amber); color: var(--bg); }
+
+  .ap-progress {
+    width: 200px;
+    height: 2px;
+    background: var(--border2);
+    border-radius: 1px;
+    overflow: hidden;
+  }
+
+  .ap-fill {
+    height: 100%;
+    background: var(--amber);
+    border-radius: 1px;
+    width: 0%;
+    transition: width linear;
+  }
+
+  .ap-label { font-size: 10px; color: var(--t3); }
+
+  /* ── SEC HDR ── */
+  .sec-hdr { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+  .sec-num { font-size: 10px; font-weight: 600; color: var(--t3); border: 1px solid var(--border2); padding: 3px 7px; border-radius: 2px; }
+  .sec-title { font-family: var(--display); font-size: 12px; font-weight: 600; color: var(--t2); letter-spacing: .06em; text-transform: uppercase; }
+  .sec-line { flex: 1; height: 1px; background: var(--border); }
+
+  @media(max-width:720px) {
+    .vr-grid { grid-template-columns: 1fr; }
+    .ep-quote { font-size: 28px; }
+    .rail-row { grid-template-columns: 1fr 1fr; }
+    .wrap { padding: 0 16px 60px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="hdr">
+    <div class="hdr-l">
+      <div class="mark">amleht</div>
+      <div class="op-id">Operation Gethsemane · Infra 3.0</div>
+    </div>
+    <div class="hdr-r">
+      Qivalis Pre-Presentation · 12 April 2026<br>
+      AMLEHT-INF-SPEC-002 v0.2 · Digital Twin v2.0
+    </div>
+  </div>
+
+  <!-- EPIGRAPH -->
+  <div class="epigraph">
+    <div class="ep-overline">On the Third Day</div>
+    <div class="ep-quote">When Rail 1 Falls,<br>Rail 2 Stands.<br>Rail 1 Rises Again.</div>
+    <div class="ep-line"></div>
+    <div class="ep-sub">A dual-rail CLOS sovereign inference demonstration in three acts.<br>Built on a laptop. Proven with real data. Ready for Qivalis.</div>
+  </div>
+
+  <!-- STATE TRANSITIONS MAP -->
+  <div class="sec-hdr">
+    <div class="sec-num">I</div>
+    <div class="sec-title">The Three Acts</div>
+    <div class="sec-line"></div>
+  </div>
+
+  <div class="transitions" style="margin-bottom:24px">
+    <div class="tr-state">
+      <div class="trs-num">Act I</div>
+      <div class="trs-label" style="color:var(--green)">Both Rails Live</div>
+      <div class="trs-risk" style="color:var(--green)">Risk: LOW</div>
+    </div>
+    <div class="tr-arrow">
+      <div class="tra-line" style="background:linear-gradient(90deg,var(--green),var(--red))"></div>
+      <div class="tra-label">Rail 1 fails</div>
+    </div>
+    <div class="tr-state">
+      <div class="trs-num">Act II</div>
+      <div class="trs-label" style="color:var(--red)">Rail 1 Down</div>
+      <div class="trs-risk" style="color:var(--red)">Risk: ELEVATED</div>
+    </div>
+    <div class="tr-arrow">
+      <div class="tra-line" style="background:linear-gradient(90deg,var(--red),var(--gold))"></div>
+      <div class="tra-label">Rail 1 restores</div>
+    </div>
+    <div class="tr-state">
+      <div class="trs-num">Act III</div>
+      <div class="trs-label" style="color:var(--gold)">Rail 1 Rises</div>
+      <div class="trs-risk" style="color:var(--gold)">Risk: RESOLVED</div>
+    </div>
+  </div>
+
+  <!-- STATE MACHINE -->
+  <div class="state-machine">
+
+    <div class="autoplay-bar">
+      <button class="ap-btn" onclick="autoPlay()">▶ Auto Play</button>
+      <div class="ap-progress"><div class="ap-fill" id="apFill"></div></div>
+      <div class="ap-label" id="apLabel">Select an act or auto play</div>
+    </div>
+
+    <div class="sm-controls">
+      <button class="sm-btn" id="btn1" onclick="showState(1)">Act I — Healthy</button>
+      <button class="sm-btn" id="btn2" onclick="showState(2)">Act II — Failover</button>
+      <button class="sm-btn" id="btn3" onclick="showState(3)">Act III — Risen</button>
+    </div>
+
+    <div class="state-display" id="stateDisplay">
+
+      <!-- ACT I — HEALTHY -->
+      <div class="state-panel" id="state1">
+        <div class="sp-hdr">
+          <div class="sp-act">
+            <div class="sp-act-num">Act I · 2026-04-12T12:22:08Z · commit 632a1af</div>
+            <div class="sp-act-title" style="color:var(--green)">Both Rails Operational</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <div class="sp-ts">Duration: 8.47s · 3 calls confirmed</div>
+            <div class="sp-risk risk-low">DORA ART.11 · RISK: LOW</div>
+          </div>
+        </div>
+        <div class="sp-body">
+          <div class="rail-row">
+            <div class="rr-label">
+              <div class="rrl-tag" style="color:var(--blue)">Rail 1</div>
+              <div class="rrl-name">Nebius B.V.</div>
+            </div>
+            <div class="rr-detail">
+              <div class="rrd-provider">DeepSeek-V3-0324</div>
+              <div class="rrd-meta">Helsinki, Finland · Netherlands B.V. · Dutch DPA</div>
+            </div>
+            <div class="rr-latency">
+              <div class="rl-label">Latency</div>
+              <div class="rl-value" style="color:var(--amber)">5850ms</div>
+            </div>
+            <div class="rr-status"><div class="status-badge sb-up">UP</div></div>
+          </div>
+
+          <div class="rail-row">
+            <div class="rr-label">
+              <div class="rrl-tag" style="color:var(--green)">Rail 2</div>
+              <div class="rrl-name">Scaleway</div>
+            </div>
+            <div class="rr-detail">
+              <div class="rrd-provider">mistral-nemo-instruct-2407</div>
+              <div class="rrd-meta">Paris, France · Iliad Group · CNIL</div>
+            </div>
+            <div class="rr-latency">
+              <div class="rl-label">Latency</div>
+              <div class="rl-value" style="color:var(--green)">2387ms</div>
+            </div>
+            <div class="rr-status"><div class="status-badge sb-up">UP</div></div>
+          </div>
+
+          <div class="router-row">
+            <div class="rtr-l"><strong>Agent Zero · LiteLLM Proxy</strong> — Dual-rail active. Load balanced. No failover required.</div>
+            <div class="rtr-r" style="color:var(--green)">HTTP 200 · Proxy healthy</div>
+          </div>
+
+          <div class="event-log">
+            <div class="el-line"><span class="el-ts">12:22:08Z</span><span class="el-msg">Test started · proxy health check → <span class="el-g">HEALTHY (HTTP 200)</span></span></div>
+            <div class="el-line"><span class="el-ts">12:22:09Z</span><span class="el-msg">Rail 1 direct call → <span class="el-g">OK 5850ms</span> · DeepSeek-V3-0324 responding</span></div>
+            <div class="el-line"><span class="el-ts">12:22:11Z</span><span class="el-msg">Rail 2 direct call → <span class="el-g">OK 2387ms</span> · mistral-nemo-instruct-2407 responding</span></div>
+            <div class="el-line"><span class="el-ts">12:22:16Z</span><span class="el-msg">Rail 1 with fallback → <span class="el-g">OK 4651ms</span> · responded by rail_1_nebius · no failover needed</span></div>
+            <div class="el-line"><span class="el-ts">12:22:16Z</span><span class="el-msg">Agent XII stub → concentration risk: <span class="el-g">LOW — both rails operational</span></span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACT II — FAILOVER -->
+      <div class="state-panel" id="state2">
+        <div class="sp-hdr">
+          <div class="sp-act">
+            <div class="sp-act-num">Act II · 2026-04-12T11:46:10Z · commit bf0fc99</div>
+            <div class="sp-act-title" style="color:var(--red)">Rail 1 Down — Rail 2 Absorbing</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <div class="sp-ts">Duration: 5.24s · failover confirmed</div>
+            <div class="sp-risk risk-elevated">DORA ART.11 · RISK: ELEVATED</div>
+          </div>
+        </div>
+        <div class="sp-body">
+          <div class="rail-row" style="border-color:rgba(255,71,87,.2)">
+            <div class="rr-label" style="background:rgba(255,71,87,.04)">
+              <div class="rrl-tag" style="color:var(--red)">Rail 1</div>
+              <div class="rrl-name">Nebius B.V.</div>
+            </div>
+            <div class="rr-detail">
+              <div class="rrd-provider">DeepSeek-V3-0324</div>
+              <div class="rrd-meta">Helsinki, Finland · 401 AuthenticationError</div>
+            </div>
+            <div class="rr-latency">
+              <div class="rl-label">Latency</div>
+              <div class="rl-value" style="color:var(--red)">393ms → ✗</div>
+            </div>
+            <div class="rr-status"><div class="status-badge sb-down">DOWN</div></div>
+          </div>
+
+          <div class="rail-row" style="border-color:rgba(212,168,67,.25)">
+            <div class="rr-label" style="background:rgba(212,168,67,.04)">
+              <div class="rrl-tag" style="color:var(--amber)">Rail 2</div>
+              <div class="rrl-name">Scaleway</div>
+            </div>
+            <div class="rr-detail">
+              <div class="rrd-provider">mistral-nemo-instruct-2407</div>
+              <div class="rrd-meta">Paris, France · Absorbing Rail 1 traffic</div>
+            </div>
+            <div class="rr-latency">
+              <div class="rl-label">Latency</div>
+              <div class="rl-value" style="color:var(--amber)">2329ms</div>
+            </div>
+            <div class="rr-status"><div class="status-badge sb-absorb">ABSORBING</div></div>
+          </div>
+
+          <div class="router-row" style="border-color:rgba(255,71,87,.15)">
+            <div class="rtr-l"><strong>Agent Zero · LiteLLM Proxy</strong> — Rail 1 unhealthy. Failover to Rail 2 invoked. Compliance workflow uninterrupted.</div>
+            <div class="rtr-r" style="color:var(--amber)">Failover: ACTIVE</div>
+          </div>
+
+          <div class="event-log">
+            <div class="el-line"><span class="el-ts">11:46:10Z</span><span class="el-msg">Test started · proxy health → <span class="el-g">HEALTHY</span> · Rail 2 in healthy_endpoints · Rail 1 in unhealthy_endpoints</span></div>
+            <div class="el-line"><span class="el-ts">11:46:11Z</span><span class="el-msg">Rail 1 direct → <span class="el-r">FAILED 393ms</span> · 401 Couldn't authenticate · BROKEN_KEY simulating provider failure</span></div>
+            <div class="el-line"><span class="el-ts">11:46:13Z</span><span class="el-msg">Rail 2 direct → <span class="el-g">OK 2375ms</span> · mistral-nemo responding · standing alone</span></div>
+            <div class="el-line"><span class="el-ts">11:46:15Z</span><span class="el-msg">Rail 1 WITH fallback → <span class="el-a">OK 2329ms</span> · responded by <span class="el-g">mistral-nemo-instruct-2407</span> · failover invoked: YES</span></div>
+            <div class="el-line"><span class="el-ts">11:46:15Z</span><span class="el-msg">Agent XII stub → SHA-256: ba7f38a8... · concentration risk: <span class="el-r">ELEVATED — single rail operational</span></span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACT III — RISEN -->
+      <div class="state-panel" id="state3">
+        <div class="sp-hdr">
+          <div class="sp-act">
+            <div class="sp-act-num">Act III · 2026-04-12T12:22:08Z · commit 632a1af</div>
+            <div class="sp-act-title" style="color:var(--gold)">Rail 1 Restored — Full Resilience Cycle Complete</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <div class="sp-ts">Both rails operational · concentration risk resolved</div>
+            <div class="sp-risk risk-resolved">DORA ART.11 · RESOLVED</div>
+          </div>
+        </div>
+        <div class="sp-body">
+          <div class="rail-row" style="border-color:rgba(240,208,96,.2)">
+            <div class="rr-label" style="background:rgba(240,208,96,.04)">
+              <div class="rrl-tag" style="color:var(--gold)">Rail 1</div>
+              <div class="rrl-name">Nebius B.V.</div>
+            </div>
+            <div class="rr-detail">
+              <div class="rrd-provider">DeepSeek-V3-0324</div>
+              <div class="rrd-meta">Helsinki, Finland · Restored · Normal config active</div>
+            </div>
+            <div class="rr-latency">
+              <div class="rl-label">Latency</div>
+              <div class="rl-value" style="color:var(--gold)">5850ms</div>
+            </div>
+            <div class="rr-status"><div class="status-badge sb-restored">RESTORED</div></div>
+          </div>
+
+          <div class="rail-row" style="border-color:rgba(240,208,96,.2)">
+            <div class="rr-label" style="background:rgba(240,208,96,.04)">
+              <div class="rrl-tag" style="color:var(--gold)">Rail 2</div>
+              <div class="rrl-name">Scaleway</div>
+            </div>
+            <div class="rr-detail">
+              <div class="rrd-provider">mistral-nemo-instruct-2407</div>
+              <div class="rrd-meta">Paris, France · Normal load · No longer carrying alone</div>
+            </div>
+            <div class="rr-latency">
+              <div class="rl-label">Latency</div>
+              <div class="rl-value" style="color:var(--gold)">2387ms</div>
+            </div>
+            <div class="rr-status"><div class="status-badge sb-restored">RESTORED</div></div>
+          </div>
+
+          <div class="router-row" style="border-color:rgba(240,208,96,.15)">
+            <div class="rtr-l"><strong>Agent Zero · LiteLLM Proxy</strong> — Both rails healthy. Full resilience cycle documented. Chain record continuous across all three acts.</div>
+            <div class="rtr-r" style="color:var(--gold)">Full cycle: COMPLETE</div>
+          </div>
+
+          <div class="event-log">
+            <div class="el-line"><span class="el-ts">12:22:08Z</span><span class="el-msg">Normal config restored · litellm_config.yaml · port 4000</span></div>
+            <div class="el-line"><span class="el-ts">12:22:09Z</span><span class="el-msg">Rail 1 restored → <span class="el-gold">OK 5850ms</span> · DeepSeek-V3-0324 operational again</span></div>
+            <div class="el-line"><span class="el-ts">12:22:11Z</span><span class="el-msg">Rail 2 confirmed → <span class="el-gold">OK 2387ms</span> · mistral-nemo operational · load normalised</span></div>
+            <div class="el-line"><span class="el-ts">12:22:16Z</span><span class="el-msg">Rail 1 with fallback → <span class="el-gold">OK 4651ms</span> · responded by rail_1_nebius · failover: NO (not needed)</span></div>
+            <div class="el-line"><span class="el-ts">12:22:16Z</span><span class="el-msg">Agent XII stub healthy → concentration risk: <span class="el-gold">LOW — both rails operational · full cycle complete</span></span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- VERIFICATION REPORT -->
+  <div class="vr-section">
+    <div class="sec-hdr">
+      <div class="sec-num">II</div>
+      <div class="sec-title">Agent XII Verification Report — Full Cycle</div>
+      <div class="sec-line"></div>
+    </div>
+
+    <div class="vr-block">
+      <div class="vr-hdr">
+        <div class="vr-hdr-l">
+          <div class="vr-tag">Agent XII · Ledger Integrity · Chain Verification Report</div>
+          <div class="vr-title">Dual-Rail CLOS Resilience Cycle — Complete</div>
+          <div class="vr-subtitle">amleht v2.0 Digital Twin · Laptop Spine Node · 12 April 2026</div>
+        </div>
+        <div class="vr-hdr-r">
+          Spine Node: amleht-laptop-digital-twin<br>
+          Commits: 5d40089 → bf0fc99 → 632a1af<br>
+          GitHub + GitLab · dual remote · verified
+        </div>
+      </div>
+
+      <div class="vr-body">
+
+        <div class="vr-grid">
+          <div class="vr-cell">
+            <div class="vrc-label">Act I — Healthy Baseline</div>
+            <div class="vrc-value vrc-g">Both Rails UP</div>
+            <div class="vrc-sub">Rail 1: 5850ms · Rail 2: 2387ms<br>Concentration risk: LOW<br>Commit: 632a1af</div>
+          </div>
+          <div class="vr-cell">
+            <div class="vrc-label">Act II — Failover Event</div>
+            <div class="vrc-value vrc-r">Rail 1 DOWN</div>
+            <div class="vrc-sub">Rail 1 fail: 393ms · Rail 2 absorb: 2329ms<br>Failover invoked: YES<br>Commit: bf0fc99</div>
+          </div>
+          <div class="vr-cell">
+            <div class="vrc-label">Act III — Full Recovery</div>
+            <div class="vrc-value vrc-gold">Rail 1 Risen</div>
+            <div class="vrc-sub">Both rails restored · Risk: LOW<br>Full cycle: COMPLETE<br>Commit: 632a1af</div>
+          </div>
+          <div class="vr-cell">
+            <div class="vrc-label">Provider Diversification</div>
+            <div class="vrc-value vrc-g">VERIFIED</div>
+            <div class="vrc-sub">Nebius B.V. (NL) ≠ Scaleway (FR)<br>Two entities · Two DPAs<br>Two jurisdictions</div>
+          </div>
+          <div class="vr-cell">
+            <div class="vrc-label">DORA Art. 11</div>
+            <div class="vrc-value vrc-g">RESOLVED</div>
+            <div class="vrc-sub">ICT concentration risk eliminated<br>by architecture · not by policy<br>Evidence: chain attested</div>
+          </div>
+          <div class="vr-cell">
+            <div class="vrc-label">Chain Continuity</div>
+            <div class="vrc-value vrc-a">UNBROKEN</div>
+            <div class="vrc-sub">Agent XII stub across all acts<br>JSON evidence committed<br>Both remotes verified</div>
+          </div>
+        </div>
+
+        <table class="evidence-table">
+          <thead>
+            <tr>
+              <th>Evidence File</th>
+              <th>Act</th>
+              <th>Rail 1</th>
+              <th>Rail 2</th>
+              <th>Risk Level</th>
+              <th>Commit</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="mono">failover_test_results.json</td>
+              <td>II — Failover</td>
+              <td class="r">DOWN · 401</td>
+              <td class="g">UP · 2375ms</td>
+              <td class="r">ELEVATED</td>
+              <td class="mono">bf0fc99</td>
+            </tr>
+            <tr>
+              <td class="mono">agent_xii_stub.json</td>
+              <td>II — Failover</td>
+              <td class="r">DOWN</td>
+              <td class="g">ABSORBING</td>
+              <td class="r">ELEVATED</td>
+              <td class="mono">bf0fc99</td>
+            </tr>
+            <tr>
+              <td class="mono">healthy_state_results.json</td>
+              <td>I + III — Healthy</td>
+              <td class="g">UP · 5850ms</td>
+              <td class="g">UP · 2387ms</td>
+              <td class="g">LOW</td>
+              <td class="mono">632a1af</td>
+            </tr>
+            <tr>
+              <td class="mono">agent_xii_stub_healthy.json</td>
+              <td>I + III — Healthy</td>
+              <td class="g">UP</td>
+              <td class="g">UP</td>
+              <td class="g">LOW</td>
+              <td class="mono">632a1af</td>
+            </tr>
+            <tr>
+              <td class="mono">litellm_config.yaml</td>
+              <td>All</td>
+              <td class="g">Nebius B.V. NL</td>
+              <td class="g">Scaleway FR</td>
+              <td class="g">Dual-rail</td>
+              <td class="mono">5d40089</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="hash-block">
+          <div class="hb-label">SHA-256<br>Response<br>Hash</div>
+          <div class="hb-value">
+            <span>ba7f38a803805aca34ff346608bf22097ca2b755f374f769c02626a9000f7450</span><br>
+            Mistral mistral-nemo-instruct-2407 · Rail 2 failover response · Act II · 11:46:15Z<br>
+            Block stub: BLOCK-STUB-1775994375 · Production: Hyperledger Fabric · IntegrityMSP · Nebius orderer VM
+          </div>
+        </div>
+
+        <div class="dora-verdict">
+          <div class="dv-title">DORA Art. 11 — ICT Concentration Risk — Verified Resolution</div>
+          <div class="dv-body">
+            The amleht dual-rail CLOS architecture demonstrates active-active sovereign AI inference across <strong>two independent EU legal entities</strong> (Nebius B.V., Netherlands and Scaleway/Iliad Group, France), <strong>two independent EU data protection authorities</strong> (Dutch DPA and CNIL), and <strong>two independent geographic locations</strong> (Helsinki, Finland and Paris, France). The failover test of 12 April 2026 confirms that Rail 1 failure does not interrupt compliance workflow delivery — Rail 2 absorbs and responds within 2329ms. The full resilience cycle — healthy baseline, failover event, and recovery — is documented in committed evidence files on both GitHub and GitLab remotes. <strong>ICT concentration risk under DORA Article 11: resolved by architecture, attested by chain record.</strong>
+          </div>
+        </div>
+
+        <div class="vr-signature">
+          <div class="sig-l">
+            In memory of <em>Thelma</em> — the Thelma Principle:<br>
+            structural impartiality, always on behalf of the institution.
+          </div>
+          <div class="sig-r">
+            amleht v2.0 · Digital Twin · Laptop Spine Node<br>
+            Operation Gethsemane Infra 3.0 · On the Third Day<br>
+            <span class="commit">5d40089 → bf0fc99 → 632a1af</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- CLOSING -->
+  <div class="closing">
+    <div class="closing-text">
+      When Rail 1 Falls, Rail 2 Stands.<br>
+      <span>Rail 1 Rises Again.</span>
+    </div>
+    <div class="closing-sub">amleht · Amsterdam · Easter Sunday · 12 April 2026</div>
+  </div>
+
+</div>
+
+<script>
+let currentState = 0;
+let autoTimer = null;
+let progressTimer = null;
+
+function showState(n) {
+  // Clear auto
+  if (autoTimer) { clearTimeout(autoTimer); clearInterval(progressTimer); }
+  document.getElementById('apFill').style.width = '0%';
+  document.getElementById('apFill').style.transition = 'none';
+
+  // Update display
+  const display = document.getElementById('stateDisplay');
+  display.className = 'state-display s' + n;
+
+  [1,2,3].forEach(i => {
+    document.getElementById('state' + i).classList.remove('active');
+    document.getElementById('btn' + i).className = 'sm-btn';
+  });
+
+  document.getElementById('state' + n).classList.add('active');
+  document.getElementById('btn' + n).className = 'sm-btn active-' + n;
+
+  const labels = ['', 'Act I — Both Rails Operational', 'Act II — Rail 1 Down · Rail 2 Absorbing', 'Act III — Rail 1 Risen · Full Cycle Complete'];
+  document.getElementById('apLabel').textContent = labels[n];
+
+  currentState = n;
+}
+
+function autoPlay() {
+  let step = 0;
+  const states = [1, 2, 3];
+  const delay = 4000;
+
+  if (autoTimer) { clearTimeout(autoTimer); clearInterval(progressTimer); }
+
+  function runStep() {
+    if (step >= states.length) {
+      document.getElementById('apLabel').textContent = 'Full cycle complete ✓';
+      document.getElementById('apFill').style.width = '100%';
+      return;
+    }
+
+    showState(states[step]);
+
+    // Progress bar
+    document.getElementById('apFill').style.transition = 'none';
+    document.getElementById('apFill').style.width = '0%';
+    setTimeout(() => {
+      document.getElementById('apFill').style.transition = `width ${delay}ms linear`;
+      document.getElementById('apFill').style.width = '100%';
+    }, 50);
+
+    step++;
+    autoTimer = setTimeout(runStep, delay);
+  }
+
+  runStep();
+}
+
+// Start on Act I
+window.addEventListener('load', () => {
+  setTimeout(() => showState(1), 400);
+});
+</script>
+</body>
+</html>
