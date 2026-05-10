@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fictief NV — Window to the World</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --bg:         #080b0f;
+    --bg-card:    #0d1118;
+    --bg-card-2:  #111820;
+    --border:     #1a2535;
+    --border-2:   #243040;
+    --teal:       #00c896;
+    --teal-dim:   #00c89618;
+    --teal-glow:  #00c89640;
+    --amber:      #f0a500;
+    --amber-dim:  #f0a50015;
+    --red:        #e05050;
+    --red-dim:    #e0505018;
+    --blue:       #4a9eff;
+    --blue-dim:   #4a9eff15;
+    --purple:     #9b7dff;
+    --text-1:     #e8edf5;
+    --text-2:     #8a9bb5;
+    --text-3:     #4a5a70;
+    --mono:       'IBM Plex Mono', monospace;
+    --sans:       'IBM Plex Sans', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-1);
+    font-family: var(--sans);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,200,150,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,200,150,0.025) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 20px 80px;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .header-left { display: flex; align-items: center; gap: 16px; }
+  .wordmark { font-family: var(--mono); font-size: 16px; font-weight: 600; color: var(--text-1); }
+  .wordmark span { color: var(--teal); }
+  .divider-v { width: 1px; height: 28px; background: var(--border-2); }
+  .client-name { font-family: var(--mono); font-size: 13px; color: var(--text-2); }
+  .client-name strong { color: var(--text-1); font-weight: 500; }
+  .header-right { display: flex; align-items: center; gap: 12px; }
+  .api-status { display: flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 10px; color: var(--text-3); }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--text-3); transition: background 0.3s; }
+  .status-dot.live { background: var(--teal); animation: pulse 2s infinite; }
+  .status-dot.error { background: var(--red); }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.85)} }
+
+  .invite-badge {
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 3px;
+    background: var(--teal-dim);
+    color: var(--teal);
+    border: 1px solid var(--teal-glow);
+  }
+
+  .status-bar { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 24px; }
+  .stat { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; }
+  .stat-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); margin-bottom: 6px; }
+  .stat-value { font-family: var(--mono); font-size: 20px; font-weight: 600; color: var(--text-1); }
+  .stat-value.teal { color: var(--teal); }
+  .stat-value.amber { color: var(--amber); }
+  .stat-value.red { color: var(--red); }
+  .stat-sub { font-size: 10px; color: var(--text-3); margin-top: 3px; }
+
+  .layout { display: grid; grid-template-columns: 1fr 400px; gap: 16px; align-items: start; }
+
+  .section-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-3); margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .idle-panel { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+  .idle-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .idle-title { font-family: var(--mono); font-size: 11px; color: var(--text-2); font-weight: 500; }
+  .ops-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .ops-card { background: var(--bg-card-2); border: 1px solid var(--border); border-radius: 5px; padding: 10px 12px; }
+  .ops-name { font-family: var(--mono); font-size: 9px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 5px; }
+  .ops-value { font-family: var(--mono); font-size: 14px; font-weight: 600; color: var(--teal); }
+  .ops-sub { font-size: 10px; color: var(--text-3); margin-top: 2px; }
+
+  .event-feed { display: flex; flex-direction: column; gap: 10px; }
+  .event-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; transition: border-color 0.2s; animation: slideIn 0.4s ease; }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: translateY(0); } }
+  .event-card.critical { border-left: 3px solid var(--red); }
+  .event-card.high { border-left: 3px solid var(--amber); }
+  .event-card.medium { border-left: 3px solid var(--blue); }
+
+  .event-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; cursor: pointer; gap: 12px; }
+  .event-header:hover { background: rgba(255,255,255,0.02); }
+  .event-id { font-family: var(--mono); font-size: 10px; color: var(--text-3); white-space: nowrap; }
+  .event-name { font-size: 13px; font-weight: 500; color: var(--text-1); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .event-badges { display: flex; gap: 6px; align-items: center; flex-shrink: 0; }
+  .badge { font-family: var(--mono); font-size: 9px; font-weight: 600; padding: 2px 7px; border-radius: 3px; }
+  .badge-critical { background: var(--red-dim);   color: var(--red);   }
+  .badge-high     { background: var(--amber-dim); color: var(--amber); }
+  .badge-medium   { background: var(--blue-dim);  color: var(--blue);  }
+  .badge-dora     { background: var(--teal-dim);  color: var(--teal);  }
+  .badge-pending  { background: var(--amber-dim); color: var(--amber); }
+  .badge-attested { background: var(--teal-dim);  color: var(--teal);  }
+
+  .event-body { display: none; padding: 0 16px 16px; border-top: 1px solid var(--border); }
+  .event-body.open { display: block; }
+  .event-fields { display: grid; grid-template-columns: 130px 1fr; gap: 0; margin-top: 12px; font-size: 11px; }
+  .ef-key { font-family: var(--mono); font-size: 10px; color: var(--text-3); padding: 5px 0; border-bottom: 1px solid var(--border); }
+  .ef-val { color: var(--text-2); padding: 5px 0 5px 12px; border-bottom: 1px solid var(--border); word-break: break-all; font-size: 11px; }
+  .ef-val.hash { font-family: var(--mono); font-size: 9px; color: var(--teal); }
+  .ef-val.teal { color: var(--teal); }
+  .ef-val.amber { color: var(--amber); }
+
+  .dora-clock { margin-top: 12px; background: var(--bg-card-2); border: 1px solid var(--amber-dim); border-radius: 5px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; }
+  .clock-label { font-family: var(--mono); font-size: 9px; color: var(--amber); text-transform: uppercase; letter-spacing: 0.08em; }
+  .clock-value { font-family: var(--mono); font-size: 18px; font-weight: 600; color: var(--amber); }
+  .clock-sub { font-size: 9px; color: var(--text-3); margin-top: 2px; }
+
+  .narrative { margin-top: 10px; background: rgba(155,125,255,0.06); border: 1px solid rgba(155,125,255,0.2); border-radius: 5px; padding: 10px 14px; font-size: 12px; color: var(--purple); font-style: italic; line-height: 1.6; }
+  .narrative::before { content: 'Narrate → '; font-style: normal; font-family: var(--mono); font-size: 9px; color: rgba(155,125,255,0.5); margin-right: 4px; }
+
+  .right-panel { display: flex; flex-direction: column; gap: 14px; }
+  .panel-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+
+  .chain-entry { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 11px; }
+  .chain-entry:last-child { border-bottom: none; }
+  .chain-dot { width: 7px; height: 7px; border-radius: 50%; margin-top: 3px; flex-shrink: 0; }
+  .chain-dot.attested { background: var(--teal); }
+  .chain-dot.pending  { background: var(--amber); }
+  .chain-id { font-family: var(--mono); font-size: 10px; color: var(--text-2); margin-bottom: 2px; }
+  .chain-hash { font-family: var(--mono); font-size: 9px; color: var(--teal); }
+  .chain-pending-note { font-family: var(--mono); font-size: 9px; color: var(--amber); }
+
+  .stages { display: flex; gap: 0; margin-top: 10px; }
+  .stage { flex: 1; text-align: center; padding: 8px 4px; font-family: var(--mono); font-size: 9px; color: var(--text-3); border-right: 1px solid var(--border); transition: all 0.3s; text-transform: uppercase; letter-spacing: 0.06em; }
+  .stage:last-child { border-right: none; }
+  .stage.active { color: var(--teal); background: var(--teal-dim); }
+  .stage.done { color: var(--teal); }
+
+  .scenario-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 11px; cursor: default; }
+  .scenario-row:last-child { border-bottom: none; }
+  .scenario-trigger { font-family: var(--mono); font-size: 10px; color: var(--teal); }
+  .scenario-name { color: var(--text-2); flex: 1; margin: 0 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 10px; }
+  .scenario-sev { font-family: var(--mono); font-size: 9px; color: var(--text-3); }
+
+  .empty-state { padding: 32px; text-align: center; color: var(--text-3); font-size: 12px; line-height: 2; }
+  .empty-state .big { font-family: var(--mono); font-size: 22px; color: var(--text-3); margin-bottom: 8px; }
+
+  .footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .memorial { font-family: var(--mono); font-size: 10px; color: var(--text-3); font-style: italic; }
+  .footer-meta { font-family: var(--mono); font-size: 9px; color: var(--text-3); text-align: right; line-height: 1.8; }
+
+  .chev { font-size: 11px; color: var(--text-3); transition: transform 0.2s; flex-shrink: 0; }
+  .chev.open { transform: rotate(180deg); }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .status-bar { grid-template-columns: repeat(3, 1fr); }
+    .ops-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── GATE GUARD — verbatim from amleht-site/demo/interactive/appia.html ── -->
+<script id="amleht-gate-guard">
+/* amleht gate guard — runs before any page content renders.
+   Reads the auth flag set by /gate.html on successful passphrase
+   entry. Anything older than 60 minutes is treated as expired. */
+(function() {
+  let ok = false;
+  try {
+    const raw = sessionStorage.getItem('amleht_gate_verified');
+    if (raw) {
+      const v = JSON.parse(raw);
+      const age = Date.now() - v.verifiedAt;
+      ok = (typeof v.verifiedAt === 'number' && age >= 0 && age < 60 * 60 * 1000);
+    }
+  } catch (e) { /* ok stays false */ }
+  if (!ok) {
+    sessionStorage.removeItem('amleht_gate_verified');
+    window.location.replace('../../gate.html');
+  }
+})();
+</script>
+
+<div class="wrap">
+
+  <div class="header">
+    <div class="header-left">
+      <div class="wordmark">amleht<span>.</span></div>
+      <div class="divider-v"></div>
+      <div class="client-name">
+        <strong>Fictief NV</strong> · Window to the World
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="api-status">
+        <div class="status-dot" id="apiDot"></div>
+        <span id="apiStatusText">connecting...</span>
+      </div>
+      <span class="invite-badge">By invitation only</span>
+    </div>
+  </div>
+
+  <div class="status-bar">
+    <div class="stat">
+      <div class="stat-label">Events fired</div>
+      <div class="stat-value teal" id="statEvents">0</div>
+      <div class="stat-sub">this session</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">DORA threshold</div>
+      <div class="stat-value" id="statDora">—</div>
+      <div class="stat-sub" id="statDoraArticle">awaiting event</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Last detection</div>
+      <div class="stat-value teal" id="statDetection">—</div>
+      <div class="stat-sub">milliseconds</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Sandbox</div>
+      <div class="stat-value" id="statSandbox">—</div>
+      <div class="stat-sub" id="statSandboxSub">awaiting event</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Chain</div>
+      <div class="stat-value amber" id="statChain">—</div>
+      <div class="stat-sub" id="statChainSub">awaiting event</div>
+    </div>
+  </div>
+
+  <div class="layout">
+
+    <div>
+      <div class="section-label">Live event feed</div>
+
+      <div class="idle-panel" id="idlePanel">
+        <div class="idle-header">
+          <div class="idle-title">Fictief NV — normal operations</div>
+          <div class="api-status">
+            <div class="status-dot live"></div>
+            <span style="color:var(--teal);font-family:var(--mono);font-size:10px">all systems nominal</span>
+          </div>
+        </div>
+        <div class="ops-grid">
+          <div class="ops-card">
+            <div class="ops-name">Payments</div>
+            <div class="ops-value" id="opsPayments">0</div>
+            <div class="ops-sub">processed today</div>
+          </div>
+          <div class="ops-card">
+            <div class="ops-name">KYC checks</div>
+            <div class="ops-value" id="opsKyc">0</div>
+            <div class="ops-sub">verifications</div>
+          </div>
+          <div class="ops-card">
+            <div class="ops-name">Trade reports</div>
+            <div class="ops-value" id="opsTrade">0</div>
+            <div class="ops-sub">MiFID II compliant</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="event-feed" id="eventFeed">
+        <div class="empty-state" id="emptyState">
+          <div class="big">◎</div>
+          Fictief NV is running normally.<br>
+          Waiting for the first event.<br>
+          <span style="font-family:var(--mono);font-size:10px;color:var(--teal)">/fire CHAOS-001</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="right-panel">
+
+      <div class="panel-card">
+        <div class="section-label" style="margin-bottom:8px">Pipeline</div>
+        <div class="stages">
+          <div class="stage" id="stageDetect">Detect</div>
+          <div class="stage" id="stageClassify">Classify</div>
+          <div class="stage" id="stageSandbox">Sandbox</div>
+          <div class="stage" id="stageAttest">Attest</div>
+        </div>
+      </div>
+
+      <div class="panel-card">
+        <div class="section-label" style="margin-bottom:8px">Compliance chain</div>
+        <div id="chainList">
+          <div style="font-family:var(--mono);font-size:10px;color:var(--text-3);padding:8px 0">
+            No blocks yet — awaiting first event
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-card">
+        <div class="section-label" style="margin-bottom:8px">Scenario quick-ref</div>
+        <div id="scenarioList">
+          <div style="font-family:var(--mono);font-size:10px;color:var(--text-3)">Loading...</div>
+        </div>
+      </div>
+
+      <div class="panel-card">
+        <div class="section-label" style="margin-bottom:8px">DORA reference</div>
+        <div style="font-size:11px;color:var(--text-2);line-height:1.8">
+          <div style="margin-bottom:6px">
+            <span style="font-family:var(--mono);color:var(--teal);font-size:10px">Art.19</span>
+            &nbsp;Major incident — notify within
+            <strong style="color:var(--amber)">4 hours</strong>
+          </div>
+          <div style="margin-bottom:6px">
+            <span style="font-family:var(--mono);color:var(--teal);font-size:10px">Art.28</span>
+            &nbsp;TPR incident — third-party provider
+          </div>
+          <div style="margin-bottom:6px">
+            <span style="font-family:var(--mono);color:var(--teal);font-size:10px">Art.11</span>
+            &nbsp;Operational continuity risk
+          </div>
+          <div>
+            <span style="font-family:var(--mono);color:var(--purple);font-size:10px">AI Act</span>
+            &nbsp;Art.13 — high-risk AI transparency
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="memorial">In memory of Thelma · Amsterdam</div>
+    <div class="footer-meta">
+      amleht · Fictief NV · Window to the World<br>
+      api.amleht.eu · eu-north1 · Helsinki
+    </div>
+  </div>
+
+</div>
+
+<!-- ── DASHBOARD LOGIC ──────────────────────────────────────── -->
+<script>
+const API = 'https://api.amleht.eu';
+const POLL_INCIDENTS = 3000;
+const POLL_HEALTH    = 5000;
+
+let knownEventIds = new Set();
+let sessionCount  = 0;
+let doraClocks    = {};
+let opsCounters   = { payments: 0, kyc: 0, trade: 0 };
+
+function tickOps() {
+  opsCounters.payments += Math.floor(Math.random() * 12) + 3;
+  opsCounters.kyc      += Math.floor(Math.random() * 4)  + 1;
+  opsCounters.trade    += Math.floor(Math.random() * 7)  + 2;
+  el('opsPayments').textContent = opsCounters.payments.toLocaleString();
+  el('opsKyc').textContent      = opsCounters.kyc.toLocaleString();
+  el('opsTrade').textContent    = opsCounters.trade.toLocaleString();
+}
+setInterval(tickOps, 2000);
+tickOps();
+
+function el(id)  { return document.getElementById(id); }
+function fmt(ts) {
+  return new Date(ts).toLocaleTimeString('nl-NL',
+    { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+}
+function sev2class(sev) {
+  return { CRITICAL: 'critical', HIGH: 'high', MEDIUM: 'medium' }[sev] || 'medium';
+}
+
+async function pollHealth() {
+  try {
+    const r = await fetch(`${API}/health`);
+    const d = await r.json();
+    el('apiDot').className = 'status-dot live';
+    el('apiStatusText').textContent = `live · ${d.scenarios} scenarios`;
+  } catch {
+    el('apiDot').className = 'status-dot error';
+    el('apiStatusText').textContent = 'api unreachable';
+  }
+}
+
+async function loadScenarios() {
+  try {
+    const r = await fetch(`${API}/scenarios`);
+    const d = await r.json();
+    const list = el('scenarioList');
+    list.innerHTML = '';
+    const featured = [
+      'CHAOS-001','CHAOS-004','CHAOS-005',
+      'ATK-001','ATK-002','ATK-004','ATK-006',
+      'REG-001','DEMO-CLOSE'
+    ];
+    d.scenarios
+      .filter(s => featured.includes(s.id))
+      .forEach(s => {
+        const row = document.createElement('div');
+        row.className = 'scenario-row';
+        const sevColor = {
+          CRITICAL: 'var(--red)',
+          HIGH:     'var(--amber)',
+          MEDIUM:   'var(--blue)',
+          INFO:     'var(--text-3)',
+        }[s.severity] || 'var(--text-3)';
+        row.innerHTML = `
+          <span class="scenario-trigger">/fire ${s.id}</span>
+          <span class="scenario-name">${s.name}</span>
+          <span class="scenario-sev" style="color:${sevColor}">${s.severity}</span>
+        `;
+        list.appendChild(row);
+      });
+  } catch(e) {
+    el('scenarioList').textContent = 'Could not load scenarios';
+  }
+}
+
+function startDoraClock(eventId, startTs) {
+  doraClocks[eventId] = {
+    start: new Date(startTs).getTime(),
+    deadline: new Date(startTs).getTime() + (4 * 60 * 60 * 1000)
+  };
+}
+
+function updateDoraClocks() {
+  const now = Date.now();
+  Object.entries(doraClocks).forEach(([eid, clock]) => {
+    const remaining = clock.deadline - now;
+    const clockEl = el(`dora-clock-${eid}`);
+    if (!clockEl) return;
+    if (remaining <= 0) {
+      clockEl.querySelector('.clock-value').textContent = 'EXPIRED';
+      clockEl.querySelector('.clock-value').style.color = 'var(--red)';
+      return;
+    }
+    const h = Math.floor(remaining / 3600000);
+    const m = Math.floor((remaining % 3600000) / 60000);
+    const s = Math.floor((remaining % 60000) / 1000);
+    clockEl.querySelector('.clock-value').textContent =
+      `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  });
+}
+setInterval(updateDoraClocks, 1000);
+
+function animatePipeline(stages) {
+  const stageIds = ['Detect','Classify','Sandbox','Attest'];
+  stageIds.forEach(s => {
+    const el2 = el(`stage${s}`);
+    if (el2) el2.className = 'stage';
+  });
+  if (!stages || !stages.length) return;
+  let delay = 0;
+  stages.forEach(stage => {
+    const name = stage.charAt(0).toUpperCase() + stage.slice(1);
+    setTimeout(() => {
+      const el2 = el(`stage${name}`);
+      if (el2) el2.className = 'stage active';
+      setTimeout(() => { if (el2) el2.className = 'stage done'; }, 600);
+    }, delay);
+    delay += 500;
+  });
+}
+
+function updateChainList(events) {
+  const list = el('chainList');
+  if (!events.length) return;
+  list.innerHTML = '';
+  [...events].reverse().slice(0, 6).forEach(evt => {
+    const dash = evt.dashboard || {};
+    const attested = dash.attested;
+    const entry = document.createElement('div');
+    entry.className = 'chain-entry';
+    entry.innerHTML = `
+      <div class="chain-dot ${attested ? 'attested' : 'pending'}"></div>
+      <div>
+        <div class="chain-id">${evt.incident_id} · ${evt.scenario_id}</div>
+        ${attested
+          ? `<div class="chain-hash">${(dash.block_hash||'').slice(0,20)}...</div>`
+          : `<div class="chain-pending-note">PENDING — Agent XII CLI</div>`
+        }
+      </div>
+    `;
+    list.appendChild(entry);
+  });
+}
+
+function renderEventCard(evt) {
+  const dash  = evt.dashboard || {};
+  const sevCls = sev2class(dash.severity || 'MEDIUM');
+  const attested = dash.attested;
+  const doraThresh = dash.dora_article && !dash.dora_article.includes('N/A');
+
+  const card = document.createElement('div');
+  card.className = `event-card ${sevCls}`;
+  card.id = `evt-${evt.event_id}`;
+
+  const badgeSev = `badge-${sevCls}`;
+  const badgeChain = attested ? 'badge-attested' : 'badge-pending';
+  const chainText = attested ? 'ATTESTED' : 'PENDING';
+
+  card.innerHTML = `
+    <div class="event-header" onclick="toggleCard('${evt.event_id}')">
+      <div class="event-id">${evt.incident_id}</div>
+      <div class="event-name">${dash.headline || evt.scenario_id}</div>
+      <div class="event-badges">
+        <span class="badge ${badgeSev}">${dash.severity || 'MEDIUM'}</span>
+        <span class="badge badge-dora">${dash.dora_article || 'DORA'}</span>
+        <span class="badge ${badgeChain}">${chainText}</span>
+        <span class="chev" id="chev-${evt.event_id}">▾</span>
+      </div>
+    </div>
+    <div class="event-body" id="body-${evt.event_id}">
+      <div class="event-fields">
+        <div class="ef-key">Scenario</div>
+        <div class="ef-val">${evt.scenario_id}</div>
+        <div class="ef-key">Detail</div>
+        <div class="ef-val">${dash.detail || '—'}</div>
+        <div class="ef-key">Detection</div>
+        <div class="ef-val teal">${dash.detection_ms || 0}ms</div>
+        <div class="ef-key">Sandbox</div>
+        <div class="ef-val">${dash.sandbox_type || '—'} · ${dash.destroyed ? 'destroyed ✓' : 'pending'}</div>
+        <div class="ef-key">Evidence</div>
+        <div class="ef-val hash">${(dash.evidence_hash||'').slice(0,32)}...</div>
+        <div class="ef-key">Chain</div>
+        <div class="ef-val ${attested ? 'teal' : 'amber'}">
+          ${attested
+            ? `Block ${(dash.block_hash||'').slice(0,16)}...`
+            : 'PENDING — Agent XII CLI (CHG-2026-001)'
+          }
+        </div>
+        <div class="ef-key">Evidence URL</div>
+        <div class="ef-val">
+          <a href="${dash.evidence_url || '#'}" target="_blank"
+             style="color:var(--teal);font-size:10px;font-family:var(--mono)">
+            GitHub →
+          </a>
+        </div>
+        <div class="ef-key">Timestamp</div>
+        <div class="ef-val">${fmt(evt.timestamp)}</div>
+      </div>
+
+      ${doraThresh ? `
+        <div class="dora-clock" id="dora-clock-${evt.event_id}">
+          <div>
+            <div class="clock-label">DORA Art.19 — 4hr notification window</div>
+            <div class="clock-sub">Notification required</div>
+          </div>
+          <div><div class="clock-value">04:00:00</div></div>
+        </div>
+      ` : ''}
+
+      ${dash.narrative_cue ? `<div class="narrative">${dash.narrative_cue}</div>` : ''}
+    </div>
+  `;
+  return card;
+}
+
+function toggleCard(eventId) {
+  const body = el(`body-${eventId}`);
+  const chev = el(`chev-${eventId}`);
+  if (!body) return;
+  const open = body.classList.toggle('open');
+  if (chev) chev.classList.toggle('open', open);
+}
+
+async function pollIncidents() {
+  try {
+    const r = await fetch(`${API}/incidents`);
+    const d = await r.json();
+    const events = d.events || [];
+    if (!events.length) return;
+
+    const empty = el('emptyState');
+    if (empty) empty.style.display = 'none';
+
+    const newEvts = events.filter(e => !knownEventIds.has(e.event_id));
+    if (newEvts.length) {
+      const feed = el('eventFeed');
+      newEvts.forEach(evt => {
+        knownEventIds.add(evt.event_id);
+        sessionCount++;
+        animatePipeline(
+          (evt.dashboard && evt.dashboard.sandbox_type)
+            ? ['detect','classify','sandbox','attest']
+            : ['detect','classify','attest']
+        );
+        const dash = evt.dashboard || {};
+        if (dash.dora_article && !dash.dora_article.includes('N/A')) {
+          startDoraClock(evt.event_id, evt.timestamp);
+        }
+        const card = renderEventCard(evt);
+        if (feed.firstChild) feed.insertBefore(card, feed.firstChild);
+        else feed.appendChild(card);
+        if (sessionCount === 1) setTimeout(() => toggleCard(evt.event_id), 300);
+      });
+    }
+
+    const latest = events[events.length - 1];
+    const dash = latest.dashboard || {};
+    el('statEvents').textContent = events.length;
+
+    if (dash.dora_article) {
+      el('statDora').textContent = dash.dora_article.split('—')[0].trim();
+      el('statDora').className = 'stat-value ' + (dash.dora_article.includes('N/A') ? '' : 'amber');
+      el('statDoraArticle').textContent =
+        dash.dora_article.split('—').slice(1).join('').trim() || 'threshold assessed';
+    }
+    if (dash.detection_ms !== undefined) {
+      el('statDetection').textContent = dash.detection_ms;
+    }
+    if (dash.sandbox_type) {
+      el('statSandbox').textContent =
+        dash.sandbox_type === 'sbx' ? 'Tier 1 sbx' :
+        dash.sandbox_type === 'docker' ? 'Tier 2 docker' :
+        dash.sandbox_type;
+      el('statSandboxSub').textContent = dash.destroyed ? 'destroyed ✓' : 'pending';
+    }
+    const attested = events.filter(e => (e.dashboard||{}).attested).length;
+    el('statChain').textContent = `${attested}/${events.length}`;
+    el('statChain').className = 'stat-value ' + (attested === events.length ? 'teal' : 'amber');
+    el('statChainSub').textContent = attested === events.length ? 'all attested' : 'attestation pending';
+
+    updateChainList(events);
+  } catch(e) {
+    console.warn('incidents poll error:', e);
+  }
+}
+
+pollHealth();
+loadScenarios();
+pollIncidents();
+setInterval(pollHealth,    POLL_HEALTH);
+setInterval(pollIncidents, POLL_INCIDENTS);
+</script>
+
+<!-- ── SESSION TIMEOUT — verbatim from amleht-site/demo/interactive/appia.html ── -->
+<script id="amleht-session-timeout">
+/* amleht Session Timeout — 60 min idle, 5 min warning */
+/* (?debug=fast → 1 min idle, 0.5 min warning) */
+(function() {
+  const FAST = new URLSearchParams(window.location.search).get('debug') === 'fast';
+  const IDLE_MINUTES    = FAST ? 1   : 60;
+  const WARNING_MINUTES = FAST ? 0.5 : 5;
+  const IDLE_MS    = IDLE_MINUTES    * 60 * 1000;
+  const WARNING_MS = WARNING_MINUTES * 60 * 1000;
+  const WARN_LABEL = FAST ? '30 seconds' : `${WARNING_MINUTES} minutes`;
+  if (FAST) console.warn('[amleht] session timeout in DEBUG fast mode — 1 min idle');
+
+  let idleTimer, warningTimer, warningShown = false;
+
+  function resetTimers() {
+    clearTimeout(idleTimer);
+    clearTimeout(warningTimer);
+    warningShown = false;
+    const banner = document.getElementById('amleht-session-warning');
+    if (banner) banner.remove();
+    warningTimer = setTimeout(showWarning, IDLE_MS - WARNING_MS);
+    idleTimer = setTimeout(logout, IDLE_MS);
+  }
+
+  function showWarning() {
+    if (warningShown) return;
+    warningShown = true;
+    const banner = document.createElement('div');
+    banner.id = 'amleht-session-warning';
+    banner.style.cssText = `
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      background: var(--surface, #152236); border: 1px solid var(--amber, #FFCC00);
+      color: var(--text, #c8d8e8); font-family: var(--mono, 'IBM Plex Mono', 'JetBrains Mono', monospace);
+      font-size: 12px; padding: 14px 24px; border-radius: 4px;
+      z-index: 9999; display: flex; align-items: center; gap: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.6);
+    `;
+    banner.innerHTML = `
+      <span style="color:var(--amber, #FFCC00);">⚠</span>
+      <span>Session expires in <strong>${WARN_LABEL}</strong> due to inactivity.</span>
+      <button id="amleht-session-extend"
+        style="background:var(--amber, #FFCC00); color:var(--bg, #0D1829); border:none; padding:6px 14px;
+               font-family:var(--mono, 'IBM Plex Mono', 'JetBrains Mono', monospace); font-size:11px;
+               cursor:pointer; border-radius:2px; font-weight:600;">
+        Extend Session
+      </button>
+    `;
+    document.body.appendChild(banner);
+    document.getElementById('amleht-session-extend')
+      .addEventListener('click', resetTimers);
+  }
+
+  function logout() {
+    /* Clear the auth flag so the user must re-enter the passphrase.
+       amleht_gate (rate-limit attempts/lockUntil) is left alone —
+       clearing it would let attackers bypass the 5-attempt lockout
+       by triggering the timeout. */
+    sessionStorage.removeItem('amleht_gate_verified');
+    document.body.innerHTML = `
+      <div style="display:flex; align-items:center; justify-content:center;
+                  min-height:100vh; background:var(--bg, #0D1829);
+                  font-family:var(--mono, 'IBM Plex Mono', 'JetBrains Mono', monospace);
+                  color:var(--text, #c8d8e8); text-align:center; flex-direction:column; gap:16px;">
+        <div style="color:var(--amber, #FFCC00); font-size:11px; letter-spacing:0.15em;">SESSION EXPIRED</div>
+        <div style="font-size:13px; color:var(--text-dim, #5a7a94);">
+          This session was closed after ${IDLE_MINUTES} minutes of inactivity.
+        </div>
+        <button id="amleht-session-relogin"
+          style="margin-top:8px; background:var(--amber, #FFCC00); color:var(--bg, #0D1829); border:none;
+                 padding:10px 24px; font-family:var(--mono, 'IBM Plex Mono', 'JetBrains Mono', monospace);
+                 font-size:12px; cursor:pointer; border-radius:2px; font-weight:600;">
+          Log In Again
+        </button>
+        <div style="font-size:10px; color:var(--border, #2A3F5F); margin-top:32px;">
+          <em>In memory of Thelma</em>
+        </div>
+      </div>`;
+    document.getElementById('amleht-session-relogin')
+      .addEventListener('click', () => { location.href = '../../gate.html'; });
+  }
+
+  ['mousemove','mousedown','keydown','touchstart','scroll','click']
+    .forEach(e => document.addEventListener(e, resetTimers, true));
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', resetTimers);
+  } else {
+    resetTimers();
+  }
+})();
+</script>
+
+</body>
+</html>
