@@ -385,16 +385,29 @@ let sessionCount  = 0;
 let doraClocks    = {};
 let opsCounters   = { payments: 0, kyc: 0, trade: 0 };
 
-function tickOps() {
-  opsCounters.payments += Math.floor(Math.random() * 12) + 3;
-  opsCounters.kyc      += Math.floor(Math.random() * 4)  + 1;
-  opsCounters.trade    += Math.floor(Math.random() * 7)  + 2;
-  el('opsPayments').textContent = opsCounters.payments.toLocaleString();
-  el('opsKyc').textContent      = opsCounters.kyc.toLocaleString();
-  el('opsTrade').textContent    = opsCounters.trade.toLocaleString();
+// Live ops from runtime containers — polls GET /ops on api.amleht.eu.
+// Driven by fictief-payments / fictief-kyc / fictief-trade using live
+// ECB Data Portal + Finnhub feeds. Falls back gracefully if API is
+// unreachable; never blocks the rest of the dashboard.
+let liveRates = { eurusd: 1.1761, estr: 1.929, sentiment: 0.5 };
+
+async function pollOps() {
+  try {
+    const r = await fetch(`${API}/ops`);
+    const d = await r.json();
+    el('opsPayments').textContent = (d.payments || 0).toLocaleString();
+    el('opsKyc').textContent      = (d.kyc      || 0).toLocaleString();
+    el('opsTrade').textContent    = (d.trade    || 0).toLocaleString();
+    if (typeof d.eurusd === 'number') liveRates.eurusd = d.eurusd;
+    if (typeof d.estr === 'number')   liveRates.estr = d.estr;
+    if (typeof d.sentiment === 'number') liveRates.sentiment = d.sentiment;
+  } catch (e) {
+    // soft-fail — dashboard remains usable even if /ops is down
+    console.debug('ops poll:', e);
+  }
 }
-setInterval(tickOps, 2000);
-tickOps();
+pollOps();
+setInterval(pollOps, 10000);
 
 function el(id)  { return document.getElementById(id); }
 function fmt(ts) {
