@@ -903,5 +903,335 @@ setInterval(pollIncidents, POLL_INCIDENTS);
 })();
 </script>
 
+
+<!-- AMLEHT GUIDED TOUR SYSTEM — The 38th Bank Tour -->
+<div id="amleht-tour-backdrop" style="
+  position:fixed;inset:0;z-index:8000;
+  pointer-events:none;
+  transition:opacity 0.4s ease;
+"></div>
+
+<div id="amleht-tour-card" style="
+  position:fixed;z-index:8001;
+  width:360px;
+  background:#0d1117;
+  border:1px solid rgba(0,200,150,0.25);
+  border-top:2px solid #00c896;
+  border-radius:4px;
+  padding:1.5rem 1.5rem 1.25rem;
+  box-shadow:0 0 60px rgba(0,200,150,0.08),0 8px 40px rgba(0,0,0,0.8);
+  font-family:'IBM Plex Sans',sans-serif;
+  display:none;
+  animation:tourCardIn 0.35s ease both;
+">
+<style>
+@keyframes tourCardIn{
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1;transform:translateY(0)}
+}
+#amleht-tour-card .tc-step{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.57rem;font-weight:500;
+  letter-spacing:0.16em;text-transform:uppercase;
+  color:rgba(0,200,150,0.7);margin-bottom:0.5rem;
+  display:flex;align-items:center;justify-content:space-between;
+}
+#amleht-tour-card .tc-skip{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.57rem;letter-spacing:0.1em;
+  color:rgba(240,235,224,0.3);
+  cursor:pointer;text-decoration:none;
+  transition:color 0.2s;
+  background:none;border:none;padding:0;
+}
+#amleht-tour-card .tc-skip:hover{color:rgba(240,235,224,0.6);}
+#amleht-tour-card .tc-title{
+  font-size:1rem;font-weight:400;
+  color:#f0ebe0;line-height:1.3;
+  margin-bottom:0.6rem;letter-spacing:-0.01em;
+}
+#amleht-tour-card .tc-title em{
+  font-style:italic;color:#00c896;
+}
+#amleht-tour-card .tc-body{
+  font-size:0.82rem;font-weight:300;
+  color:rgba(240,235,224,0.72);
+  line-height:1.65;margin-bottom:1.25rem;
+}
+#amleht-tour-card .tc-body strong{
+  color:#f0ebe0;font-weight:500;
+}
+#amleht-tour-card .tc-nav{
+  display:flex;align-items:center;gap:0.75rem;
+}
+#amleht-tour-card .tc-btn{
+  flex:1;
+  background:#00c896;color:#080b0f;
+  border:none;border-radius:3px;
+  padding:0.6rem 0.75rem;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.68rem;font-weight:500;
+  letter-spacing:0.1em;text-transform:uppercase;
+  cursor:pointer;
+  transition:background 0.2s,box-shadow 0.15s,transform 0.1s;
+}
+#amleht-tour-card .tc-btn:hover{
+  background:#00d9a6;
+  box-shadow:0 0 16px rgba(0,200,150,0.3);
+}
+#amleht-tour-card .tc-btn:active{transform:translateY(1px);}
+#amleht-tour-card .tc-dots{
+  display:flex;gap:5px;align-items:center;
+}
+#amleht-tour-card .tc-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:rgba(0,200,150,0.25);
+  transition:background 0.2s,transform 0.2s;
+}
+#amleht-tour-card .tc-dot.active{
+  background:#00c896;transform:scale(1.3);
+}
+/* Arrow pointer */
+#amleht-tour-arrow{
+  position:fixed;z-index:8002;
+  pointer-events:none;
+  opacity:0;transition:opacity 0.3s ease,top 0.4s ease,left 0.4s ease;
+}
+#amleht-tour-arrow svg{
+  filter:drop-shadow(0 0 8px rgba(0,200,150,0.6));
+}
+/* Spotlight ring */
+#amleht-tour-spotlight{
+  position:fixed;z-index:7999;
+  border-radius:6px;
+  box-shadow:0 0 0 9999px rgba(0,0,0,0.72);
+  pointer-events:none;
+  opacity:0;
+  transition:opacity 0.4s ease,top 0.4s ease,left 0.4s ease,
+             width 0.4s ease,height 0.4s ease;
+}
+</style>
+</div>
+
+<!-- Spotlight ring element -->
+<div id="amleht-tour-spotlight"></div>
+
+<!-- Arrow element -->
+<div id="amleht-tour-arrow">
+  <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+    <path d="M8 24 L36 24 M28 14 L40 24 L28 34"
+      stroke="#00c896" stroke-width="3"
+      stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</div>
+
+<script>
+(function(){
+
+// Only run if arriving from Sell gate OR override
+var welcomeTarget = sessionStorage.getItem('amleht_welcome_target');
+var tourDone = sessionStorage.getItem('amleht_tour_done');
+if(tourDone) return;
+// Start tour after welcome overlay is dismissed
+// (welcome overlay sets amleht_welcome_seen)
+// We wait 800ms after page load then check
+
+var STEPS = [
+  {
+    title: "The 38th Bank — <em>Window to the World</em>",
+    body: "You are looking at <strong>Fictief NV</strong> — a live DNB-supervised bank, trading right now. The data is real. The chain is live. This is the 38th member of the Qivalis consortium, operated by amleht as your permanent digital twin.",
+    target: null, // full screen
+    cardPos: "center",
+    btnText: "Show me the data →"
+  },
+  {
+    title: "Live Market Data — <em>Not Simulated</em>",
+    body: "<strong>EUR/USD and €STR overnight rate</strong> from the ECB Data Portal. Dutch market sentiment from Finnhub. Updated every five minutes from live sources. When you see a number on this screen, it is the number the regulator sees.",
+    target: ".stats-strip,.stat-row,.live-stats,.metrics-row,.header-stats",
+    cardPos: "below",
+    btnText: "Show me the pipeline →"
+  },
+  {
+    title: "The Compliance Pipeline",
+    body: "When a regulatory event fires it travels through <strong>four stages automatically</strong>: DETECT → CLASSIFY → SANDBOX → ATTEST. Detection in milliseconds. Evidence on the chain before a human could reach for the phone.",
+    target: ".pipeline,.pipeline-stages,.stage-row",
+    cardPos: "below",
+    btnText: "Show me the chain →"
+  },
+  {
+    title: "The Immutable Chain",
+    body: "Every event is <strong>timestamped, hashed, and chain-attested</strong> on Hyperledger Fabric running on Nebius B.V. Netherlands. This is what the DNB sees when they ask for proof. Not a PDF. A blockchain URL.",
+    target: ".compliance-chain,.chain-section,.chain-panel",
+    cardPos: "left",
+    btnText: "Show me the scenarios →"
+  },
+  {
+    title: "Ready — <em>Watch This Panel</em>",
+    body: "These are the regulatory events. Andrew will fire three of them from his phone in a moment using a single Telegram command. <strong>Watch what appears in this panel when each one fires.</strong> The chain records everything.",
+    target: ".scenario-list,.quick-ref,.scenarios-panel,.sidebar",
+    cardPos: "left",
+    btnText: "I am ready. Show me. →"
+  }
+];
+
+var current = 0;
+var card = document.getElementById('amleht-tour-card');
+var backdrop = document.getElementById('amleht-tour-backdrop');
+var spotlight = document.getElementById('amleht-tour-spotlight');
+var arrow = document.getElementById('amleht-tour-arrow');
+
+function findTarget(selector){
+  if(!selector) return null;
+  var parts = selector.split(',');
+  for(var i=0;i<parts.length;i++){
+    var el = document.querySelector(parts[i].trim());
+    if(el) return el;
+  }
+  return null;
+}
+
+function positionSpotlight(el){
+  if(!el){
+    spotlight.style.opacity='0';
+    arrow.style.opacity='0';
+    backdrop.style.background='rgba(0,0,0,0)';
+    backdrop.style.pointerEvents='none';
+    return;
+  }
+  var r = el.getBoundingClientRect();
+  var pad = 12;
+  spotlight.style.top=(r.top-pad)+'px';
+  spotlight.style.left=(r.left-pad)+'px';
+  spotlight.style.width=(r.width+pad*2)+'px';
+  spotlight.style.height=(r.height+pad*2)+'px';
+  spotlight.style.opacity='1';
+  backdrop.style.pointerEvents='all';
+
+  // Arrow: point from right of spotlight
+  arrow.style.top=(r.top+r.height/2-24)+'px';
+  arrow.style.left=(r.left-64)+'px';
+  arrow.style.opacity='1';
+}
+
+function positionCard(el, pos){
+  card.style.display='block';
+  // Reset animation
+  card.style.animation='none';
+  card.offsetHeight;
+  card.style.animation='tourCardIn 0.35s ease both';
+
+  if(!el || pos==='center'){
+    card.style.top='50%';
+    card.style.left='50%';
+    card.style.transform='translate(-50%,-50%)';
+    return;
+  }
+  var r = el.getBoundingClientRect();
+  var cw = 360, ch = 200;
+  var vw = window.innerWidth, vh = window.innerHeight;
+
+  if(pos==='below'){
+    card.style.top=Math.min(r.bottom+20, vh-ch-20)+'px';
+    card.style.left=Math.max(10,Math.min(r.left,vw-cw-10))+'px';
+    card.style.transform='none';
+  } else if(pos==='left'){
+    card.style.top=Math.max(10,Math.min(r.top,vh-ch-10))+'px';
+    card.style.left=Math.max(10,r.left-cw-30)+'px';
+    card.style.transform='none';
+  } else {
+    card.style.top='50%';
+    card.style.left='50%';
+    card.style.transform='translate(-50%,-50%)';
+  }
+}
+
+function renderStep(i){
+  var s = STEPS[i];
+  var el = findTarget(s.target);
+
+  // Update dots
+  var dots = card.querySelectorAll('.tc-dot');
+  dots.forEach(function(d,di){ d.classList.toggle('active',di===i); });
+
+  // Update content
+  card.querySelector('.tc-step .tc-step-num').textContent='Step '+(i+1)+' of '+STEPS.length;
+  card.querySelector('.tc-title').innerHTML=s.title;
+  card.querySelector('.tc-body').innerHTML=s.body;
+
+  var btn = card.querySelector('.tc-btn');
+  btn.textContent=s.btnText;
+
+  positionSpotlight(el);
+  positionCard(el, s.cardPos);
+}
+
+function nextStep(){
+  if(current < STEPS.length-1){
+    current++;
+    renderStep(current);
+  } else {
+    endTour();
+  }
+}
+
+function endTour(){
+  card.style.display='none';
+  spotlight.style.opacity='0';
+  arrow.style.opacity='0';
+  backdrop.style.opacity='0';
+  backdrop.style.pointerEvents='none';
+  sessionStorage.setItem('amleht_tour_done','1');
+}
+
+function skipTour(){
+  endTour();
+}
+
+// Build card HTML
+card.innerHTML = '<div class="tc-step">' +
+  '<span class="tc-step-num">Step 1 of '+STEPS.length+'</span>' +
+  '<button class="tc-skip" onclick="window._amlehtTour.skip()">Skip tour ↗</button>' +
+  '</div>' +
+  '<div class="tc-title"></div>' +
+  '<div class="tc-body"></div>' +
+  '<div class="tc-nav">' +
+  '<div class="tc-dots">' +
+  STEPS.map(function(_,i){ return '<div class="tc-dot'+(i===0?' active':'')+'"></div>'; }).join('') +
+  '</div>' +
+  '<button class="tc-btn" onclick="window._amlehtTour.next()">Next →</button>' +
+  '</div>';
+
+window._amlehtTour = { next: nextStep, skip: skipTour };
+
+// Start after welcome overlay is gone (poll)
+function startWhenReady(){
+  var welcomeEl = document.getElementById('amleht-welcome-overlay');
+  var welcomeGone = !welcomeEl || welcomeEl.style.display==='none';
+  var welcomeSeen = sessionStorage.getItem('amleht_welcome_seen');
+  if(welcomeGone || welcomeSeen){
+    setTimeout(function(){
+      // Only show tour for Sell path or if no target gating
+      var target = sessionStorage.getItem('amleht_welcome_target');
+      if(target === 'sell' || !target){
+        backdrop.style.opacity='1';
+        renderStep(0);
+      }
+    }, 600);
+  } else {
+    setTimeout(startWhenReady, 300);
+  }
+}
+
+// Wait for DOM + data load
+if(document.readyState==='complete'){
+  startWhenReady();
+} else {
+  window.addEventListener('load', startWhenReady);
+}
+
+})();
+</script>
+<!-- END AMLEHT GUIDED TOUR SYSTEM -->
+
 </body>
 </html>
