@@ -4,498 +4,504 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>amleht — Bespoke Access · Qivalis</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<title>amleht · The 38th Bank Tour</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Jost:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --navy: #080e1a;
-  --navy2: #0d1625;
-  --gold: #c9a84c;
-  --gold-dim: rgba(201,168,76,0.1);
-  --text: #b8cce0;
-  --text-dim: #3a5a74;
-  --text-bright: #e8f2ff;
-  --red: #cc3344;
-  --green: #00b87a;
-  --mono: 'JetBrains Mono', monospace;
-  --serif: 'Cormorant Garamond', Georgia, serif;
+:root{
+  --navy:#0B1220;--navy-mid:#111827;--navy-light:#1a2540;
+  --amber:#c8933a;--amber-glow:rgba(200,147,58,0.12);
+  --amber-border:rgba(200,147,58,0.28);--amber-pale:rgba(200,147,58,0.06);
+  --green:#00c896;--green-glow:rgba(0,200,150,0.12);
+  --green-border:rgba(0,200,150,0.28);
+  --cream:#f0ebe0;--cream-dim:rgba(240,235,224,0.55);
+  --muted:rgba(240,235,224,0.32);--border:rgba(240,235,224,0.07);
+  --font-serif:'Cormorant Garamond',Georgia,serif;
+  --font-sans:'Jost',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+body{background:var(--navy);color:var(--cream);font-family:var(--font-sans);}
+
+/* ── GATE SCREEN ── */
+#gate-screen{
+  position:fixed;inset:0;z-index:100;
+  background:var(--navy);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:2rem;
+}
+body::before{
+  content:'';position:fixed;top:-20%;left:-20%;width:60%;height:60%;
+  background:radial-gradient(ellipse,rgba(200,147,58,0.04) 0%,transparent 65%);
+  pointer-events:none;z-index:0;
+}
+.wordmark{
+  font-family:var(--font-serif);font-size:2.8rem;font-weight:300;
+  letter-spacing:0.25em;color:var(--cream);text-transform:lowercase;
+  margin-bottom:0.35rem;position:relative;z-index:1;
+  animation:fadeUp 0.8s ease both;
+}
+.wordmark span{color:var(--amber);}
+.tagline{
+  font-family:var(--font-mono);font-size:0.6rem;
+  letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);
+  margin-bottom:3rem;position:relative;z-index:1;
+  animation:fadeUp 0.8s ease 0.1s both;
+}
+.divider{
+  width:100%;max-width:480px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--amber-border),transparent);
+  margin-bottom:3rem;position:relative;z-index:1;
+  animation:fadeUp 0.8s ease 0.2s both;
+}
+.gate-card{
+  width:100%;max-width:480px;
+  background:var(--navy-mid);
+  border:1px solid var(--amber-border);border-top:2px solid var(--amber);
+  border-radius:3px;padding:2rem;
+  box-shadow:0 0 60px rgba(200,147,58,0.06),0 4px 40px rgba(0,0,0,0.5);
+  position:relative;z-index:1;
+  animation:fadeUp 0.8s ease 0.3s both;
+}
+.gate-label{
+  font-family:var(--font-mono);font-size:0.6rem;font-weight:700;
+  letter-spacing:0.18em;text-transform:uppercase;color:var(--amber);
+  margin-bottom:0.6rem;display:flex;align-items:center;gap:0.5rem;
+}
+.gate-label::before{
+  content:'';display:inline-block;width:6px;height:6px;border-radius:50%;
+  background:var(--amber);animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(200,147,58,0.5);}
+  50%{opacity:0.7;box-shadow:0 0 0 6px rgba(200,147,58,0);}
+}
+.gate-heading{
+  font-family:var(--font-serif);font-size:1.5rem;font-weight:400;
+  color:var(--cream);line-height:1.2;margin-bottom:0.3rem;
+}
+.gate-heading em{font-style:italic;color:var(--amber);}
+.gate-personal{
+  font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.1em;
+  color:rgba(200,147,58,0.6);margin-bottom:1.5rem;
+}
+.gate-sub{
+  font-size:0.8rem;color:var(--cream-dim);line-height:1.6;margin-bottom:1.75rem;
+}
+.input-label{
+  font-family:var(--font-mono);font-size:0.58rem;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--muted);display:block;margin-bottom:0.5rem;
+}
+.passphrase-input{
+  width:100%;background:rgba(11,18,32,0.8);
+  border:1px solid var(--amber-border);border-radius:2px;
+  padding:0.75rem 1rem;font-family:var(--font-mono);
+  font-size:0.85rem;letter-spacing:0.08em;color:var(--cream);
+  outline:none;transition:border-color 0.2s,box-shadow 0.2s;
+  caret-color:var(--amber);margin-bottom:1rem;
+}
+.passphrase-input:focus{
+  border-color:var(--amber);box-shadow:0 0 0 3px rgba(200,147,58,0.08);
+}
+.passphrase-input.error{
+  border-color:rgba(192,23,43,0.6);
+  animation:shake 0.35s ease;
+}
+@keyframes shake{
+  0%,100%{transform:translateX(0);}20%{transform:translateX(-6px);}
+  40%{transform:translateX(6px);}60%{transform:translateX(-4px);}
+  80%{transform:translateX(4px);}
+}
+.enter-btn{
+  width:100%;background:var(--amber);color:var(--navy);
+  border:none;border-radius:2px;padding:0.8rem 1rem;
+  font-family:var(--font-sans);font-size:0.78rem;font-weight:600;
+  letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;
+  transition:background 0.2s,transform 0.1s,box-shadow 0.2s;
+}
+.enter-btn:hover{background:#d9a04a;box-shadow:0 0 20px rgba(200,147,58,0.25);}
+.enter-btn:active{transform:translateY(1px);}
+.error-msg{
+  font-family:var(--font-mono);font-size:0.62rem;color:rgba(192,23,43,0.85);
+  margin-top:0.6rem;text-align:center;min-height:1em;
+  opacity:0;transition:opacity 0.2s;
+}
+.error-msg.visible{opacity:1;}
+.gate-footer{
+  margin-top:2rem;text-align:center;position:relative;z-index:1;
+  animation:fadeUp 0.8s ease 0.4s both;
+}
+.memorial{
+  font-family:var(--font-serif);font-style:italic;
+  font-size:0.78rem;color:var(--muted);display:block;margin-bottom:0.3rem;
+}
+.platform-tag{
+  font-family:var(--font-mono);font-size:0.55rem;
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:rgba(240,235,224,0.18);
+}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(14px);}
+  to{opacity:1;transform:translateY(0);}
 }
 
-* { margin:0; padding:0; box-sizing:border-box; }
-
-body {
-  background: var(--navy);
-  color: var(--text);
-  font-family: var(--mono);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
+/* ── TOUR SHELL ── */
+#tour-shell{
+  position:fixed;inset:0;z-index:50;
+  display:none;background:var(--navy);
 }
 
-/* BACKGROUND */
-body::before {
-  content: '';
-  position: fixed;
-  top: -300px; right: -300px;
-  width: 700px; height: 700px;
-  background: radial-gradient(circle, rgba(201,168,76,0.04) 0%, transparent 70%);
-  pointer-events: none;
+/* iframe panel */
+#tour-iframe{
+  position:absolute;inset:0;bottom:64px;
+  width:100%;border:none;background:var(--navy);
 }
 
-body::after {
-  content: '';
-  position: fixed;
-  bottom: -200px; left: -200px;
-  width: 500px; height: 500px;
-  background: radial-gradient(circle, rgba(74,158,255,0.03) 0%, transparent 70%);
-  pointer-events: none;
+/* welcome panel (panel 0) */
+#welcome-panel{
+  position:absolute;inset:0;bottom:64px;
+  display:flex;align-items:center;justify-content:center;
+  padding:2rem;
+}
+.welcome-inner{
+  max-width:620px;width:100%;
+  background:var(--navy-mid);
+  border:1px solid var(--amber-border);border-top:2px solid var(--amber);
+  border-radius:3px;padding:2.5rem;
+  box-shadow:0 0 80px rgba(200,147,58,0.06);
+}
+.welcome-tag{
+  font-family:var(--font-mono);font-size:0.6rem;font-weight:700;
+  letter-spacing:0.18em;text-transform:uppercase;color:var(--amber);
+  margin-bottom:0.6rem;display:flex;align-items:center;gap:0.5rem;
+}
+.welcome-tag::before{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:var(--amber);animation:pulse 2s ease-in-out infinite;
+}
+.welcome-title{
+  font-family:var(--font-serif);font-size:2rem;font-weight:400;
+  color:var(--cream);line-height:1.2;margin-bottom:0.5rem;
+}
+.welcome-title em{font-style:italic;color:var(--amber);}
+.welcome-sub{
+  font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:1.75rem;
+}
+.welcome-body{
+  border-left:2px solid var(--amber-border);
+  padding-left:1.25rem;margin-bottom:1.75rem;
+}
+.welcome-line{
+  font-size:0.88rem;font-weight:300;
+  color:var(--cream-dim);line-height:1.7;margin-bottom:0.5rem;
+}
+.welcome-line:last-child{margin-bottom:0;}
+.welcome-line strong{color:var(--cream);font-weight:500;}
+
+/* transition panel (panel 4) */
+#transition-panel{
+  position:absolute;inset:0;bottom:64px;
+  display:flex;align-items:center;justify-content:center;
+  padding:2rem;
+}
+.transition-inner{
+  max-width:560px;width:100%;text-align:center;
+}
+.transition-num{
+  font-family:var(--font-serif);font-size:5rem;font-weight:300;
+  color:var(--amber);opacity:0.3;line-height:1;margin-bottom:1rem;
+}
+.transition-title{
+  font-family:var(--font-serif);font-size:1.8rem;font-weight:300;
+  color:var(--cream);line-height:1.2;margin-bottom:1rem;
+}
+.transition-title em{font-style:italic;color:var(--amber);}
+.transition-body{
+  font-size:0.88rem;font-weight:300;
+  color:var(--cream-dim);line-height:1.7;max-width:440px;margin:0 auto;
 }
 
-/* GATE CARD */
-.gate {
-  width: 100%;
-  max-width: 420px;
-  padding: 24px;
-  position: relative;
-  z-index: 10;
-  animation: fadeIn 0.8s ease forwards;
+/* ── PERSISTENT NAV BAR ── */
+#tour-nav{
+  position:absolute;bottom:0;left:0;right:0;height:64px;
+  background:rgba(11,18,32,0.97);
+  border-top:1px solid var(--amber-border);
+  display:flex;align-items:center;
+  justify-content:space-between;padding:0 1.5rem;
+  backdrop-filter:blur(8px);
+  z-index:10;
 }
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
+.nav-brand{
+  display:flex;align-items:center;gap:0.75rem;
+  font-family:var(--font-mono);font-size:0.6rem;
+  letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);
 }
-
-/* BRAND */
-.brand {
-  text-align: center;
-  margin-bottom: 36px;
+.nav-brand strong{
+  font-family:var(--font-serif);font-size:1rem;
+  font-weight:300;letter-spacing:0.15em;color:var(--cream);
 }
-
-.brand-name {
-  font-family: var(--serif);
-  font-size: 52px;
-  font-weight: 300;
-  color: var(--gold);
-  letter-spacing: -1px;
-  line-height: 1;
-  margin-bottom: 8px;
+.nav-brand strong span{color:var(--amber);}
+.nav-dots{display:flex;gap:6px;align-items:center;}
+.nav-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:rgba(200,147,58,0.2);
+  transition:background 0.2s,transform 0.2s;cursor:pointer;
 }
-
-.brand-rule {
-  width: 40px;
-  height: 1px;
-  background: var(--gold);
-  margin: 12px auto;
-  opacity: 0.4;
+.nav-dot.active{background:var(--amber);transform:scale(1.3);}
+.nav-dot.done{background:rgba(200,147,58,0.5);}
+.nav-actions{display:flex;align-items:center;gap:0.75rem;}
+.nav-skip{
+  font-family:var(--font-mono);font-size:0.6rem;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--muted);background:none;border:none;
+  cursor:pointer;padding:0.4rem 0.75rem;
+  transition:color 0.2s;
 }
-
-.brand-label {
-  font-size: 8px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--text-dim);
+.nav-skip:hover{color:var(--cream-dim);}
+.nav-label{
+  font-family:var(--font-mono);font-size:0.58rem;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--muted);
 }
-
-.gate-personal {
-  font-family: var(--mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.1em;
-  color: rgba(201,168,76,0.6);
-  margin-top: 0.5rem;
-  margin-bottom: 0;
-  text-transform: none;
+.nav-next{
+  background:var(--amber);color:var(--navy);
+  border:none;border-radius:2px;
+  padding:0.5rem 1.25rem;
+  font-family:var(--font-mono);font-size:0.68rem;
+  font-weight:500;letter-spacing:0.1em;text-transform:uppercase;
+  cursor:pointer;transition:background 0.2s,box-shadow 0.2s,transform 0.1s;
+  white-space:nowrap;
 }
-
-/* CARD */
-.card {
-  background: var(--navy2);
-  border: 1px solid rgba(201,168,76,0.12);
-  padding: 32px;
-  margin-bottom: 16px;
+.nav-next:hover{
+  background:#d9a04a;box-shadow:0 0 16px rgba(200,147,58,0.3);
 }
+.nav-next:active{transform:translateY(1px);}
+.nav-next.final{background:var(--green);color:#080b0f;}
+.nav-next.final:hover{background:#00d9a6;}
 
-.card-label {
-  font-size: 8px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.card-label::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: rgba(255,255,255,0.06);
-}
-
-/* INPUT */
-.input-row {
-  display: flex;
-  gap: 0;
-  margin-bottom: 8px;
-}
-
-.passphrase-input {
-  flex: 1;
-  font-family: var(--mono);
-  font-size: 13px;
-  font-weight: 500;
-  padding: 14px 16px;
-  background: rgba(0,0,0,0.3);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-right: none;
-  color: var(--text-bright);
-  outline: none;
-  letter-spacing: 2px;
-  transition: border-color 0.2s;
-}
-
-.passphrase-input:focus {
-  border-color: rgba(201,168,76,0.4);
-}
-
-.passphrase-input::placeholder {
-  color: var(--text-dim);
-  letter-spacing: 1px;
-  font-size: 11px;
-}
-
-.submit-btn {
-  font-family: var(--mono);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  padding: 14px 20px;
-  background: var(--gold);
-  color: var(--navy);
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s;
-  white-space: nowrap;
-}
-
-.submit-btn:hover { background: #e8c060; }
-.submit-btn:active { transform: scale(0.98); }
-
-/* FEEDBACK */
-.feedback {
-  font-size: 9px;
-  letter-spacing: 1px;
-  padding: 8px 14px;
-  min-height: 32px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.3s;
-}
-
-.feedback.error {
-  background: rgba(204,51,68,0.1);
-  border: 1px solid rgba(204,51,68,0.2);
-  color: var(--red);
-}
-
-.feedback.success {
-  background: rgba(0,184,122,0.1);
-  border: 1px solid rgba(0,184,122,0.2);
-  color: var(--green);
-}
-
-.feedback.hidden { opacity: 0; }
-
-/* HINT */
-.hint {
-  font-size: 9px;
-  color: var(--text-dim);
-  text-align: center;
-  line-height: 1.7;
-  margin-top: 8px;
-}
-
-.hint a {
-  color: var(--gold);
-  text-decoration: none;
-  opacity: 0.7;
-}
-
-/* FOOTER */
-.gate-footer {
-  text-align: center;
-  margin-top: 40px;
-}
-
-.footer-thelma {
-  font-family: var(--serif);
-  font-size: 12px;
-  font-style: italic;
-  color: var(--text-dim);
-  opacity: 0.5;
-}
-
-/* ATTEMPTS */
-.attempts-bar {
-  display: flex;
-  gap: 4px;
-  margin-bottom: 16px;
-}
-
-.attempt-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.1);
-  transition: background 0.3s;
-}
-
-.attempt-dot.used { background: var(--red); }
-
-/* LOCKED STATE */
-.locked-msg {
-  display: none;
-  text-align: center;
-  padding: 20px;
-}
-
-.locked-msg.show { display: block; }
-
-.locked-icon {
-  font-size: 24px;
-  margin-bottom: 12px;
-}
-
-.locked-text {
-  font-size: 10px;
-  color: var(--red);
-  letter-spacing: 1px;
-  line-height: 1.7;
-}
-
-.countdown {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--gold);
-  margin: 12px 0;
+@media(max-width:600px){
+  .nav-brand .nav-label{display:none;}
+  .nav-skip{display:none;}
 }
 </style>
 </head>
 <body>
 
-<div class="gate">
-
-  <div class="brand">
-    <div class="brand-name">amleht</div>
-    <div class="brand-rule"></div>
-    <div class="brand-label">Secure Bespoke Access</div>
-    <p class="gate-personal">Prepared for Jan-Olivier Sell · Qivalis consortium · May 2026</p>
+<!-- ── GATE SCREEN ── -->
+<div id="gate-screen">
+  <div class="wordmark">aml<span>eh</span>t</div>
+  <div class="tagline">EU Sovereign Multi-Agent Compliance Platform</div>
+  <div class="divider"></div>
+  <div class="gate-card">
+    <div class="gate-label">By invitation · The 38th Bank Tour</div>
+    <h1 class="gate-heading">Fictief NV — <em>Window to the World</em></h1>
+    <div class="gate-personal">Prepared for Jan-Olivier Sell · Qivalis consortium · May 2026</div>
+    <p class="gate-sub">Enter the passphrase provided in your briefing to begin the guided tour.</p>
+    <label class="input-label" for="passphrase">Passphrase</label>
+    <input type="password" id="passphrase" class="passphrase-input"
+      placeholder="· · · · · · · ·"
+      autocomplete="off" autocorrect="off"
+      autocapitalize="off" spellcheck="false"/>
+    <button class="enter-btn" onclick="attemptEntry()">Begin the tour →</button>
+    <div class="error-msg" id="errorMsg">Passphrase not recognised.</div>
   </div>
-
-  <div class="card">
-    <div class="card-label">Access Control</div>
-
-    <div id="inputSection">
-      <div class="attempts-bar" id="attemptsBar">
-        <div class="attempt-dot" id="d1"></div>
-        <div class="attempt-dot" id="d2"></div>
-        <div class="attempt-dot" id="d3"></div>
-        <div class="attempt-dot" id="d4"></div>
-        <div class="attempt-dot" id="d5"></div>
-      </div>
-
-      <div class="input-row">
-        <input
-          type="password"
-          id="passphraseInput"
-          class="passphrase-input"
-          placeholder="Enter passphrase"
-          autocomplete="off"
-          autocorrect="off"
-          spellcheck="false"
-          maxlength="32"
-        />
-        <button class="submit-btn" onclick="verify()">ENTER →</button>
-      </div>
-
-      <div class="feedback hidden" id="feedback"></div>
-    </div>
-
-    <div class="locked-msg" id="lockedMsg">
-      <div class="locked-icon">⊘</div>
-      <div class="locked-text">
-        ACCESS SUSPENDED<br>
-        TOO MANY INCORRECT ATTEMPTS<br><br>
-        RESETS IN
-      </div>
-      <div class="countdown" id="lockCountdown">--:--</div>
-      <div class="locked-text">
-        Contact paul@amleht.eu<br>
-        to request access
-      </div>
-    </div>
-  </div>
-
-  <div class="hint">
-    Access is by direct invitation.<br>
-    For assistance contact
-    <a href="mailto:paul@amleht.eu">paul@amleht.eu</a>
-  </div>
-
   <div class="gate-footer">
-    <div class="footer-thelma">In memory of Thelma.</div>
+    <span class="memorial">In memory of Thelma · Amsterdam</span>
+    <span class="platform-tag">amleht · Nebius B.V. Netherlands · EU-resident inference only</span>
+  </div>
+</div>
+
+<!-- ── TOUR SHELL ── -->
+<div id="tour-shell">
+
+  <!-- Panel 0: Welcome -->
+  <div id="welcome-panel">
+    <div class="welcome-inner">
+      <div class="welcome-tag">The 38th Bank Tour · amleht</div>
+      <div class="welcome-title">Before the live system — <em>three questions</em></div>
+      <div class="welcome-sub">Answers built before you asked them</div>
+      <div class="welcome-body">
+        <div class="welcome-line">Three questions were asked publicly about consortium stablecoin infrastructure. <strong>None were answered.</strong></div>
+        <div class="welcome-line">amleht built the answers — before this call, before Qivalis became 37 banks, before anyone asked us to.</div>
+        <div class="welcome-line">You will see each answer in the next three panels. Then the live system. Then three regulatory events will fire in real time.</div>
+        <div class="welcome-line"><strong>The whole journey takes thirty minutes. You can skip at any point.</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel 4: Transition to live system -->
+  <div id="transition-panel" style="display:none;">
+    <div class="transition-inner">
+      <div class="transition-num">◆</div>
+      <div class="transition-title">Now — <em>the live system</em></div>
+      <div class="transition-body">
+        Three questions. Three answers. All built and shipped before this call.<br><br>
+        What follows is the live platform. Fictief NV — the 38th member of the Qivalis consortium — trading right now. The data is real. The chain is live. Andrew will fire three regulatory events from his phone. Watch what happens.
+      </div>
+    </div>
+  </div>
+
+  <!-- iframe for panels 1-3 -->
+  <iframe id="tour-iframe" style="display:none;" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+
+  <!-- Persistent nav bar -->
+  <div id="tour-nav">
+    <div class="nav-brand">
+      <strong>aml<span>eh</span>t</strong>
+      <span class="nav-label">The 38th Bank Tour</span>
+    </div>
+    <div class="nav-dots" id="navDots"></div>
+    <div class="nav-actions">
+      <button class="nav-skip" onclick="skipTour()">Skip tour ↗</button>
+      <button class="nav-next" id="navNext" onclick="nextPanel()">Next →</button>
+    </div>
   </div>
 
 </div>
 
 <script>
-// ============================================================
-// gate-qivalis — bespoke static-passphrase gate for Jan-Olivier Sell
-// Separate from gate.html (TOTP rotating). Same sessionStorage
-// shape so downstream gated demos accept the verification.
-// ============================================================
+var PASSPHRASE = 'qivalis';
+var SESSION_MINUTES = 60;
+var DASHBOARD = 'https://amleht.eu/demo/interactive/fictief-window.html';
 
-const PASSPHRASE = "qivalis";              // static, case-insensitive
-const MAX_ATTEMPTS = 5;
-const LOCKOUT_MINUTES = 30;
-const DESTINATION = "https://amleht.eu/demo/interactive/fictief-window.html";
+var PANELS = [
+  { type: 'welcome', label: 'Welcome' },
+  { type: 'iframe',  label: 'KfW Answer',
+    url: 'https://amleht.eu/demos/operation-appia/operation-appia-demo.html',
+    intro: 'The KfW Question — Answered' },
+  { type: 'iframe',  label: 'Consortium Integrity',
+    url: 'https://amleht.eu/demos/operation-gethsemane/operation-gethsemane.html',
+    intro: 'The Adversarial Member Question — Answered' },
+  { type: 'iframe',  label: 'Custody Stack',
+    url: 'https://amleht.eu/documents/SIG-112-dfns-strategic-partner.html',
+    intro: 'The Custody Question — Answered' },
+  { type: 'transition', label: 'Live System' },
+  { type: 'dashboard', label: 'Window to the World' }
+];
 
-// ============================================================
-// STATE — persisted in sessionStorage under a dedicated key so
-// it does not interfere with the rotating gate.html state.
-// ============================================================
-function getState() {
-  try {
-    return JSON.parse(sessionStorage.getItem('amleht_gate_qivalis') || '{}');
-  } catch { return {}; }
-}
+var current = 0;
 
-function saveState(s) {
-  sessionStorage.setItem('amleht_gate_qivalis', JSON.stringify(s));
-}
-
-let attempts = 0;
-let locked = false;
-let lockUntil = null;
-
-function init() {
-  const s = getState();
-  attempts = s.attempts || 0;
-  lockUntil = s.lockUntil || null;
-
-  if (lockUntil && Date.now() < lockUntil) {
-    setLocked(true);
-    startLockTick();
-  } else if (lockUntil && Date.now() >= lockUntil) {
-    attempts = 0;
-    lockUntil = null;
-    saveState({ attempts: 0, lockUntil: null });
-  }
-
-  updateAttemptDots();
-
-  document.getElementById('passphraseInput').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') verify();
-  });
-  document.getElementById('passphraseInput').focus();
-}
-
-function startLockTick() {
-  function tick() {
-    if (!locked || !lockUntil) return;
-    const remaining = Math.max(0, lockUntil - Date.now());
-    const lm = Math.floor(remaining / 60000);
-    const ls = Math.floor((remaining % 60000) / 1000);
-    document.getElementById('lockCountdown').textContent =
-      `${String(lm).padStart(2,'0')}:${String(ls).padStart(2,'0')}`;
-    if (remaining === 0) {
-      attempts = 0;
-      lockUntil = null;
-      locked = false;
-      saveState({ attempts: 0, lockUntil: null });
-      setLocked(false);
-      updateAttemptDots();
+// Check session
+(function(){
+  var v = sessionStorage.getItem('amleht_gate_qivalis');
+  if(v){
+    var d = JSON.parse(v);
+    if((Date.now()-d.ts)/60000 < SESSION_MINUTES){
+      startTour();
     }
   }
-  tick();
-  setInterval(tick, 1000);
+})();
+
+document.getElementById('passphrase').addEventListener('keydown',function(e){
+  if(e.key==='Enter') attemptEntry();
+});
+
+function attemptEntry(){
+  var input = document.getElementById('passphrase');
+  var err = document.getElementById('errorMsg');
+  var val = input.value.trim().toLowerCase();
+  if(val === PASSPHRASE){
+    sessionStorage.setItem('amleht_gate_qivalis',
+      JSON.stringify({ts:Date.now(),slot:'qivalis-bespoke'}));
+    sessionStorage.setItem('amleht_gate_verified',
+      JSON.stringify({verifiedAt:Date.now(),slot:'qivalis-bespoke'}));
+    sessionStorage.setItem('amleht_welcome_target','sell');
+    sessionStorage.setItem('amleht_tour_done','1');
+    startTour();
+  } else {
+    input.classList.add('error');
+    err.classList.add('visible');
+    input.value='';
+    setTimeout(function(){input.classList.remove('error');},400);
+    setTimeout(function(){input.focus();},50);
+  }
 }
 
-function verify() {
-  if (locked) return;
+function startTour(){
+  document.getElementById('gate-screen').style.display='none';
+  document.getElementById('tour-shell').style.display='block';
+  buildDots();
+  showPanel(0);
+}
 
-  const input = document.getElementById('passphraseInput').value.trim().toLowerCase();
+function buildDots(){
+  var dots = document.getElementById('navDots');
+  dots.innerHTML = '';
+  PANELS.forEach(function(_,i){
+    var d = document.createElement('div');
+    d.className = 'nav-dot' + (i===0?' active':'');
+    d.onclick = function(){ showPanel(i); };
+    d.title = PANELS[i].label;
+    dots.appendChild(d);
+  });
+}
 
-  if (input === PASSPHRASE) {
-    // Downstream-compatible verification stamp: same key and shape as gate.html
-    // so gated demos accept the session without modification.
-    sessionStorage.setItem('amleht_gate_verified', JSON.stringify({
-      verifiedAt: Date.now(),
-      slot: 'qivalis-bespoke'
-    }));
-    // Sell-only flag — gates the welcome overlay on fictief-window.html
-    // so the personalised "Prepared for Jan-Olivier Sell" panel only appears
-    // for visitors arriving through this bespoke gate.
-    sessionStorage.setItem('amleht_welcome_target', 'sell');
-    showFeedback('success', '✓ ACCESS GRANTED — REDIRECTING');
-    document.getElementById('passphraseInput').disabled = true;
-    setTimeout(() => {
-      window.location.href = DESTINATION;
-    }, 800);
+function updateDots(i){
+  var dots = document.querySelectorAll('.nav-dot');
+  dots.forEach(function(d,di){
+    d.classList.toggle('active', di===i);
+    d.classList.toggle('done', di<i);
+  });
+}
+
+function updateNav(i){
+  var btn = document.getElementById('navNext');
+  var isLast = (i >= PANELS.length-2);
+  if(i === PANELS.length-1){
+    // Dashboard — hide nav
+    document.getElementById('tour-nav').style.display='none';
+    return;
+  }
+  document.getElementById('tour-nav').style.display='flex';
+  if(isLast){
+    btn.textContent = 'Enter the platform →';
+    btn.classList.add('final');
+  } else {
+    btn.classList.remove('final');
+    var next = PANELS[i+1];
+    btn.textContent = (next.intro || next.label) + ' →';
+  }
+}
+
+function showPanel(i){
+  current = i;
+  var panel = PANELS[i];
+
+  // Hide all
+  document.getElementById('welcome-panel').style.display='none';
+  document.getElementById('transition-panel').style.display='none';
+  document.getElementById('tour-iframe').style.display='none';
+
+  if(panel.type === 'welcome'){
+    document.getElementById('welcome-panel').style.display='flex';
+  } else if(panel.type === 'iframe'){
+    var iframe = document.getElementById('tour-iframe');
+    iframe.style.display='block';
+    if(iframe.src !== panel.url) iframe.src = panel.url;
+  } else if(panel.type === 'transition'){
+    document.getElementById('transition-panel').style.display='flex';
+  } else if(panel.type === 'dashboard'){
+    // Navigate to dashboard
+    window.location.href = DASHBOARD;
     return;
   }
 
-  // Wrong
-  attempts++;
-  saveState({ attempts, lockUntil });
-  updateAttemptDots();
-  document.getElementById('passphraseInput').value = '';
-
-  if (attempts >= MAX_ATTEMPTS) {
-    lockUntil = Date.now() + (LOCKOUT_MINUTES * 60 * 1000);
-    saveState({ attempts, lockUntil });
-    setLocked(true);
-    startLockTick();
-    return;
-  }
-
-  const remaining = MAX_ATTEMPTS - attempts;
-  showFeedback('error', `✗ INCORRECT PASSPHRASE — ${remaining} attempt${remaining !== 1 ? 's' : ''} remaining`);
-
-  const input_el = document.getElementById('passphraseInput');
-  input_el.style.borderColor = 'rgba(204,51,68,0.6)';
-  setTimeout(() => input_el.style.borderColor = '', 600);
+  updateDots(i);
+  updateNav(i);
 }
 
-function updateAttemptDots() {
-  for (let i = 1; i <= 5; i++) {
-    const dot = document.getElementById('d' + i);
-    dot.className = 'attempt-dot' + (i <= attempts ? ' used' : '');
+function nextPanel(){
+  if(current < PANELS.length-1){
+    showPanel(current+1);
   }
 }
 
-function setLocked(isLocked) {
-  locked = isLocked;
-  document.getElementById('inputSection').style.display = isLocked ? 'none' : 'block';
-  const lockedMsg = document.getElementById('lockedMsg');
-  lockedMsg.className = 'locked-msg' + (isLocked ? ' show' : '');
+function skipTour(){
+  sessionStorage.setItem('amleht_tour_done','1');
+  window.location.href = DASHBOARD;
 }
-
-function showFeedback(type, msg) {
-  const fb = document.getElementById('feedback');
-  fb.className = `feedback ${type}`;
-  fb.textContent = msg;
-  if (type === 'error') {
-    setTimeout(() => fb.className = 'feedback hidden', 4000);
-  }
-}
-
-init();
 </script>
 
 </body>
