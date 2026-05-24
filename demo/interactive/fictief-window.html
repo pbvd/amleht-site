@@ -309,6 +309,14 @@
 </div>
 </div>
 <script>
+// Sell-only gating: suppress the overlay unless the visitor arrived through
+// gate-qivalis.html (which sets amleht_welcome_target='sell' on success).
+// Defensively set welcome_seen for non-Sell visitors so the flag is consistent
+// for the rest of the session.
+if(sessionStorage.getItem('amleht_welcome_target') !== 'sell') {
+  document.getElementById('amleht-welcome-overlay').style.display='none';
+  sessionStorage.setItem('amleht_welcome_seen','1');
+}
 if(sessionStorage.getItem('amleht_welcome_seen')){
   document.getElementById('amleht-welcome-overlay').style.display='none';
 }

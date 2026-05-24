@@ -438,6 +438,10 @@ function verify() {
       verifiedAt: Date.now(),
       slot: 'qivalis-bespoke'
     }));
+    // Sell-only flag — gates the welcome overlay on fictief-window.html
+    // so the personalised "Prepared for Jan-Olivier Sell" panel only appears
+    // for visitors arriving through this bespoke gate.
+    sessionStorage.setItem('amleht_welcome_target', 'sell');
     showFeedback('success', '✓ ACCESS GRANTED — REDIRECTING');
     document.getElementById('passphraseInput').disabled = true;
     setTimeout(() => {
