@@ -199,6 +199,123 @@
 </head>
 <body>
 
+<!-- SELL WELCOME OVERLAY -->
+<div id="amleht-welcome-overlay" style="
+  position:fixed;inset:0;z-index:9999;
+  background:rgba(8,11,15,0.97);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'IBM Plex Sans',sans-serif;
+  backdrop-filter:blur(4px);
+  animation:overlayFadeIn 0.6s ease both;
+">
+<style>
+@keyframes overlayFadeIn{from{opacity:0}to{opacity:1}}
+@keyframes overlaySlideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+#amleht-welcome-overlay .ov-card{
+  max-width:580px;width:90%;
+  background:#0d1117;
+  border:1px solid rgba(0,200,150,0.2);
+  border-top:2px solid #00c896;
+  border-radius:4px;
+  padding:2.5rem 2.5rem 2rem;
+  box-shadow:0 0 80px rgba(0,200,150,0.06),0 4px 60px rgba(0,0,0,0.7);
+  animation:overlaySlideUp 0.6s ease 0.15s both;
+}
+#amleht-welcome-overlay .ov-tag{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.58rem;font-weight:500;
+  letter-spacing:0.18em;text-transform:uppercase;
+  color:#00c896;margin-bottom:0.6rem;
+  display:flex;align-items:center;gap:0.5rem;
+}
+#amleht-welcome-overlay .ov-tag::before{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:#00c896;
+  box-shadow:0 0 8px rgba(0,200,150,0.6);
+  animation:overlayFadeIn 1.5s ease-in-out infinite alternate;
+}
+#amleht-welcome-overlay .ov-title{
+  font-size:1.6rem;font-weight:300;
+  color:#f0ebe0;line-height:1.2;
+  margin-bottom:0.3rem;
+  letter-spacing:-0.01em;
+}
+#amleht-welcome-overlay .ov-title em{
+  font-style:italic;color:#f0a500;
+}
+#amleht-welcome-overlay .ov-sub{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.62rem;letter-spacing:0.12em;
+  text-transform:uppercase;color:rgba(240,235,224,0.35);
+  margin-bottom:1.75rem;
+}
+#amleht-welcome-overlay .ov-body{
+  border-left:2px solid rgba(0,200,150,0.2);
+  padding-left:1.25rem;margin-bottom:1.75rem;
+}
+#amleht-welcome-overlay .ov-line{
+  font-size:0.88rem;font-weight:300;
+  color:rgba(240,235,224,0.75);
+  line-height:1.7;margin-bottom:0.5rem;
+}
+#amleht-welcome-overlay .ov-line:last-child{margin-bottom:0;}
+#amleht-welcome-overlay .ov-line strong{
+  color:#f0ebe0;font-weight:500;
+}
+#amleht-welcome-overlay .ov-btn{
+  width:100%;
+  background:#00c896;color:#080b0f;
+  border:none;border-radius:3px;
+  padding:0.85rem 1rem;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.75rem;font-weight:500;
+  letter-spacing:0.12em;text-transform:uppercase;
+  cursor:pointer;
+  transition:background 0.2s,box-shadow 0.2s,transform 0.1s;
+  margin-bottom:1rem;
+}
+#amleht-welcome-overlay .ov-btn:hover{
+  background:#00d9a6;
+  box-shadow:0 0 20px rgba(0,200,150,0.3);
+}
+#amleht-welcome-overlay .ov-btn:active{transform:translateY(1px);}
+#amleht-welcome-overlay .ov-footer{
+  text-align:center;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.56rem;letter-spacing:0.12em;
+  text-transform:uppercase;color:rgba(240,235,224,0.2);
+}
+#amleht-welcome-overlay .ov-footer em{
+  font-style:italic;color:rgba(240,235,224,0.3);
+  font-family:'IBM Plex Sans',sans-serif;
+  font-size:0.7rem;letter-spacing:0;text-transform:none;
+}
+</style>
+<div class="ov-card">
+  <div class="ov-tag">Live demonstration · amleht</div>
+  <div class="ov-title">Fictief NV — <em>Window to the World</em></div>
+  <div class="ov-sub">EU Sovereign Compliance Intelligence · Live Platform</div>
+  <div class="ov-body">
+    <div class="ov-line">You are looking at a <strong>live DNB-supervised bank.</strong></div>
+    <div class="ov-line">The data is real — EUR/USD, €STR overnight rate, and Dutch market sentiment updated every five minutes from the ECB Data Portal and Finnhub.</div>
+    <div class="ov-line">In the next thirty minutes you will see <strong>three regulatory events fire in real time</strong> — and watch the compliance chain respond before a human could reach for the phone.</div>
+  </div>
+  <button class="ov-btn" onclick="document.getElementById('amleht-welcome-overlay').style.display='none';sessionStorage.setItem('amleht_welcome_seen','1');">
+    Enter the platform →
+  </button>
+  <div class="ov-footer">
+    <em>Prepared for Jan-Olivier Sell · Qivalis consortium · May 2026</em>
+  </div>
+</div>
+</div>
+<script>
+if(sessionStorage.getItem('amleht_welcome_seen')){
+  document.getElementById('amleht-welcome-overlay').style.display='none';
+}
+</script>
+<!-- END SELL WELCOME OVERLAY -->
+
+
 <!-- ── GATE GUARD — verbatim from amleht-site/demo/interactive/appia.html ── -->
 <script id="amleht-gate-guard">
 /* amleht gate guard — runs before any page content renders.
