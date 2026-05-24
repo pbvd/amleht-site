@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIG-173 | KfW Appia Bond | DORA Art.11 Resilience | amleht</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:        #0b0f1a;
+    --navy-card:   #111d30;
+    --navy-mid:    #141c2e;
+    --navy-border: #1e2d47;
+    --gold:        #c9a84c;
+    --gold-light:  #e8c97a;
+    --gold-dim:    #7a6230;
+    --steel:       #4a90c4;
+    --steel-light: #7ab8e8;
+    --steel-dim:   #1e3f5c;
+    --steel-bg:    #0a1520;
+    --cream:       #f0ead8;
+    --cream-dim:   #a89f88;
+    --green:       #27ae60;
+    --green-light: #81c784;
+    --green-dim:   #1a4a2a;
+    --red:         #d4554a;
+    --red-dim:     #5a1f1a;
+    --white:       #ffffff;
+    --mono:        'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--navy);
+    color: var(--cream);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    padding: 48px 24px 80px;
+    line-height: 1.7;
+  }
+
+  .page { max-width: 880px; margin: 0 auto; }
+
+  /* ── OPPORTUNITY BANNER ── */
+  .opportunity-banner {
+    background: linear-gradient(135deg, #0a1f35 0%, #1a1208 100%);
+    border: 1px solid var(--gold-dim);
+    border-left: 5px solid var(--gold);
+    padding: 16px 24px;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .opp-pill {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    color: var(--gold-light);
+    border: 1px solid var(--gold-dim);
+    padding: 4px 12px;
+    white-space: nowrap;
+    text-transform: uppercase;
+  }
+  .opp-text {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--gold-light);
+    letter-spacing: 0.05em;
+    line-height: 1.6;
+  }
+  .opp-text strong { color: var(--white); }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid var(--gold-dim);
+    padding-bottom: 20px;
+    margin-bottom: 36px;
+  }
+  .topbar-left { display: flex; flex-direction: column; gap: 4px; }
+  .sig-number {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+  .org-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 300;
+    letter-spacing: 0.12em;
+    color: var(--cream);
+    text-transform: lowercase;
+  }
+  .topbar-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .date-stamp {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--cream-dim);
+    letter-spacing: 0.1em;
+  }
+  .classification {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--gold);
+    border: 1px solid var(--gold-dim);
+    padding: 3px 8px;
+    text-transform: uppercase;
+  }
+
+  /* ── HERO ── */
+  .hero { margin-bottom: 40px; }
+  .entity-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    color: var(--steel);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 56px;
+    font-weight: 300;
+    line-height: 1.05;
+    color: var(--white);
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
+  }
+  .hero-title span.kfw   { color: var(--steel-light); }
+  .hero-title span.and   { color: var(--gold-dim); font-size: 36px; margin: 0 12px; }
+  .hero-title span.dora  { color: var(--gold); }
+  .hero-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 20px;
+    color: var(--cream-dim);
+    letter-spacing: 0.04em;
+    margin-bottom: 24px;
+    line-height: 1.4;
+  }
+  .status-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .badge {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border: 1px solid;
+  }
+  .badge-steel  { color: var(--steel-light); border-color: var(--steel-dim); }
+  .badge-gold   { color: var(--gold);         border-color: var(--gold-dim); }
+  .badge-green  { color: var(--green-light);  border-color: #2e5e30; }
+  .badge-amber  { color: #ffb74d;             border-color: #7a5000; }
+
+  /* ── RULES ── */
+  .gold-rule {
+    height: 1px;
+    background: linear-gradient(90deg, var(--gold) 0%, transparent 100%);
+    margin: 36px 0;
+  }
+  .steel-rule {
+    height: 1px;
+    background: linear-gradient(90deg, var(--steel) 0%, transparent 100%);
+    margin: 36px 0;
+  }
+
+  /* ── SECTION ── */
+  .section { margin-bottom: 40px; }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .section-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 0.14em;
+    min-width: 36px;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--white);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .section-body {
+    font-size: 14.5px;
+    color: var(--cream-dim);
+    line-height: 1.8;
+    padding-left: 50px;
+  }
+  .section-body strong { color: var(--cream); font-weight: 500; }
+  .section-body em     { color: var(--gold-light); font-style: normal; }
+  .section-body em.steel { color: var(--steel-light); font-style: normal; }
+
+  /* ── STAT STRIP ── */
+  .stat-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--navy-border);
+    margin: 0 0 0 50px;
+    margin-bottom: 20px;
+  }
+  .stat-cell {
+    background: var(--navy-card);
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .stat-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 300;
+    color: var(--steel-light);
+    line-height: 1;
+  }
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    color: var(--cream-dim);
+    text-transform: uppercase;
+  }
+  .stat-sub {
+    font-size: 11px;
+    color: var(--cream-dim);
+    margin-top: 2px;
+  }
+
+  /* ── BOND ID CARD ── */
+  .bond-card {
+    background: var(--steel-bg);
+    border: 1px solid var(--steel-dim);
+    border-left: 4px solid var(--steel-light);
+    padding: 24px 28px;
+    margin-left: 50px;
+    margin-bottom: 16px;
+  }
+  .bond-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--steel-light);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .bond-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+  .bond-isin {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--gold-light);
+    letter-spacing: 0.14em;
+    margin-bottom: 14px;
+  }
+  .bond-meta {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .bond-tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: var(--cream-dim);
+    border: 1px solid var(--navy-border);
+    padding: 3px 8px;
+    text-transform: uppercase;
+  }
+
+  /* ── THREE-BREAK STACK ── */
+  .breaks {
+    padding-left: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .break-row {
+    display: grid;
+    grid-template-columns: 40px 1fr 28px 1fr;
+    gap: 10px;
+    align-items: stretch;
+    background: var(--navy-card);
+    border: 1px solid var(--navy-border);
+    padding: 14px 16px;
+  }
+  .break-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    color: var(--gold-dim);
+    line-height: 1;
+    padding-top: 2px;
+  }
+  .break-from, .break-to {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    justify-content: center;
+  }
+  .break-from { opacity: 0.7; }
+  .break-arrow {
+    font-family: var(--mono);
+    font-size: 18px;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .break-entity-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--white);
+  }
+  .break-entity-tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: var(--cream-dim);
+    text-transform: uppercase;
+  }
+  .break-from .break-entity-name { color: var(--cream-dim); }
+  .break-to .break-entity-name { color: var(--green-light); }
+  .break-to .break-entity-tag { color: var(--green-light); }
+
+  .break-layer-label {
+    grid-column: 1 / -1;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  /* ── REGULATORY GRID ── */
+  .reg-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding-left: 50px;
+    margin-top: 4px;
+  }
+  .reg-cell {
+    background: var(--navy-card);
+    border: 1px solid var(--navy-border);
+    padding: 13px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .reg-cell-art {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+  }
+  .reg-cell-body {
+    font-size: 12px;
+    color: var(--cream-dim);
+    line-height: 1.55;
+  }
+
+  /* ── VERIFICATION REPORTS ── */
+  .vrs {
+    padding-left: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .vr-row {
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    gap: 14px;
+    align-items: center;
+    background: var(--navy-card);
+    border: 1px solid var(--navy-border);
+    border-left: 3px solid var(--green-light);
+    padding: 12px 16px;
+  }
+  .vr-id {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 0.14em;
+  }
+  .vr-text {
+    font-size: 13px;
+    color: var(--cream-dim);
+    line-height: 1.55;
+  }
+  .vr-text strong { color: var(--cream); font-weight: 500; }
+  .vr-status {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--green-light);
+    border: 1px solid #2e5e30;
+    padding: 3px 8px;
+  }
+
+  /* ── INTEL NOTE ── */
+  .intel-note {
+    background: #0e1520;
+    border-left: 3px solid var(--gold);
+    padding: 18px 22px;
+    margin-left: 50px;
+    margin-top: 4px;
+  }
+  .intel-note p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    color: var(--cream);
+    line-height: 1.65;
+  }
+  .intel-note p em { color: var(--gold-light); font-style: italic; }
+  .intel-note p strong { color: var(--white); font-weight: 500; }
+
+  .steel-note {
+    background: var(--steel-bg);
+    border-left: 3px solid var(--steel);
+    padding: 18px 22px;
+    margin-left: 50px;
+    margin-top: 4px;
+  }
+  .steel-note p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    color: var(--cream);
+    line-height: 1.65;
+  }
+  .steel-note p em { color: var(--steel-light); font-style: italic; }
+  .steel-note p strong { color: var(--white); font-weight: 500; }
+
+  /* ── CROSS-REF ── */
+  .xref {
+    padding-left: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .xref-row {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 14px;
+    align-items: baseline;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--navy-border);
+  }
+  .xref-row:last-child { border-bottom: none; }
+  .xref-id {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 0.14em;
+  }
+  .xref-text {
+    font-size: 13px;
+    color: var(--cream-dim);
+    line-height: 1.65;
+  }
+  .xref-text strong { color: var(--cream); font-weight: 500; }
+  .xref-text a { color: var(--steel-light); text-decoration: none; border-bottom: 1px dotted var(--steel-dim); }
+
+  /* ── ACTIONS ── */
+  .actions { padding-left: 50px; }
+  .action-row {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--navy-border);
+  }
+  .action-row:last-child { border-bottom: none; }
+  .action-id {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--gold);
+    letter-spacing: 0.14em;
+    min-width: 72px;
+    padding-top: 2px;
+  }
+  .action-text {
+    font-size: 13.5px;
+    color: var(--cream-dim);
+    line-height: 1.65;
+    flex: 1;
+  }
+  .action-text strong { color: var(--cream); font-weight: 500; }
+  .action-status {
+    font-family: var(--mono);
+    font-size: 9px;
+    padding: 3px 8px;
+    border: 1px solid;
+    white-space: nowrap;
+    align-self: flex-start;
+  }
+  .s-now     { color: var(--green-light); border-color: #2e5e30; }
+  .s-soon    { color: #ffb74d; border-color: #7a5000; }
+  .s-mid     { color: var(--steel-light); border-color: var(--steel-dim); }
+  .s-back    { color: var(--cream-dim); border-color: var(--navy-border); }
+
+  /* ── FOOTER ── */
+  .footer {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--navy-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .footer-left { display: flex; flex-direction: column; gap: 4px; }
+  .footer-dedication {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--cream-dim);
+    letter-spacing: 0.04em;
+  }
+  .footer-dedication span { color: var(--gold); }
+  .footer-org {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    color: var(--cream-dim);
+    text-transform: uppercase;
+  }
+  .footer-right {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--cream-dim);
+    letter-spacing: 0.1em;
+    text-align: right;
+    line-height: 1.8;
+  }
+  .footer-right .principle {
+    color: var(--gold);
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .footer-right a { color: var(--steel-light); text-decoration: none; border-bottom: 1px dotted var(--steel-dim); }
+
+  @media (max-width: 620px) {
+    .hero-title { font-size: 38px; }
+    .hero-title span.and { font-size: 26px; }
+    .stat-strip { grid-template-columns: 1fr; }
+    .section-body, .breaks, .reg-grid, .vrs, .xref, .actions,
+    .intel-note, .steel-note, .bond-card { padding-left: 0; margin-left: 0; }
+    .reg-grid { grid-template-columns: 1fr; }
+    .break-row { grid-template-columns: 1fr; }
+    .break-arrow { display: none; }
+    .vr-row { grid-template-columns: 1fr; }
+    .xref-row { grid-template-columns: 1fr; }
+    .topbar { flex-direction: column; gap: 12px; }
+    .topbar-right { align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- OPPORTUNITY BANNER -->
+  <div class="opportunity-banner">
+    <div class="opp-pill">⬛ DORA ART.11 PATTERN · SIG-173</div>
+    <div class="opp-text">
+      <strong>LIVE DEMONSTRATION · 24 MAY 2026:</strong> KfW Appia Bond — three simultaneous infrastructure breaks attested by Agent XII to Hyperledger Fabric. BaFin examination evidence reproducible without access to Cashlink, Polygon, or Bundesbank systems. <strong>This is what a sovereign compliance chain looks like operationally.</strong>
+    </div>
+  </div>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="sig-number">Signal Intelligence Series · SIG-173</div>
+      <div class="org-name">amleht</div>
+    </div>
+    <div class="topbar-right">
+      <div class="date-stamp">24 MAY 2026 · AMSTERDAM</div>
+      <div class="classification">PUBLIC INTELLIGENCE · AMLEHT.EU</div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="entity-label">DLT-Native Infrastructure Resilience</div>
+    <div class="hero-title">
+      <span class="kfw">KfW Appia</span><span class="and">&amp;</span><span class="dora">DORA Art.11</span>
+    </div>
+    <div class="hero-sub">Three-Break Migration Proves Sovereign Compliance Chain Viability — the regulatory pattern, demonstrated end-to-end, against a representative €500M DLT-native institutional bond.</div>
+    <div class="status-row">
+      <span class="badge badge-steel">KFW BANKENGRUPPE · BAFIN REGULATED</span>
+      <span class="badge badge-gold">DORA ART.11 + ART.17 EVENTS</span>
+      <span class="badge badge-green">AGENT XII · 3 VERIFICATION REPORTS</span>
+      <span class="badge badge-amber">QIVALIS MEMBER PATTERN</span>
+    </div>
+  </div>
+
+  <div class="steel-rule"></div>
+
+  <!-- 01 BOND PROFILE -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">01 ·</span>
+      <span class="section-title">Bond Profile — Appia Series I</span>
+    </div>
+    <div class="section-body" style="margin-bottom:20px;">
+      Appia is the representative configuration that anchors amleht's <em>Operation Appia</em> live demonstration. It mirrors the pattern KfW has already established with its real DLT-native bond programme — registrar managed via crypto-securities registrar, blockchain settlement on an external chain, payment via the Bundesbank trigger solution. The Appia bond holds the configuration steady so the regulatory question can be answered cleanly: <em>when three infrastructure layers migrate simultaneously, mid-coupon, can the compliance evidence survive?</em>
+    </div>
+
+    <div class="bond-card">
+      <div class="bond-label">DLT-Native Institutional Bond · Representative Configuration</div>
+      <div class="bond-name">KfW Appia Bond Series I</div>
+      <div class="bond-isin">ISIN: DE000KFW1234 · EUR · SENIOR · FIXED 3.25% · MATURITY 2029</div>
+      <div class="bond-meta">
+        <span class="bond-tag">KfW Bankengruppe</span>
+        <span class="bond-tag">BaFin Regulated</span>
+        <span class="bond-tag">DLT-Native</span>
+        <span class="bond-tag">eWpG / German Crypto-Securities Act</span>
+        <span class="bond-tag">Coupon T+2 Mid-Lifecycle</span>
+      </div>
+    </div>
+
+    <div class="stat-strip">
+      <div class="stat-cell">
+        <div class="stat-value">€500M</div>
+        <div class="stat-label">Notional</div>
+        <div class="stat-sub">Senior fixed 3.25% · maturity 2029</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-value">€8.125M</div>
+        <div class="stat-label">Coupon Event · T+2</div>
+        <div class="stat-sub">Cleared mid-migration · attested end-to-end</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-value">3</div>
+        <div class="stat-label">Simultaneous Breaks</div>
+        <div class="stat-sub">Registrar · Chain · Payment Rail</div>
+      </div>
+    </div>
+
+    <div class="section-body">
+      The point of the configuration is not that any single break is novel — registrar transfers happen, chain migrations happen, payment rail transitions happen. The point is that <strong>all three happen at once, in the middle of a live coupon event</strong>, against a representative KfW bond, and the compliance evidence emerges intact at the other end. That is the resilience question DORA Art.11 actually asks. Most ICT continuity testing splits the question into three. Appia answers all three simultaneously.
+    </div>
+  </div>
+
+  <div class="gold-rule"></div>
+
+  <!-- 02 THE THREE BREAKS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">02 ·</span>
+      <span class="section-title">The Three Infrastructure Breaks</span>
+    </div>
+    <div class="section-body" style="margin-bottom:18px;">
+      Each break represents a distinct ICT third-party concentration risk the supervisor cares about. Each is mapped to its own DORA continuity event. Each produces its own Agent XII Verification Report on the compliance chain. The breaks are not staggered — they are simultaneous, by construction, because real infrastructure failures do not queue politely.
+    </div>
+
+    <div class="breaks">
+
+      <div class="break-row">
+        <div class="break-layer-label">Break 01 · Registrar Layer · Ownership Register Custody</div>
+        <div class="break-num">1</div>
+        <div class="break-from">
+          <div class="break-entity-name">Cashlink GmbH</div>
+          <div class="break-entity-tag">FROM · CRYPTO-SECURITIES REGISTRAR</div>
+        </div>
+        <div class="break-arrow">→</div>
+        <div class="break-to">
+          <div class="break-entity-name">DekaBank</div>
+          <div class="break-entity-tag">TO · INCUMBENT INSTITUTIONAL REGISTRAR</div>
+        </div>
+      </div>
+
+      <div class="break-row">
+        <div class="break-layer-label">Break 02 · DLT Chain Layer · Settlement Substrate</div>
+        <div class="break-num">2</div>
+        <div class="break-from">
+          <div class="break-entity-name">Polygon</div>
+          <div class="break-entity-tag">FROM · PUBLIC-PERMISSIONED CHAIN</div>
+        </div>
+        <div class="break-arrow">→</div>
+        <div class="break-to">
+          <div class="break-entity-name">SWIAT / RL1</div>
+          <div class="break-entity-tag">TO · EU-SOVEREIGN PERMISSIONED CHAIN</div>
+        </div>
+      </div>
+
+      <div class="break-row">
+        <div class="break-layer-label">Break 03 · Payment Rail · Cash-Leg Settlement</div>
+        <div class="break-num">3</div>
+        <div class="break-from">
+          <div class="break-entity-name">Bundesbank Trigger</div>
+          <div class="break-entity-tag">FROM · NATIONAL CB TRIGGER SOLUTION</div>
+        </div>
+        <div class="break-arrow">→</div>
+        <div class="break-to">
+          <div class="break-entity-name">Pontes / TARGET2</div>
+          <div class="break-entity-tag">TO · EUROSYSTEM PRODUCTION RAIL</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="intel-note">
+      <p>The chain-of-custody question is not "did each break succeed". The question is: <em>can the supervisor, after the fact, reconstruct exactly what state existed before each break, exactly what state existed after, and exactly who attested to each transition — without access to any of the migrated systems?</em> That is the test. Appia is designed to answer it in the affirmative.</p>
+    </div>
+  </div>
+
+  <div class="gold-rule"></div>
+
+  <!-- 03 DORA REGULATORY MAPPING -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">03 ·</span>
+      <span class="section-title">DORA Article 11 · What Was Proven</span>
+    </div>
+    <div class="section-body" style="margin-bottom:16px;">
+      DORA Article 11 governs ICT-related incident management and the resilience of business continuity arrangements. Article 17 covers the supervisory notification assessment. Both apply when an issuer mid-lifecycle moves between ICT third parties at the registrar, chain, and payment-rail layers. Appia attests both in a single live event.
+    </div>
+
+    <div class="reg-grid">
+      <div class="reg-cell">
+        <div class="reg-cell-art">DORA Art.11(1)</div>
+        <div class="reg-cell-body">ICT business continuity policy must include arrangements for the protection and recovery of ICT systems. Appia demonstrates the recovery posture against simultaneous failure of three independent ICT third parties.</div>
+      </div>
+      <div class="reg-cell">
+        <div class="reg-cell-art">DORA Art.11(2)</div>
+        <div class="reg-cell-body">Tests of business continuity plans must include scenarios for cyberattack, switch-over from primary to backup, and recovery from severe disruption. The three-break configuration tests precisely the third category.</div>
+      </div>
+      <div class="reg-cell">
+        <div class="reg-cell-art">DORA Art.11(6)</div>
+        <div class="reg-cell-body">Financial entities shall draw lessons learned from ICT-related incidents. Appia produces an immutable, chain-attested lesson set per break — readable by both internal risk teams and the supervisor without dependency on the migrated infrastructure.</div>
+      </div>
+      <div class="reg-cell">
+        <div class="reg-cell-art">DORA Art.17 (Threshold)</div>
+        <div class="reg-cell-body">Incident classification — does this event require supervisory notification? The chain produces the dual-stream evidence package needed for the threshold assessment without ad-hoc reconstruction from logs.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="gold-rule"></div>
+
+  <!-- 04 AGENT XII ATTESTATION -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">04 ·</span>
+      <span class="section-title">Agent XII · The Attestation Layer</span>
+    </div>
+    <div class="section-body" style="margin-bottom:18px;">
+      Agent XII is the verification function in amleht's 12-agent hub-and-spoke architecture. It does not perform the work — it attests that the work was performed correctly. Its outputs are <strong>Verification Reports</strong> written to a Hyperledger Fabric compliance chain via IntegrityMSP. Each report references the pre-state hash, the post-state hash, the assessing agent, the regulatory article in scope, and the timestamp. The reports survive failure of any infrastructure they attest — that is the load-bearing property.
+    </div>
+
+    <div class="vrs">
+      <div class="vr-row">
+        <div class="vr-id">VR-APPIA-01</div>
+        <div class="vr-text"><strong>Registrar transfer Cashlink → DekaBank.</strong> Pre-transfer ownership register state hashed and chained. Post-reconstitution at DekaBank verified and chained. DORA Art.11 continuity event CLOSED with chain-of-custody evidence written to Fabric block.</div>
+        <div class="vr-status">ATTESTED</div>
+      </div>
+      <div class="vr-row">
+        <div class="vr-id">VR-APPIA-02</div>
+        <div class="vr-text"><strong>Infrastructure migration Polygon → SWIAT/RL1.</strong> Pre-migration state root and post-migration genesis both recorded. Settlement resumed. DORA Art.11 + Art.17 events CLOSED; Art.17 notification assessment recorded as below threshold and attested.</div>
+        <div class="vr-status">ATTESTED</div>
+      </div>
+      <div class="vr-row">
+        <div class="vr-id">VR-APPIA-03</div>
+        <div class="vr-text"><strong>Payment rail transition Bundesbank → Pontes/TARGET2.</strong> DLT coupon event cross-referenced against Pontes T2 settlement confirmation. Dual-record audit artefact written to Fabric chain. Coupon €8,125,000 cleared and PAID.</div>
+        <div class="vr-status">ATTESTED</div>
+      </div>
+    </div>
+
+    <div class="steel-note">
+      <p>The recursive trust property is the part regulators notice. <strong>Agent XII's chaincode hash is pinned in the Go binary; the Go binary's hash is registered on the chain Agent XII writes to.</strong> A break in either direction is detectable. Agent I monitors Agent XII silence as a SEV-1 condition — the verifier cannot quietly disappear. <em>It is not the chain that proves resilience. It is the verifier's verifiability that proves the chain.</em></p>
+    </div>
+  </div>
+
+  <div class="gold-rule"></div>
+
+  <!-- 05 SOVEREIGN COMPLIANCE CHAIN VIABILITY -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">05 ·</span>
+      <span class="section-title">Sovereign Compliance Chain Viability</span>
+    </div>
+    <div class="section-body" style="margin-bottom:16px;">
+      Appia is a coherent demonstration only because the chain it writes to is itself sovereign. A US-jurisdiction substrate would re-open every CLOUD Act question the configuration was designed to close. The two preceding architectural decisions are load-bearing here, and Appia is the operational test of both.
+    </div>
+
+    <div class="xref">
+      <div class="xref-row">
+        <div class="xref-id">ADR-001</div>
+        <div class="xref-text"><strong>Nebius B.V. as Primary Sovereign Inference Layer.</strong> Netherlands-incorporated, EU-jurisdiction-only data path, zero US CLOUD Act exposure on the inference layer. The reasoning Agent XII relies on for Verification Report construction runs on this substrate. Appia validates that the substrate holds under live coupon-event pressure.</div>
+      </div>
+      <div class="xref-row">
+        <div class="xref-id">CLUSTER-001</div>
+        <div class="xref-text"><strong>Sovereign Cloud Convergence — 20 May 2026.</strong> Three independent signals (SIG-153 MDASH / SIG-154 / SIG-155) confirmed sovereign-first cloud and AI architecture is now the supervisory benchmark, not an analyst preference. Appia is the operational instantiation of the pattern those signals describe. The convergence is no longer thesis — it is demonstration.</div>
+      </div>
+      <div class="xref-row">
+        <div class="xref-id">DEMO ASSET</div>
+        <div class="xref-text"><strong>Operation Appia live demonstration.</strong> Reachable at <a href="https://amleht.eu/demos/operation-appia/operation-appia-demo.html">amleht.eu/demos/operation-appia/operation-appia-demo.html</a> (gated). The visual treatment walks the three breaks chronologically, with the coupon event status indicator transitioning <em>SCHEDULED → BLOCKED → PAID</em> across the migration sequence.</div>
+      </div>
+      <div class="xref-row">
+        <div class="xref-id">SIG-112</div>
+        <div class="xref-text"><strong>Dfns Strategic Partner Profile.</strong> Dfns provides the EU-sovereign MPC wallet infrastructure layer; amleht provides the chain-attested compliance assessment layer. Both run on Hyperledger Fabric. Appia demonstrates the attestation side of that joint stack against a regulated institutional bond use case.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="gold-rule"></div>
+
+  <!-- 06 QIVALIS MEMBER IMPLICATIONS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">06 ·</span>
+      <span class="section-title">Implications for Qivalis Members</span>
+    </div>
+    <div class="section-body">
+      Qivalis is a consortium of approximately thirty-seven institutions that each face the same DORA Art.11 question — and currently solve it institution by institution. Appia is the pattern that lets the consortium answer the question once, at the platform layer, and let each member draw down the attestation evidence for their own supervisor without rebuilding the chain. <strong>That is the consortium-economics argument:</strong> one platform, one chain, thirty-seven separate but identical regulatory reductions.
+      <br><br>
+      The closing line from the Appia demonstration — <em>"this is what amleht can offer its members"</em> — is not a marketing flourish. It is the operational statement of what the platform does. Member institutions pay amleht directly for the assessment; amleht produces the chain-attested DORA Art. 28/29 evidence; the Thelma Principle holds because amleht assesses the member's compliance posture, not the infrastructure provider's product.
+    </div>
+
+    <div class="intel-note" style="margin-top:18px;">
+      <p>The Qivalis pattern is not an exception. It is the template for any consortium of regulated institutions sharing a compliance question. <em>Appia proves the template runs.</em></p>
+    </div>
+  </div>
+
+  <div class="gold-rule"></div>
+
+  <!-- 07 ACTIONS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">07 ·</span>
+      <span class="section-title">Actions</span>
+    </div>
+    <div class="actions">
+      <div class="action-row">
+        <span class="action-id">APP-001</span>
+        <span class="action-text"><strong>Use SIG-173 as the written companion to Operation Appia in any DORA Art.11 conversation.</strong> The demo shows the breaks; this card explains what was proven. Pair them in the Sell call (26 May 2026) and in subsequent regulated-institution conversations.</span>
+        <span class="action-status s-now">IN MOTION</span>
+      </div>
+      <div class="action-row">
+        <span class="action-id">APP-002</span>
+        <span class="action-text"><strong>Surface SIG-173 in the next IBM Z conversation</strong> — the BaFin examination evidence story is exactly the kind of audit-trail-without-system-access argument that lands with mainframe-era risk teams. Cross-reference Agent VII (IBM Z) framing.</span>
+        <span class="action-status s-soon">THIS WEEK</span>
+      </div>
+      <div class="action-row">
+        <span class="action-id">APP-003</span>
+        <span class="action-text"><strong>Add SIG-173 to Guillaume Princen briefing pack</strong> — the existing pack covers ECB, digital euro, MPP/Tempo, HMRC/AWS. Appia is the operational evidence those signals describe. Update the curator's guide to place SIG-173 after SIG-153/154/155 (CLUSTER-001) as "from convergence to demonstration".</span>
+        <span class="action-status s-soon">THIS WEEK</span>
+      </div>
+      <div class="action-row">
+        <span class="action-id">APP-004</span>
+        <span class="action-text"><strong>Track the Hyperledger Fabric upstream for native PQC MSP support</strong> — Appia attestation today uses ML-DSA dual-signing as an augmentation over ECDSA on Agent XII. Native MSP-level PQC closes the last cryptographic surface. Quarterly Horizon Watch — next review 1 July 2026.</span>
+        <span class="action-status s-mid">SPRINT 2</span>
+      </div>
+      <div class="action-row">
+        <span class="action-id">APP-005</span>
+        <span class="action-text"><strong>Build the Appia → Pontes second-leg scenario</strong> — once Pontes Q3 2026 production rail data is confirmed, extend the Appia demonstration with a Pontes-to-Pontes corridor for cross-border coupon events. Closes the Appia → Digital Euro narrative arc.</span>
+        <span class="action-status s-back">BACKLOG</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="gold-rule"></div>
+
+  <!-- 08 CLOSING -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">08 ·</span>
+      <span class="section-title">Closing Assessment</span>
+    </div>
+    <div class="intel-note">
+      <p>DORA Article 11 has been on the books since January 2025. Almost every regulated institution can describe what compliance looks like on paper. <em>Almost none can demonstrate what it looks like during a live coupon event when three infrastructure layers migrate at once.</em> Appia closes that gap. It is not a slide deck. It is a configuration that runs.</p>
+    </div>
+    <div class="steel-note" style="margin-top: 12px;">
+      <p>The €8.125 million cleared via Pontes/T2 is the coupon. The three Verification Reports written to the Hyperledger Fabric chain are the audit. <strong>The fact that BaFin can read both without access to Cashlink, Polygon, or Bundesbank is the product.</strong> <em>This is what a sovereign compliance chain looks like — not in the abstract, in the working.</em></p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-left">
+      <div class="footer-dedication">In loving memory of <span>Thelma Bloomfield</span> — every line, every commitment, every covenant kept.</div>
+      <div class="footer-org">amleht · EU-Sovereign Multi-Agent Compliance Platform · Amsterdam</div>
+    </div>
+    <div class="footer-right">
+      <div class="principle">The Thelma Principle</div>
+      <div>Structural impartiality · Always for the institution</div>
+      <div>SIG-173 · 24 May 2026 · PUBLIC INTELLIGENCE</div>
+      <div>Live demo: <a href="https://amleht.eu/demos/operation-appia/operation-appia-demo.html">amleht.eu/demos/operation-appia</a></div>
+      <div>Hyperledger Fabric · Nebius B.V. Sovereign Inference</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
