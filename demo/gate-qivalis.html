@@ -547,16 +547,42 @@ function showPip(panelIndex) {
   ].join(';');
   closeBtn.onclick = removePip;
 
+  var unmuteBtn = document.createElement('button');
+  unmuteBtn.textContent = '🔇';
+  unmuteBtn.title = 'Click to unmute';
+  unmuteBtn.style.cssText = [
+    'position:absolute','top:6px','right:34px',
+    'background:rgba(0,0,0,0.6)','color:#f0ebe0',
+    'border:none','border-radius:50%',
+    'width:22px','height:22px','font-size:11px',
+    'cursor:pointer','z-index:1',
+    'display:flex','align-items:center','justify-content:center','line-height:1'
+  ].join(';');
+
   var video = document.createElement('video');
   video.src = url;
   video.autoplay = true;
+  video.muted = true;
   video.controls = false;
   video.style.cssText = 'width:100%;height:100%;object-fit:cover;';
   video.onended = function() {
     setTimeout(removePip, 2000);
   };
 
+  unmuteBtn.onclick = function() {
+    if(video.muted) {
+      video.muted = false;
+      unmuteBtn.textContent = '🔊';
+      unmuteBtn.title = 'Click to mute';
+    } else {
+      video.muted = true;
+      unmuteBtn.textContent = '🔇';
+      unmuteBtn.title = 'Click to unmute';
+    }
+  };
+
   pip.appendChild(video);
+  pip.appendChild(unmuteBtn);
   pip.appendChild(closeBtn);
   document.body.appendChild(pip);
 }
