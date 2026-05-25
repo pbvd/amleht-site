@@ -1276,7 +1276,6 @@ if(document.readyState==='complete'){
     var video = document.createElement('video');
     video.src = url;
     video.autoplay = true;
-    video.muted = true;
     video.controls = false;
     video.playsInline = true;
     video.onended = function(){
@@ -1285,8 +1284,8 @@ if(document.readyState==='complete'){
     };
 
     var unmuteBtn = document.createElement('button');
-    unmuteBtn.textContent = '🔇';
-    unmuteBtn.title = 'Click to unmute';
+    unmuteBtn.textContent = '🔊';
+    unmuteBtn.title = 'Click to mute';
     unmuteBtn.style.cssText = [
       'position:absolute','top:6px','right:34px',
       'background:rgba(0,0,0,0.6)','color:#f0ebe0',
