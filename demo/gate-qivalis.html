@@ -257,6 +257,16 @@ body::before{
   transition:color 0.2s;
 }
 .nav-skip:hover{color:var(--cream-dim);}
+.nav-back{
+  font-family:var(--font-mono);font-size:0.6rem;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--amber);background:none;
+  border:1px solid var(--amber-border);border-radius:2px;
+  padding:0.35rem 0.7rem;cursor:pointer;
+  transition:color 0.2s,border-color 0.2s,opacity 0.2s;
+}
+.nav-back:hover:not(:disabled){color:var(--amber-light, #d9a04a);border-color:var(--amber);}
+.nav-back:disabled{opacity:0.3;cursor:not-allowed;}
 .nav-label{
   font-family:var(--font-mono);font-size:0.58rem;
   letter-spacing:0.1em;text-transform:uppercase;
@@ -351,6 +361,7 @@ body::before{
     </div>
     <div class="nav-dots" id="navDots"></div>
     <div class="nav-actions">
+      <button class="nav-back" id="navBack" onclick="prevPanel()" title="Previous slide">← Back</button>
       <button class="nav-skip" onclick="skipTour()">Skip tour ↗</button>
       <button class="nav-next" id="navNext" onclick="nextPanel()">Next →</button>
     </div>
@@ -445,6 +456,8 @@ function updateDots(i){
 
 function updateNav(i){
   var btn = document.getElementById('navNext');
+  var backBtn = document.getElementById('navBack');
+  if(backBtn) backBtn.disabled = (i === 0);
   var isLast = (i >= PANELS.length-2);
   if(i === PANELS.length-1){
     // Dashboard — hide nav
@@ -493,6 +506,12 @@ function showPanel(i){
 function nextPanel(){
   if(current < PANELS.length-1){
     showPanel(current+1);
+  }
+}
+
+function prevPanel(){
+  if(current > 0){
+    showPanel(current-1);
   }
 }
 
