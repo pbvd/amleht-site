@@ -222,13 +222,13 @@ body::before{
 
 /* ── PERSISTENT NAV BAR ── */
 #tour-nav{
-  position:absolute;bottom:0;left:0;right:0;height:64px;
+  position:fixed;bottom:0;left:0;right:0;height:64px;
   background:rgba(11,18,32,0.97);
   border-top:1px solid var(--amber-border);
-  display:flex;align-items:center;
+  display:flex !important;align-items:center;
   justify-content:space-between;padding:0 1.5rem;
   backdrop-filter:blur(8px);
-  z-index:10;
+  z-index:100;
 }
 .nav-brand{
   display:flex;align-items:center;gap:0.75rem;
@@ -459,11 +459,8 @@ function updateNav(i){
   var backBtn = document.getElementById('navBack');
   if(backBtn) backBtn.disabled = (i === 0);
   var isLast = (i >= PANELS.length-2);
-  if(i === PANELS.length-1){
-    // Dashboard — hide nav
-    document.getElementById('tour-nav').style.display='none';
-    return;
-  }
+  // Dashboard panel navigates away immediately (window.location.href) so we
+  // never need to hide the nav. Keep nav always visible while tour-shell is shown.
   document.getElementById('tour-nav').style.display='flex';
   if(isLast){
     btn.textContent = 'Enter the platform →';
