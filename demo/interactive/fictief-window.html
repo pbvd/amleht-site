@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Jost:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fictief NV — Window to the World</title>
@@ -1322,55 +1323,62 @@ if(document.readyState==='complete'){
 <!-- END AMLEHT DASHBOARD PIP -->
 
 
-<!-- ═════ AMLEHT BACK-TO-TOUR FOOTER ═════ -->
+<!-- ═════ AMLEHT TOUR NAV — exact mirror of gate-qivalis #tour-nav ═════ -->
 <style>
-#amleht-back-footer{
-  position:fixed;bottom:0;left:0;right:0;height:64px;
-  background:rgba(11,18,32,0.97);
-  border-top:1px solid rgba(200,147,58,0.28);
-  display:flex !important;align-items:center;
-  justify-content:space-between;padding:0 1.5rem;
-  backdrop-filter:blur(8px);
-  z-index:100;
-  font-family:'IBM Plex Mono',monospace;
+/* Scoped colour + font definitions — match gate-qivalis :root values exactly */
+#tour-nav {
+  --amber: #c8933a;
+  --amber-border: rgba(200,147,58,0.28);
+  --amber-light: #d9a04a;
+  --cream: #f0ebe0;
+  --muted: rgba(240,235,224,0.32);
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+
+  position: fixed; bottom: 0; left: 0; right: 0; height: 64px;
+  background: rgba(11,18,32,0.97);
+  border-top: 1px solid var(--amber-border);
+  display: flex !important; align-items: center;
+  justify-content: space-between; padding: 0 1.5rem;
+  backdrop-filter: blur(8px);
+  z-index: 100;
 }
-#amleht-back-footer .ab-brand{
-  font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;
-  color:rgba(240,235,224,0.32);display:flex;align-items:center;gap:0.75rem;
+#tour-nav .nav-brand {
+  display: flex; align-items: center; gap: 0.75rem;
+  font-family: var(--font-mono); font-size: 0.6rem;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
 }
-#amleht-back-footer .ab-brand strong{
-  font-family:'Cormorant Garamond',Georgia,serif;
-  font-size:1rem;font-weight:300;letter-spacing:0.15em;color:#f0ebe0;
-  text-transform:lowercase;
+#tour-nav .nav-brand strong {
+  font-family: var(--font-serif); font-size: 1rem;
+  font-weight: 300; letter-spacing: 0.15em; color: var(--cream);
+  text-transform: lowercase;
 }
-#amleht-back-footer .ab-brand strong span{color:#c8933a;}
-#amleht-back-footer .ab-back{
-  font-family:'IBM Plex Mono',monospace;font-size:0.6rem;font-weight:500;
-  letter-spacing:0.1em;text-transform:uppercase;
-  color:#c8933a;background:rgba(200,147,58,0.08);
-  border:1px solid #c8933a;border-radius:2px;
-  padding:0.5rem 0.85rem;cursor:pointer;text-decoration:none;
-  transition:background 0.2s,color 0.2s;
-  display:inline-block;
+#tour-nav .nav-brand strong span { color: var(--amber); }
+#tour-nav .nav-back {
+  font-family: var(--font-mono); font-size: 0.6rem; font-weight: 500;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--amber); background: rgba(200,147,58,0.08);
+  border: 1px solid var(--amber); border-radius: 2px;
+  padding: 0.5rem 0.85rem; cursor: pointer; text-decoration: none;
+  display: inline-block;
+  transition: color 0.2s, border-color 0.2s, opacity 0.2s, background 0.2s;
 }
-#amleht-back-footer .ab-back:hover{
-  background:rgba(200,147,58,0.18);color:#e8c97a;
-}
-/* Move dashboard pip up so it doesn't sit on the footer */
-#amleht-dash-pip{bottom:80px !important;}
-@media(max-width:600px){
-  #amleht-back-footer{padding:0 0.75rem;}
-  #amleht-back-footer .ab-brand span.ab-label{display:none;}
+#tour-nav .nav-back:hover { color: var(--amber-light); border-color: var(--amber); background: rgba(200,147,58,0.18); }
+/* Lift dashboard pip so it doesn't sit on the nav */
+#amleht-dash-pip { bottom: 80px !important; }
+@media (max-width: 600px) {
+  #tour-nav { padding: 0 0.75rem; }
+  #tour-nav .nav-brand .nav-label { display: none; }
 }
 </style>
-<div id="amleht-back-footer">
-  <div class="ab-brand">
+<div id="tour-nav">
+  <div class="nav-brand">
     <strong>aml<span>eh</span>t</strong>
-    <span class="ab-label">Fictief NV · The 38th Bank</span>
+    <span class="nav-label">Fictief NV · The 38th Bank</span>
   </div>
-  <a class="ab-back" href="../gate-qivalis.html?panel=4" title="Return to the 38th Bank Tour">← Back to Tour</a>
+  <a class="nav-back" href="../gate-qivalis.html?panel=4" title="Return to the 38th Bank Tour">← Back to Tour</a>
 </div>
-<!-- ═════ END AMLEHT BACK-TO-TOUR FOOTER ═════ -->
+<!-- ═════ END AMLEHT TOUR NAV ═════ -->
 
 </body>
 </html>
