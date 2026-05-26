@@ -436,7 +436,14 @@ function startTour(){
   document.getElementById('gate-screen').style.display='none';
   document.getElementById('tour-shell').style.display='block';
   buildDots();
-  showPanel(0);
+  // Honour ?panel=N URL param (used by Back-to-Tour from fictief-window dashboard).
+  var qp = new URLSearchParams(window.location.search);
+  var startPanel = parseInt(qp.get('panel'), 10);
+  if (!isNaN(startPanel) && startPanel >= 0 && startPanel < PANELS.length) {
+    showPanel(startPanel);
+  } else {
+    showPanel(0);
+  }
 }
 
 function buildDots(){

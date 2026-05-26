@@ -1321,5 +1321,56 @@ if(document.readyState==='complete'){
 </script>
 <!-- END AMLEHT DASHBOARD PIP -->
 
+
+<!-- ═════ AMLEHT BACK-TO-TOUR FOOTER ═════ -->
+<style>
+#amleht-back-footer{
+  position:fixed;bottom:0;left:0;right:0;height:64px;
+  background:rgba(11,18,32,0.97);
+  border-top:1px solid rgba(200,147,58,0.28);
+  display:flex !important;align-items:center;
+  justify-content:space-between;padding:0 1.5rem;
+  backdrop-filter:blur(8px);
+  z-index:100;
+  font-family:'IBM Plex Mono',monospace;
+}
+#amleht-back-footer .ab-brand{
+  font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;
+  color:rgba(240,235,224,0.32);display:flex;align-items:center;gap:0.75rem;
+}
+#amleht-back-footer .ab-brand strong{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:1rem;font-weight:300;letter-spacing:0.15em;color:#f0ebe0;
+  text-transform:lowercase;
+}
+#amleht-back-footer .ab-brand strong span{color:#c8933a;}
+#amleht-back-footer .ab-back{
+  font-family:'IBM Plex Mono',monospace;font-size:0.6rem;font-weight:500;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:#c8933a;background:rgba(200,147,58,0.08);
+  border:1px solid #c8933a;border-radius:2px;
+  padding:0.5rem 0.85rem;cursor:pointer;text-decoration:none;
+  transition:background 0.2s,color 0.2s;
+  display:inline-block;
+}
+#amleht-back-footer .ab-back:hover{
+  background:rgba(200,147,58,0.18);color:#e8c97a;
+}
+/* Move dashboard pip up so it doesn't sit on the footer */
+#amleht-dash-pip{bottom:80px !important;}
+@media(max-width:600px){
+  #amleht-back-footer{padding:0 0.75rem;}
+  #amleht-back-footer .ab-brand span.ab-label{display:none;}
+}
+</style>
+<div id="amleht-back-footer">
+  <div class="ab-brand">
+    <strong>aml<span>eh</span>t</strong>
+    <span class="ab-label">Fictief NV · The 38th Bank</span>
+  </div>
+  <a class="ab-back" href="../gate-qivalis.html?panel=4" title="Return to the 38th Bank Tour">← Back to Tour</a>
+</div>
+<!-- ═════ END AMLEHT BACK-TO-TOUR FOOTER ═════ -->
+
 </body>
 </html>
