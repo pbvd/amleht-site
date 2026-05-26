@@ -258,12 +258,12 @@ body::before{
 }
 .nav-skip:hover{color:var(--cream-dim);}
 .nav-back{
-  font-family:var(--font-mono);font-size:0.6rem;
+  font-family:var(--font-mono);font-size:0.6rem;font-weight:500;
   letter-spacing:0.1em;text-transform:uppercase;
-  color:var(--amber);background:none;
-  border:1px solid var(--amber-border);border-radius:2px;
-  padding:0.35rem 0.7rem;cursor:pointer;
-  transition:color 0.2s,border-color 0.2s,opacity 0.2s;
+  color:var(--amber);background:rgba(200,147,58,0.08);
+  border:1px solid var(--amber);border-radius:2px;
+  padding:0.5rem 0.85rem;cursor:pointer;
+  transition:color 0.2s,border-color 0.2s,opacity 0.2s,background 0.2s;
 }
 .nav-back:hover:not(:disabled){color:var(--amber-light, #d9a04a);border-color:var(--amber);}
 .nav-back:disabled{opacity:0.3;cursor:not-allowed;}
@@ -291,6 +291,11 @@ body::before{
 @media(max-width:600px){
   .nav-brand .nav-label{display:none;}
   .nav-skip{display:none;}
+  .nav-dots{display:none;}
+  #tour-nav{padding:0 0.75rem;gap:0.5rem;}
+  .nav-actions{gap:0.5rem;flex:1;justify-content:flex-end;}
+  .nav-next{padding:0.5rem 0.9rem;font-size:0.66rem;}
+  .nav-back{padding:0.5rem 0.7rem;font-size:0.66rem;}
 }
 </style>
 </head>
@@ -463,7 +468,8 @@ function updateNav(i){
   // never need to hide the nav. Keep nav always visible while tour-shell is shown.
   document.getElementById('tour-nav').style.display='flex';
   if(isLast){
-    btn.textContent = 'Enter the platform →';
+    // Mobile gets the short CTA; desktop gets the full label
+    btn.textContent = (window.innerWidth < 600) ? 'Enter →' : 'Enter the platform →';
     btn.classList.add('final');
   } else {
     btn.classList.remove('final');
@@ -611,6 +617,13 @@ function skipTour(){
   sessionStorage.setItem('amleht_tour_done','1');
   window.location.href = DASHBOARD;
 }
+
+// Keep CTA text correct if viewport changes (rotate device, resize window).
+window.addEventListener('resize', function() {
+  if (typeof current === 'number' && typeof updateNav === 'function') {
+    updateNav(current);
+  }
+});
 </script>
 
 </body>
