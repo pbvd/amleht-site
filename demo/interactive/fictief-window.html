@@ -170,10 +170,38 @@
   .chain-pending-note { font-family: var(--mono); font-size: 9px; color: var(--amber); }
 
   .stages { display: flex; gap: 0; margin-top: 10px; }
-  .stage { flex: 1; text-align: center; padding: 8px 4px; font-family: var(--mono); font-size: 9px; color: var(--text-3); border-right: 1px solid var(--border); transition: all 0.3s; text-transform: uppercase; letter-spacing: 0.06em; }
+  .stage { flex: 1; text-align: center; padding: 10px 4px; font-family: var(--mono); font-size: 9px; color: var(--text-3); border-right: 1px solid var(--border); transition: background 0.25s ease, color 0.25s ease, box-shadow 0.25s ease; text-transform: uppercase; letter-spacing: 0.06em; }
   .stage:last-child { border-right: none; }
-  .stage.active { color: var(--teal); background: var(--teal-dim); }
-  .stage.done { color: var(--teal); }
+  /* Unambiguous full-stage flash — teal-glow (25% alpha) not teal-dim (9% alpha) */
+  .stage.active { color: var(--text-1); background: var(--teal-glow); box-shadow: inset 0 -2px 0 var(--teal); font-weight: 600; }
+  .stage.done   { color: var(--teal); background: var(--teal-dim); }
+
+  /* Pre-animation instruction line — appears between video end and first stage flash */
+  .pipeline-instruction {
+    font-family: var(--mono); font-size: 10px; color: var(--text-1);
+    letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 8px 10px; border-left: 2px solid var(--teal);
+    background: var(--teal-dim);
+    margin-top: 8px;
+    animation: pipelineInsIn 0.35s ease both;
+  }
+  .pipeline-instruction[hidden] { display: none; }
+  @keyframes pipelineInsIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Ghost amber replay button — appears after animation completes */
+  .pipeline-replay-btn {
+    display: block; margin: 12px auto 0;
+    background: transparent; color: var(--amber);
+    border: 1px solid var(--amber); border-radius: 3px;
+    padding: 7px 14px;
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .pipeline-replay-btn:hover { background: var(--amber-dim); }
+  .pipeline-replay-btn:active { transform: translateY(1px); }
+  .pipeline-replay-btn[hidden] { display: none; }
 
   .scenario-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 11px; cursor: default; }
   .scenario-row:last-child { border-bottom: none; }
@@ -446,6 +474,8 @@ if(sessionStorage.getItem('amleht_welcome_seen')){
           <div class="stage" id="stageSandbox">Sandbox</div>
           <div class="stage" id="stageAttest">Attest</div>
         </div>
+        <div class="pipeline-instruction" id="pipelineInstruction" hidden>The compliance pipeline is about to run. Watch each stage confirm.</div>
+        <button type="button" class="pipeline-replay-btn" id="pipelineReplayBtn" hidden>↺ Replay pipeline</button>
       </div>
 
       <div class="panel-card">
@@ -620,22 +650,35 @@ function updateDoraClocks() {
 }
 setInterval(updateDoraClocks, 1000);
 
-function animatePipeline(stages) {
+function animatePipeline(stages, onComplete) {
+  // Reset all stages to neutral before each run
   const stageIds = ['Detect','Classify','Sandbox','Attest'];
   stageIds.forEach(s => {
     const el2 = el(`stage${s}`);
     if (el2) el2.className = 'stage';
   });
-  if (!stages || !stages.length) return;
+  if (!stages || !stages.length) { if (onComplete) onComplete(); return; }
+
+  // 900ms dwell per stage (was 500ms step + 600ms active) — readable, not a flash.
+  // Active state holds for the full dwell; transitions to 'done' as the next
+  // stage activates, giving an unambiguous handoff rather than a fade-out gap.
+  const DWELL_MS = 900;
   let delay = 0;
-  stages.forEach(stage => {
+  stages.forEach((stage, idx) => {
     const name = stage.charAt(0).toUpperCase() + stage.slice(1);
     setTimeout(() => {
       const el2 = el(`stage${name}`);
       if (el2) el2.className = 'stage active';
-      setTimeout(() => { if (el2) el2.className = 'stage done'; }, 600);
     }, delay);
-    delay += 500;
+    setTimeout(() => {
+      const el2 = el(`stage${name}`);
+      if (el2) el2.className = 'stage done';
+      if (idx === stages.length - 1 && onComplete) {
+        // Brief settle before exposing the replay button
+        setTimeout(onComplete, 300);
+      }
+    }, delay + DWELL_MS);
+    delay += DWELL_MS;
   });
 }
 
@@ -757,11 +800,16 @@ async function pollIncidents() {
       newEvts.forEach(evt => {
         knownEventIds.add(evt.event_id);
         sessionCount++;
-        animatePipeline(
-          (evt.dashboard && evt.dashboard.sandbox_type)
-            ? ['detect','classify','sandbox','attest']
-            : ['detect','classify','attest']
-        );
+        // Gate: skip the live-event flash while the Abigail intro video is
+        // still playing (and while the post-video showcase is running).
+        // The showcase IIFE opens the gate after the showcase completes.
+        if (window.__amlehtPipelineGate) {
+          animatePipeline(
+            (evt.dashboard && evt.dashboard.sandbox_type)
+              ? ['detect','classify','sandbox','attest']
+              : ['detect','classify','attest']
+          );
+        }
         const dash = evt.dashboard || {};
         if (dash.dora_article && !dash.dora_article.includes('N/A')) {
           startDoraClock(evt.event_id, evt.timestamp);
@@ -1257,6 +1305,84 @@ if(document.readyState==='complete'){
 }
 </style>
 <script>
+// ═════ AMLEHT PIPELINE SHOWCASE COORDINATOR ═════
+// Owns the post-video pipeline-animation state machine. The pipeline used
+// to flash silently on first page load (pollIncidents fired animatePipeline
+// for each event in the initial API response, while the Abigail intro
+// video was still playing — user saw nothing after the video ended).
+// This IIFE gates the live-event animation behind the showcase completion.
+//
+// State machine:
+//   PIP shown → video.onended → runFullShowcase
+//                              → 2s instruction line
+//                              → 4-stage slow animation (900ms dwell)
+//                              → replay button + gate opens
+//   PIP closed early via × → skipToReplay → gate opens + replay button
+//   PIP already seen this session → init delay + skipToReplay
+//   Replay click → animation only (no instruction line)
+(function(){
+  var DEMO_STAGES = ['detect','classify','sandbox','attest'];
+  window.__amlehtPipelineGate = false;  // live-event animation suppressed until opened
+
+  function _el(id){ return document.getElementById(id); }
+  function showInstruction(){ var x = _el('pipelineInstruction'); if (x) x.hidden = false; }
+  function hideInstruction(){ var x = _el('pipelineInstruction'); if (x) x.hidden = true; }
+  function showReplay(){ var x = _el('pipelineReplayBtn'); if (x) x.hidden = false; }
+  function hideReplay(){ var x = _el('pipelineReplayBtn'); if (x) x.hidden = true; }
+
+  function runAnimationOnly(){
+    hideReplay();
+    if (typeof window.animatePipeline === 'function') {
+      window.animatePipeline(DEMO_STAGES, showReplay);
+    } else {
+      showReplay();
+    }
+  }
+
+  window.__amlehtPipelineRunFullShowcase = function(){
+    hideReplay();
+    showInstruction();
+    setTimeout(function(){
+      hideInstruction();
+      hideReplay();
+      if (typeof window.animatePipeline === 'function') {
+        window.animatePipeline(DEMO_STAGES, function(){
+          window.__amlehtPipelineGate = true;  // live API events may now animate
+          showReplay();
+        });
+      } else {
+        window.__amlehtPipelineGate = true;
+        showReplay();
+      }
+    }, 2000);
+  };
+
+  window.__amlehtPipelineSkipToReplay = function(){
+    window.__amlehtPipelineGate = true;
+    showReplay();
+  };
+
+  function init(){
+    var btn = _el('pipelineReplayBtn');
+    if (btn) btn.onclick = function(){ runAnimationOnly(); };
+
+    // PIP-already-seen path: brief delay so pollIncidents seeds knownEventIds
+    // without flashing, then surface the replay button so the user can re-run.
+    if (sessionStorage.getItem('amleht_dashboard_pip_seen')) {
+      setTimeout(window.__amlehtPipelineSkipToReplay, 1500);
+    }
+    // PIP-shown path: gate stays closed; video.onended (PIP IIFE below) calls
+    // runFullShowcase which opens the gate on completion.
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+// ═════ END PIPELINE SHOWCASE COORDINATOR ═════
+
 (function(){
   // sessionStorage guard — only show once per session
   if(sessionStorage.getItem('amleht_dashboard_pip_seen')) return;
@@ -1272,6 +1398,12 @@ if(document.readyState==='complete'){
     closeBtn.onclick = function(){
       sessionStorage.setItem('amleht_dashboard_pip_seen','1');
       pip.remove();
+      // User closed PIP before video ended — skip the auto-showcase but
+      // open the pipeline gate and surface the replay button so the
+      // pipeline UI is still reachable.
+      if (typeof window.__amlehtPipelineSkipToReplay === 'function') {
+        window.__amlehtPipelineSkipToReplay();
+      }
     };
 
     var video = document.createElement('video');
@@ -1282,6 +1414,12 @@ if(document.readyState==='complete'){
     video.onended = function(){
       sessionStorage.setItem('amleht_dashboard_pip_seen','1');
       setTimeout(function(){ pip.remove(); }, 2000);
+      // Hand off to the pipeline showcase: 2s instruction → 4-stage
+      // slow animation → replay button. The showcase opens the gate
+      // for live API events on completion.
+      if (typeof window.__amlehtPipelineRunFullShowcase === 'function') {
+        window.__amlehtPipelineRunFullShowcase();
+      }
     };
 
     var unmuteBtn = document.createElement('button');
