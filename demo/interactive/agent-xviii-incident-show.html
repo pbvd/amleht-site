@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMLEHT-XVIII-001 · Agent XVIII Incident Show · First Record in the Ledger</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0B1220;--navy-mid:#111827;--navy-light:#1a2540;--navy-card:#141d2e;
+    --amber:#c8933a;--amber-bright:#d9a04a;--amber-glow:rgba(200,147,58,0.12);
+    --amber-dim:rgba(200,147,58,0.15);--amber-pale:rgba(200,147,58,0.06);
+    --amber-border:rgba(200,147,58,0.28);
+    --green:#1db97a;--green-glow:rgba(29,185,122,0.13);--green-border:rgba(29,185,122,0.28);
+    --rust:#b85c3a;--rust-dim:rgba(184,92,58,0.13);--rust-border:rgba(184,92,58,0.28);
+    --teal:#2dd4bf;--teal-dim:rgba(45,212,191,0.10);--teal-border:rgba(45,212,191,0.22);
+    --cream:#f0ebe0;--cream-dim:rgba(240,235,224,0.55);--muted:rgba(240,235,224,0.32);
+    --border:rgba(240,235,224,0.07);
+    --font-serif:'EB Garamond',Georgia,serif;
+    --font-display:'Playfair Display',Georgia,serif;
+    --font-mono:'JetBrains Mono',monospace;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--navy);color:var(--cream);font-family:var(--font-serif);font-weight:400;min-height:100vh;padding:2.5rem 1.5rem;line-height:1.65}
+  .card{max-width:980px;margin:0 auto;background:var(--navy-card);border:1px solid var(--amber-border);border-top:3px solid var(--amber);border-radius:3px;overflow:hidden;box-shadow:0 0 70px rgba(200,147,58,0.07),0 2px 40px rgba(0,0,0,0.65)}
+
+  /* ── Header ── */
+  .header{padding:2rem 2.5rem 1.5rem;border-bottom:1px solid var(--border);background:linear-gradient(135deg,var(--navy-card) 0%,rgba(200,147,58,0.04) 100%);position:relative;overflow:hidden}
+  .header::before{content:'';position:absolute;top:-40px;right:-40px;width:320px;height:320px;background:radial-gradient(circle,rgba(200,147,58,0.07) 0%,transparent 65%);pointer-events:none}
+  .header-top{display:flex;align-items:flex-start;justify-content:space-between;gap:1.5rem;flex-wrap:wrap}
+  .series-tag{font-family:var(--font-mono);font-size:0.65rem;font-weight:700;letter-spacing:0.18em;color:var(--amber);text-transform:uppercase;margin-bottom:0.5rem;display:flex;align-items:center;gap:0.6rem}
+  .series-tag .pulse{width:7px;height:7px;border-radius:50%;background:var(--amber);animation:pulse-a 2.4s ease-in-out infinite;flex-shrink:0}
+  @keyframes pulse-a{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(200,147,58,0.55)}50%{opacity:0.65;box-shadow:0 0 0 6px rgba(200,147,58,0)}}
+  .card-title{font-family:var(--font-display);font-size:2.1rem;font-weight:600;line-height:1.15;color:var(--cream);letter-spacing:-0.005em;max-width:680px}
+  .card-title em{font-style:italic;color:var(--amber);font-weight:500}
+  .classification-block{text-align:right;flex-shrink:0}
+  .classification-badge{display:inline-block;font-family:var(--font-mono);font-size:0.68rem;font-weight:700;letter-spacing:0.14em;padding:0.35rem 0.9rem;border-radius:2px;background:var(--amber-glow);border:1px solid var(--amber-border);color:var(--amber);text-transform:uppercase}
+  .series-badge{display:block;font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase;margin-top:0.35rem}
+  .ticket-id{display:block;font-family:var(--font-mono);font-size:0.72rem;color:var(--amber);font-weight:600;margin-top:0.4rem}
+  .meta-strip{display:flex;gap:2rem;margin-top:1.2rem;flex-wrap:wrap}
+  .meta-item{display:flex;flex-direction:column;gap:0.15rem}
+  .meta-label{font-family:var(--font-mono);font-size:0.57rem;letter-spacing:0.14em;color:var(--muted);text-transform:uppercase}
+  .meta-value{font-family:var(--font-serif);font-size:0.88rem;font-weight:500;color:var(--cream-dim)}
+
+  /* ── Video block ── */
+  .video-wrap{padding:1.5rem 2.5rem 0.5rem;position:relative}
+  .video-label{font-family:var(--font-mono);font-size:0.58rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--amber);margin-bottom:0.55rem;display:flex;align-items:center;gap:0.5rem}
+  .video-label::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--amber);animation:pulse-a 2.4s ease-in-out infinite}
+  .video-frame{position:relative;background:#000;border:1px solid var(--amber-border);border-radius:3px;overflow:hidden;aspect-ratio:16/9;box-shadow:0 0 30px rgba(200,147,58,0.08)}
+  .video-frame video{width:100%;height:100%;display:block;object-fit:cover}
+  .video-unmute{position:absolute;bottom:14px;right:14px;background:rgba(11,18,32,0.75);color:var(--cream);border:1px solid var(--amber-border);border-radius:2px;font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.08em;padding:0.4rem 0.75rem;cursor:pointer;text-transform:uppercase;backdrop-filter:blur(4px);transition:background 0.2s,border-color 0.2s}
+  .video-unmute:hover{background:rgba(200,147,58,0.18);border-color:var(--amber)}
+
+  /* ── Body sections ── */
+  .body{padding:1.75rem 2.5rem;display:grid;gap:1.75rem}
+  .section-label{font-family:var(--font-mono);font-size:0.62rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--amber);margin-bottom:0.85rem;display:flex;align-items:center;gap:0.6rem}
+  .section-label::after{content:'';flex:1;height:1px;background:var(--amber-border);opacity:0.4}
+  .section-label.green{color:var(--green)}.section-label.green::after{background:var(--green-border);opacity:0.4}
+  .section-label.rust{color:var(--rust)}.section-label.rust::after{background:var(--rust-border);opacity:0.4}
+
+  /* ── Stats strip ── */
+  .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--amber-border);border-radius:2px;overflow:hidden}
+  .stat-cell{background:var(--navy-mid);padding:1.1rem 0.7rem;text-align:center}
+  .stat-number{font-family:var(--font-display);font-size:1.75rem;font-weight:600;line-height:1;display:block;margin-bottom:0.35rem}
+  .stat-number.amber{color:var(--amber)}.stat-number.green{color:var(--green)}.stat-number.teal{color:var(--teal)}
+  .stat-label{font-family:var(--font-mono);font-size:0.55rem;letter-spacing:0.08em;color:var(--muted);text-transform:uppercase;line-height:1.4}
+
+  /* ── Timeline (gated — hidden until video ends) ── */
+  .timeline-wrap{position:relative;min-height:60px}
+  .timeline-pre{font-family:var(--font-mono);font-size:0.75rem;letter-spacing:0.06em;color:var(--muted);text-align:center;padding:1.5rem 1rem;border:1px dashed var(--amber-border);border-radius:2px;background:var(--amber-pale)}
+  .timeline-pre[hidden]{display:none}
+  .timeline{display:grid;gap:0.65rem;opacity:1}
+  .timeline[hidden]{display:none}
+  .timeline-row{display:grid;grid-template-columns:auto auto 1fr auto;align-items:center;gap:1rem;padding:0.95rem 1.1rem;background:var(--navy-mid);border:1px solid var(--border);border-left:3px solid var(--amber-border);border-radius:2px;opacity:0;transform:translateX(-8px);transition:opacity 0.4s ease,transform 0.4s ease,border-color 0.3s ease,background 0.3s ease}
+  .timeline-row.active{opacity:1;transform:translateX(0);border-left-color:var(--amber);background:linear-gradient(90deg,rgba(200,147,58,0.10) 0%,var(--navy-mid) 60%)}
+  .timeline-row.done{opacity:1;transform:translateX(0);border-left-color:var(--green);background:var(--navy-mid)}
+  .tl-tier{font-family:var(--font-mono);font-size:0.7rem;font-weight:700;color:var(--amber);width:36px;text-align:center}
+  .timeline-row.done .tl-tier{color:var(--green)}
+  .tl-time{font-family:var(--font-mono);font-size:0.65rem;color:var(--muted);letter-spacing:0.04em}
+  .tl-body{font-family:var(--font-serif);font-size:0.95rem;color:var(--cream-dim);line-height:1.5}
+  .tl-body strong{color:var(--cream);font-weight:500}
+  .tl-badge{font-family:var(--font-mono);font-size:0.55rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:0.25rem 0.55rem;border-radius:2px;background:var(--amber-glow);color:var(--amber);border:1px solid var(--amber-border)}
+  .timeline-row.done .tl-badge{background:var(--green-glow);color:var(--green);border-color:var(--green-border)}
+  .replay-btn{display:none;margin:1.1rem auto 0;background:transparent;color:var(--amber);border:1px solid var(--amber);border-radius:3px;padding:0.55rem 1.1rem;font-family:var(--font-mono);font-size:0.66rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:background 0.2s,color 0.2s}
+  .replay-btn.visible{display:block}
+  .replay-btn:hover{background:var(--amber-dim);color:var(--amber-bright)}
+  .replay-btn:active{transform:translateY(1px)}
+
+  /* ── Two-market ── */
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+  .market-card{background:var(--navy-mid);border:1px solid var(--amber-border);border-radius:2px;padding:1.25rem 1.4rem}
+  .market-tag{font-family:var(--font-mono);font-size:0.58rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--amber);margin-bottom:0.4rem}
+  .market-title{font-family:var(--font-display);font-size:1.1rem;font-weight:600;color:var(--cream);margin-bottom:0.7rem;letter-spacing:0.005em}
+  .market-body{font-family:var(--font-serif);font-size:0.93rem;color:var(--cream-dim);line-height:1.65}
+  .market-body strong{color:var(--cream);font-weight:500}
+
+  /* ── Attestation pending block ── */
+  .attest-block{padding:1.25rem 1.5rem;background:var(--amber-glow);border:1px solid var(--amber-border);border-left:3px solid var(--amber);border-radius:2px;display:grid;grid-template-columns:auto 1fr;gap:1rem;align-items:start}
+  .attest-mark{font-family:var(--font-display);font-size:1.9rem;font-weight:600;color:var(--amber);line-height:1;margin-top:0.05rem}
+  .attest-label{font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--amber);margin-bottom:0.4rem}
+  .attest-text{font-family:var(--font-serif);font-size:0.95rem;color:var(--cream-dim);line-height:1.65}
+  .attest-text strong{color:var(--cream);font-weight:500}
+  .attest-text code{font-family:var(--font-mono);font-size:0.82rem;background:var(--navy-light);color:var(--amber);padding:0.05rem 0.35rem;border-radius:2px}
+
+  /* ── Chain footer + memorial footer ── */
+  .chain-footer{padding:0.85rem 2.5rem;background:var(--navy-light);border-top:1px solid var(--border);font-family:var(--font-mono);font-size:0.59rem;letter-spacing:0.06em;color:var(--muted)}
+  .chain-row{display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap}
+  .chain-dot{width:5px;height:5px;border-radius:50%;background:var(--amber);flex-shrink:0;animation:pulse-a 3s ease-in-out infinite}
+  .memorial-footer{padding:0.9rem 2.5rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem}
+  .memorial-text{font-family:var(--font-display);font-style:italic;font-size:0.9rem;color:var(--muted)}
+  .footer-sig{font-family:var(--font-mono);font-size:0.59rem;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase}
+
+  @media(max-width:700px){
+    .stat-row{grid-template-columns:repeat(2,1fr)}
+    .two-col{grid-template-columns:1fr}
+    .card-title{font-size:1.6rem}
+    .timeline-row{grid-template-columns:auto 1fr auto;gap:0.7rem}
+    .tl-time{display:none}
+    .header,.body,.video-wrap,.chain-footer,.memorial-footer{padding-left:1.25rem;padding-right:1.25rem}
+  }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <div class="header">
+    <div class="header-top">
+      <div>
+        <div class="series-tag"><span class="pulse"></span>Incident Show · Agent XVIII Ledger · Internal Proof-of-Concept</div>
+        <h1 class="card-title">When the agent met its <em>first incident</em> — and recorded the answer.</h1>
+        <div class="meta-strip">
+          <div class="meta-item"><span class="meta-label">Endpoint</span><span class="meta-value">labuhr · macOS · Amsterdam</span></div>
+          <div class="meta-item"><span class="meta-label">Incident date</span><span class="meta-value">27 May 2026 · 11:18 CEST</span></div>
+          <div class="meta-item"><span class="meta-label">Resolution</span><span class="meta-value">13:20 CEST · 45 minutes</span></div>
+        </div>
+      </div>
+      <div class="classification-block">
+        <div class="classification-badge">&#9679; AMBER</div>
+        <span class="series-badge">Internal POC · Endpoint Compliance</span>
+        <span class="ticket-id">AMLEHT-XVIII-001</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═════ VIDEO ═════ -->
+  <div class="video-wrap">
+    <div class="video-label">Agent XVIII · Abigail · amleht</div>
+    <div class="video-frame">
+      <!-- HeyGen signed URL — expires ~2026-06-03; re-render via scripts/heygen/ + update src + sidecar. -->
+      <video id="abigail-video" src="https://files2.heygen.ai/aws_pacific/avatar_tmp/c6977c5aa8584810bd35bba1d24ea2a5/4a4ab40458ba48138bf65ad833378a2c.mp4?Expires=1780501232&amp;Signature=RwCuxbhDo5HWX9bob0j-BLPDnSOm3XMa0arCj2-CM~p5uZbecDsGDI~SQzAD4q~M7ESklo4KamsVHxketTlR7tMa2MDPi9ddMh2w0SZ~YfDzbxPq-jM-gAkRnVeSlvh7KulLEb8lKTd2xlGUOqA2ONeK4iRavPDZjgnBz69mUeAO4FondmtdnQ5EN1zYLkCZgSnA3fRpWtqqt~j~gXzACXgs~Pm~avsiN48K2Z1cToTFuHd2Qz-2TDQar08eGuMYrTYTXGlkKo51q4GKAIHXB4EvJG9xSTfs6TmqRha6~qwynRztN9fZyQpum6ilQ7Da9igz~JjuRjjVJv3E50KKWA__&amp;Key-Pair-Id=K38HBHX5LX3X2H" autoplay muted playsinline preload="auto"></video>
+      <button type="button" class="video-unmute" id="videoUnmute" title="Click to unmute">&#128264; Unmute</button>
+    </div>
+  </div>
+
+  <div class="body">
+
+    <!-- ═════ STATS STRIP ═════ -->
+    <div>
+      <div class="section-label">§ 1 · The incident in four numbers</div>
+      <div class="stat-row">
+        <div class="stat-cell"><span class="stat-number amber">8,095</span><span class="stat-label">Restarts<br>(R-001 zombie)</span></div>
+        <div class="stat-cell"><span class="stat-number green">292% → 15%</span><span class="stat-label">CPU after L1<br>remediation</span></div>
+        <div class="stat-cell"><span class="stat-number teal">14.36 GB</span><span class="stat-label">Reclaimed<br>after L2 approval</span></div>
+        <div class="stat-cell"><span class="stat-number amber">45 min</span><span class="stat-label">Detect → resolve<br>end-to-end</span></div>
+      </div>
+    </div>
+
+    <!-- ═════ TIMELINE (gated by video.onended) ═════ -->
+    <div>
+      <div class="section-label green">§ 2 · Ticket timeline · L0 → L1 → L2 → resolved</div>
+      <div class="timeline-wrap">
+        <div class="timeline-pre" id="timelinePre">Timeline unlocks when Abigail finishes — watch the briefing first.</div>
+        <div class="timeline" id="timeline" hidden>
+          <div class="timeline-row" data-step="0">
+            <span class="tl-tier">L0</span>
+            <span class="tl-time">11:18 CEST</span>
+            <span class="tl-body"><strong>Detection.</strong> Container <code style="font-family:var(--font-mono);font-size:0.82rem;color:var(--amber)">team-member-app-server</code> caught by R-001: 8,095 restarts, no DB partner running. CPU 292%.</span>
+            <span class="tl-badge">Detected</span>
+          </div>
+          <div class="timeline-row" data-step="1">
+            <span class="tl-tier">L1</span>
+            <span class="tl-time">11:18 CEST</span>
+            <span class="tl-body"><strong>Boundary check + autonomous remediation.</strong> Protected-resource guard passed — container had no <code style="font-family:var(--font-mono);font-size:0.82rem;color:var(--amber)">amleht</code> / <code style="font-family:var(--font-mono);font-size:0.82rem;color:var(--amber)">mcp</code> affiliation. L1 neutralised the zombie. CPU 292% → 15%, fan spin-down.</span>
+            <span class="tl-badge">Auto-resolved</span>
+          </div>
+          <div class="timeline-row" data-step="2">
+            <span class="tl-tier">L2</span>
+            <span class="tl-time">13:18 CEST</span>
+            <span class="tl-body"><strong>Approval gate.</strong> Broader cleanup (images, build cache, stopped containers) bound and presented in plain English with exact commands and risk assessment. Operator approved scope; bound commands executed verbatim.</span>
+            <span class="tl-badge">Approved</span>
+          </div>
+          <div class="timeline-row" data-step="3">
+            <span class="tl-tier">&#10003;</span>
+            <span class="tl-time">13:20 CEST</span>
+            <span class="tl-body"><strong>Resolved.</strong> 14.36 GB reclaimed — containers 3.233 + build cache 2.757 + images 8.366. <code style="font-family:var(--font-mono);font-size:0.82rem;color:var(--amber)">pensive_chebyshev</code> and protected MCP image held throughout.</span>
+            <span class="tl-badge">Resolved</span>
+          </div>
+        </div>
+        <button type="button" class="replay-btn" id="replayBtn">&#8634; Replay timeline</button>
+      </div>
+    </div>
+
+    <!-- ═════ TWO MARKETS ═════ -->
+    <div>
+      <div class="section-label">§ 3 · Two markets · one agent</div>
+      <div class="two-col">
+        <div class="market-card">
+          <div class="market-tag">Market 1 · SME &amp; professional services</div>
+          <div class="market-title">A compliance posture, not a hope</div>
+          <p class="market-body">If you're not running a full MDM stack, Agent XVIII <strong>is</strong> your endpoint compliance posture. Lightweight. Sovereign. <strong>No per-device licensing.</strong> Packaged inside the existing amleht retainer — the audit trail lands on the same compliance chain as everything else.</p>
+        </div>
+        <div class="market-card">
+          <div class="market-tag">Market 2 · Enterprise / regulated FI</div>
+          <div class="market-title">Signed package · JFrog distribution</div>
+          <p class="market-body">For DNB-supervised institutions, distribution is a <strong>signed, versioned package via JFrog Artifactory</strong>. Staff install it the same way they install any approved internal tool. From first run, the device is an ICT asset on the compliance chain — <strong>DORA Art.11 / Art.12 evidence captured automatically</strong>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═════ ATTESTATION PENDING ═════ -->
+    <div>
+      <div class="section-label rust">§ 4 · Attestation · still pending (honest status)</div>
+      <div class="attest-block">
+        <div class="attest-mark">~</div>
+        <div>
+          <div class="attest-label">RESOLVED ≠ ATTESTED</div>
+          <p class="attest-text"><code>AMLEHT-XVIII-001</code> is <strong>RESOLVED</strong>. It is <strong>not yet ATTESTED</strong>. Attestation requires Agent XII sealing the ticket on the chain — and the Agent XII binary deployment is the next major engineering milestone (<code>CHG-2026-001</code>, weeks away). Independent countersignature by Blank en Partners (Agents XIII–XV) is a separate commercial conversation that has not yet been initiated. <strong>This page records the work that was done, not work that was claimed.</strong> When the chain seals close, this section gets a green block and a block hash. Until then it stays amber.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="chain-footer">
+    <div class="chain-row">
+      <span class="chain-dot"></span>
+      <span>AMLEHT-XVIII-001 · RESOLVED · NOT ATTESTED (CHG-2026-001 pending) · 14.36 GB reclaimed · 32/32 unit tests green</span>
+      <span style="margin-left:auto;opacity:0.55;">IntegrityMSP · amleht platform self-host · Thelma Principle enforced</span>
+    </div>
+  </div>
+
+  <div class="memorial-footer">
+    <span class="memorial-text">In memory of Thelma &middot; Amsterdam</span>
+    <span class="footer-sig">amleht &middot; Agent XVIII Incident Show &middot; 27 May 2026</span>
+  </div>
+
+</div>
+
+<script>
+// ═════ Video gate + timeline reveal — pattern mirrors fictief-window.html ═════
+(function(){
+  var video      = document.getElementById('abigail-video');
+  var unmuteBtn  = document.getElementById('videoUnmute');
+  var timelinePre= document.getElementById('timelinePre');
+  var timeline   = document.getElementById('timeline');
+  var replayBtn  = document.getElementById('replayBtn');
+  var rows       = timeline ? timeline.querySelectorAll('.timeline-row') : [];
+
+  var STEP_DWELL_MS = 900;   // per row, matches Endpoint Health stage dwell
+  var POST_DELAY_MS = 300;   // settle before replay button
+
+  function resetRows(){ rows.forEach(function(r){ r.classList.remove('active','done'); }); }
+  function showReplay(){ replayBtn.classList.add('visible'); }
+  function hideReplay(){ replayBtn.classList.remove('visible'); }
+
+  function animateTimeline(onDone){
+    hideReplay();
+    resetRows();
+    if(!rows.length){ if(onDone) onDone(); return; }
+    var delay = 0;
+    rows.forEach(function(row, idx){
+      setTimeout(function(){ row.classList.add('active'); }, delay);
+      setTimeout(function(){
+        row.classList.remove('active');
+        row.classList.add('done');
+        if(idx === rows.length - 1 && onDone){
+          setTimeout(onDone, POST_DELAY_MS);
+        }
+      }, delay + STEP_DWELL_MS);
+      delay += STEP_DWELL_MS;
+    });
+  }
+
+  function openGate(){
+    if(timelinePre) timelinePre.hidden = true;
+    if(timeline)    timeline.hidden = false;
+    animateTimeline(showReplay);
+  }
+
+  // Unmute toggle
+  if(unmuteBtn && video){
+    unmuteBtn.addEventListener('click', function(){
+      if(video.muted){
+        video.muted = false;
+        unmuteBtn.innerHTML = '&#128263; Mute';
+        unmuteBtn.title = 'Click to mute';
+      } else {
+        video.muted = true;
+        unmuteBtn.innerHTML = '&#128264; Unmute';
+        unmuteBtn.title = 'Click to unmute';
+      }
+    });
+  }
+
+  // Video → gate
+  if(video){
+    video.addEventListener('ended', openGate);
+    // If the MP4 fails to load (missing file during dev), reveal the gate
+    // immediately so the page is still navigable for review.
+    video.addEventListener('error', openGate);
+  } else {
+    // No video element at all — degrade gracefully.
+    openGate();
+  }
+
+  // Replay button — animation only, no video reload
+  if(replayBtn){
+    replayBtn.addEventListener('click', function(){ animateTimeline(showReplay); });
+  }
+})();
+</script>
+
+</body>
+</html>
