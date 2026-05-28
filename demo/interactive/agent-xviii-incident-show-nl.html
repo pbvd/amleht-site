@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AMLEHT-XVIII-001 · Agent XVIII Incident Show · First Record in the Ledger</title>
+<title>&lt;keep&gt;AMLEHT-XVIII-001&lt;/keep&gt; · &lt;keep&gt;Agent XVIII&lt;/keep&gt; Incidentoverzicht · Eerste vermelding in het register</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -16,9 +16,9 @@
     --teal:#2dd4bf;--teal-dim:rgba(45,212,191,0.10);--teal-border:rgba(45,212,191,0.22);
     --cream:#f0ebe0;--cream-dim:rgba(240,235,224,0.55);--muted:rgba(240,235,224,0.32);
     --border:rgba(240,235,224,0.07);
-    --font-serif:'EB Garamond',Georgia,serif;
-    --font-display:'Playfair Display',Georgia,serif;
-    --font-mono:'JetBrains Mono',monospace;
+    --font-serif:&#x27;EB Garamond&#x27;,Georgia,serif;
+    --font-display:&#x27;Playfair Display&#x27;,Georgia,serif;
+    --font-mono:&#x27;JetBrains Mono&#x27;,monospace;
   }
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   body{background:var(--navy);color:var(--cream);font-family:var(--font-serif);font-weight:400;min-height:100vh;padding:2.5rem 1.5rem;line-height:1.65}
@@ -26,7 +26,7 @@
 
   /* ── Header ── */
   .header{padding:2rem 2.5rem 1.5rem;border-bottom:1px solid var(--border);background:linear-gradient(135deg,var(--navy-card) 0%,rgba(200,147,58,0.04) 100%);position:relative;overflow:hidden}
-  .header::before{content:'';position:absolute;top:-40px;right:-40px;width:320px;height:320px;background:radial-gradient(circle,rgba(200,147,58,0.07) 0%,transparent 65%);pointer-events:none}
+  .header::before{content:&#x27;&#x27;;position:absolute;top:-40px;right:-40px;width:320px;height:320px;background:radial-gradient(circle,rgba(200,147,58,0.07) 0%,transparent 65%);pointer-events:none}
   .header-top{display:flex;align-items:flex-start;justify-content:space-between;gap:1.5rem;flex-wrap:wrap}
   .series-tag{font-family:var(--font-mono);font-size:0.65rem;font-weight:700;letter-spacing:0.18em;color:var(--amber);text-transform:uppercase;margin-bottom:0.5rem;display:flex;align-items:center;gap:0.6rem}
   .series-tag .pulse{width:7px;height:7px;border-radius:50%;background:var(--amber);animation:pulse-a 2.4s ease-in-out infinite;flex-shrink:0}
@@ -45,7 +45,7 @@
   /* ── Video block ── */
   .video-wrap{padding:1.5rem 2.5rem 0.5rem;position:relative}
   .video-label{font-family:var(--font-mono);font-size:0.58rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--amber);margin-bottom:0.55rem;display:flex;align-items:center;gap:0.5rem}
-  .video-label::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--amber);animation:pulse-a 2.4s ease-in-out infinite}
+  .video-label::before{content:&#x27;&#x27;;width:6px;height:6px;border-radius:50%;background:var(--amber);animation:pulse-a 2.4s ease-in-out infinite}
   .video-frame{position:relative;background:#000;border:1px solid var(--amber-border);border-radius:3px;overflow:hidden;aspect-ratio:16/9;box-shadow:0 0 30px rgba(200,147,58,0.08)}
   .video-frame video{width:100%;height:100%;display:block;object-fit:cover}
   .video-unmute{position:absolute;bottom:14px;right:14px;background:rgba(11,18,32,0.75);color:var(--cream);border:1px solid var(--amber-border);border-radius:2px;font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.08em;padding:0.4rem 0.75rem;cursor:pointer;text-transform:uppercase;backdrop-filter:blur(4px);transition:background 0.2s,border-color 0.2s}
@@ -54,7 +54,7 @@
   /* ── Body sections ── */
   .body{padding:1.75rem 2.5rem;display:grid;gap:1.75rem}
   .section-label{font-family:var(--font-mono);font-size:0.62rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--amber);margin-bottom:0.85rem;display:flex;align-items:center;gap:0.6rem}
-  .section-label::after{content:'';flex:1;height:1px;background:var(--amber-border);opacity:0.4}
+  .section-label::after{content:&#x27;&#x27;;flex:1;height:1px;background:var(--amber-border);opacity:0.4}
   .section-label.green{color:var(--green)}.section-label.green::after{background:var(--green-border);opacity:0.4}
   .section-label.rust{color:var(--rust)}.section-label.rust::after{background:var(--rust-border);opacity:0.4}
 
@@ -153,21 +153,23 @@
 </head>
 <body>
 <div class="card">
+  <div style="padding:0.85rem 2.5rem;background:var(--teal-dim);border-bottom:1px solid var(--teal-border);font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.06em;color:var(--teal);text-transform:uppercase">🇳🇱 Nederlandse versie &middot; Kwaliteitscontrole: Rhys van den Berg</div>
 
   <div class="header">
     <div class="header-top">
       <div>
-        <div class="series-tag"><span class="pulse"></span>Incident Show · Agent XVIII Ledger · Internal Proof-of-Concept</div>
-        <h1 class="card-title">When the agent met its <em>first incident</em> — and recorded the answer.</h1>
+        <div class="series-tag"><span class="pulse"></span>Incidentweergave · Agent XVIII Grootboek · Interne Proof-of-Concept</div>
+        <h1 class="card-title">Toen de agent zijn <em>eerste incident</em> tegenkwam — en het antwoord vastlegde.</h1>
         <div class="meta-strip">
           <div class="meta-item"><span class="meta-label">Endpoint</span><span class="meta-value">labuhr · macOS · Amsterdam</span></div>
-          <div class="meta-item"><span class="meta-label">Incident date</span><span class="meta-value">27 May 2026 · 11:18 CEST</span></div>
-          <div class="meta-item"><span class="meta-label">Resolution</span><span class="meta-value">13:20 CEST · 45 minutes</span></div>
+          <div class="meta-item"><span class="meta-value">Datum </span><span class="meta-label">incident </span><span class="meta-value">27 mei 2026 · 11:18 CEST</span></div>
+          <div class="meta-item"><span class="meta-label">Oplossing </span><span class="meta-value">13:20 CEST · 45 min utes</span></div>
         </div>
       </div>
       <div class="classification-block">
-        <div class="classification-badge">&#9679; AMBER</div>
-        <span class="series-badge">Internal POC · Endpoint Compliance</span>
+        <div class="classification-badge">● AMBER</div>
+        <span class="series-badge">Interne POC · Endpoint Compliance</span>
+        
         <span class="ticket-id">AMLEHT-XVIII-001</span>
       </div>
     </div>
@@ -179,7 +181,7 @@
     <div class="video-frame">
       <!-- HeyGen signed URL — expires ~2026-06-03; re-render via scripts/heygen/ + update src + sidecar. -->
       <video id="abigail-video" src="https://files2.heygen.ai/aws_pacific/avatar_tmp/c6977c5aa8584810bd35bba1d24ea2a5/4a4ab40458ba48138bf65ad833378a2c.mp4?Expires=1780501232&amp;Signature=RwCuxbhDo5HWX9bob0j-BLPDnSOm3XMa0arCj2-CM~p5uZbecDsGDI~SQzAD4q~M7ESklo4KamsVHxketTlR7tMa2MDPi9ddMh2w0SZ~YfDzbxPq-jM-gAkRnVeSlvh7KulLEb8lKTd2xlGUOqA2ONeK4iRavPDZjgnBz69mUeAO4FondmtdnQ5EN1zYLkCZgSnA3fRpWtqqt~j~gXzACXgs~Pm~avsiN48K2Z1cToTFuHd2Qz-2TDQar08eGuMYrTYTXGlkKo51q4GKAIHXB4EvJG9xSTfs6TmqRha6~qwynRztN9fZyQpum6ilQ7Da9igz~JjuRjjVJv3E50KKWA__&amp;Key-Pair-Id=K38HBHX5LX3X2H" autoplay muted playsinline preload="auto"></video>
-      <button type="button" class="video-unmute" id="videoUnmute" title="Click to unmute">&#128264; Unmute</button>
+      <button type="button" class="video-unmute" id="videoUnmute" title="Click to unmute">🔈 Geluid inschakelen</button>
     </div>
   </div>
 
@@ -187,32 +189,32 @@
 
     <!-- ═════ STATS STRIP — the four numbers are constant across all personas ═════ -->
     <div>
-      <div class="section-label">§ 1 · The incident in four numbers</div>
+      <div class="section-label">§ 1 · Het incident in vier cijfers</div>
       <div class="stat-row">
-        <div class="stat-cell"><span class="stat-number amber">8,095</span><span class="stat-label">Restarts<br>(R-001 zombie)</span></div>
-        <div class="stat-cell"><span class="stat-number green">292% → 15%</span><span class="stat-label">CPU after L1<br>remediation</span></div>
-        <div class="stat-cell"><span class="stat-number teal">14.36 GB</span><span class="stat-label">Reclaimed<br>after L2 approval</span></div>
-        <div class="stat-cell"><span class="stat-number amber">45 min</span><span class="stat-label">Detect → resolve<br>end-to-end</span></div>
+        <div class="stat-cell"><span class="stat-number amber">8,095</span><span class="stat-label"> Herstarts<br>(R-001 zombie)</span></div>
+        <div class="stat-cell"><span class="stat-number green">292% → 15%</span><span class="stat-label"> CPU na herstel vanL1<br></span></div>
+        <div class="stat-cell"><span class="stat-number teal">14.36 GB </span><span class="stat-label">teruggewonnen<br>na goedkeuring door L2</span></div>
+        <div class="stat-cell"><span class="stat-number amber">45 min</span><span class="stat-label"> Detecteren → end-to-end oplossen<br></span></div>
       </div>
 
       <!-- §1 persona subhead + framing (CTO has none; numbers speak for themselves) -->
       <div class="persona-block" data-persona="cfo">
-        <div class="persona-subhead">What this incident cost — and what it would have cost without us.</div>
-        <p class="persona-frame">In 45 minutes, Agent XVIII autonomously detected a runaway process consuming 292% CPU, contained it without human intervention at L1, and presented a bounded cleanup scope for L2 approval before executing a single command. 14.36 GB of reclaimable storage was identified, quantified, and recovered. The operator approved the scope. The agent executed verbatim. No unilateral action. No surprises on the invoice.</p>
+        <div class="persona-subhead">Wat dit incident heeft gekost — en wat het zonder ons zou hebben gekost.</div>
+        <p class="persona-frame">Binn45 minn detecteerde Agent XVIII zelfstandig een op hol geslagen proces dat 292% CPU verbruikte, beperkte het zonder menselijke tussenkomst op L1 en presenteerde een afgebakende opschoningsscope voor L2 goedkeuring voordat er ook maar één commando werd uitgevoerd. 14.36 GB aan terug te winnen opslagruimte werd geïdentificeerd, gekwantificeerd en hersteld. De operator keurde de scope goed. De agent voerde het letterlijk uit. Geen eenzijdige actie. Geen verrassingen op de factuur.</p>
       </div>
       <div class="persona-block" data-persona="ceo">
-        <div class="persona-subhead">What your regulator would see if they asked today.</div>
-        <p class="persona-frame">An endpoint running uncontrolled for an unknown period. 8,095 restart cycles. 292% CPU. A fan at full speed. No alert. No ticket. No evidence. That is what DNB would have found on a spot examination before Agent XVIII. What they find now: a timestamped record of detection, autonomous L1 remediation, human-approved L2 scope, and a resolved ticket — all on the compliance chain. The 45-minute window is visible, bounded, and documented. That is the difference between a finding and a demonstration of control.</p>
+        <div class="persona-subhead">Wat uw toezichthouder zou zien als hij er vandaag naar zou vragen.</div>
+        <p class="persona-frame">Een eindpunt dat gedurende een onbekende periode ongecontroleerd draait. 8,095 herstartcycli. 292% CPU. Een ventilator op volle snelheid. Geen waarschuwing. Geen ticket. Geen bewijs. Dat is wat DNB zou hebben aangetroffen bij een steekproefcontrole vóór Agent XVIII. Wat ze nu aantreffen: een tijdgestempeld detectierapport, autonome L1-herstelmaatregelen, door mensen goedgekeurde L2-omvang en een opgelost ticket — allemaal in de compliance-keten. Het venster van 45 minuten is zichtbaar, afgebakend en gedocumenteerd. Dat is het verschil tussen een bevinding en een demonstratie van controle.</p>
       </div>
       <div class="persona-block" data-persona="cro">
-        <div class="persona-subhead">DORA Art.11 / Art.12 — what this incident produces as evidence.</div>
-        <p class="persona-frame">AMLEHT-XVIII-001 maps directly to DORA Article 11 (ICT continuity) and Article 12 (backup and recovery). The 45-minute detect-to-resolve window, the L1 autonomous remediation, the L2 human approval gate, and the compliance chain entry are not narrative. They are evidence artefacts. Each is timestamped. Each is immutable. Each is available for examination.</p>
+        <div class="persona-subhead">DORA Art.11 / Art.12 — wat dit incident als bewijs oplevert.</div>
+        <p class="persona-frame">AMLEHT-XVIII-001 sluit direct aan bij artikel 11 (ICT-continuïteit) en artikel 12 (back-up en herstel) van de DORA. Het tijdsbestek van 45 minuten tussen detectie en oplossing, de autonome herstelmaatregelen van de L1, de menselijke goedkeuringspoort van de L2 en de vermelding in de compliance-keten zijn geen beschrijvingen. Het zijn bewijsstukken. Elk is voorzien van een tijdstempel. Elk is onveranderlijk. Elk is beschikbaar voor onderzoek.</p>
       </div>
     </div>
 
     <!-- ═════ PERSONA SELECTOR — directly below §1, above §2 ═════ -->
     <div class="persona-bar">
-      <span class="persona-bar-label">Reporting lens —</span>
+      <span class="persona-bar-label">Rapportageperspectief —</span>
       <div class="persona-pills" id="personaPills">
         <button type="button" class="persona-pill active" data-persona="cto">CTO</button>
         <button type="button" class="persona-pill" data-persona="cfo">CFO</button>
@@ -223,117 +225,129 @@
 
     <!-- ═════ TIMELINE (gated by video.onended) ═════ -->
     <div>
-      <div class="section-label green">§ 2 · Ticket timeline · L0 → L1 → L2 → resolved</div>
+      <div class="section-label green">§ 2 · Ticket-tijdlijn · L0 → L1 → L2 → opgelost</div>
 
       <!-- §2 persona framing (CTO has none — the timeline speaks) -->
-      <p class="persona-frame persona-block" data-persona="cfo">The L2 approval gate is the budget control point. No action beyond L1 autonomous remediation was taken until a human reviewed the exact commands, the exact scope, and the exact risk assessment — and approved. That gate is not a courtesy. It is the control your audit committee expects to see.</p>
-      <p class="persona-frame persona-block" data-persona="ceo">Regulatory examinations do not announce themselves. The question is not whether amleht performed well in this incident. The question is whether this incident — or one like it — is the one your examiner picks. If it is, you want this record to exist.</p>
-      <p class="persona-frame persona-block" data-persona="cro">The L2 approval gate is the control that satisfies the human oversight requirement under DORA Art.11 §3. No broader action was taken without explicit operator approval of the exact commands and scope. That approval is logged. The commands executed were the commands approved — verbatim. Deviation is architecturally prevented.</p>
+      <p class="persona-frame persona-block" data-persona="cfo">De goedkeuringspoort van L2 is het controlepunt voor het budget. Er werd geen actie ondernomen buiten de autonome herstelmaatregelen van L1 totdat een mens de exacte commando&#x27;s, de exacte reikwijdte en de exacte risicobeoordeling had beoordeeld — en goedgekeurd. Die poort is geen beleefdheid. Het is de controle die uw auditcommissie verwacht te zien.</p>
+      <p class="persona-frame persona-block" data-persona="ceo">Regelgevende onderzoeken kondigen zich niet aan. De vraag is niet of amleht in dit incident goed heeft gepresteerd. De vraag is of dit incident — of een soortgelijk incident — het incident is dat uw onderzoeker uitkiest. Als dat het geval is, wilt u dat dit dossier bestaat.</p>
+      <p class="persona-frame persona-block" data-persona="cro">De goedkeuringspoort van L2 is de controle die voldoet aan de vereiste van menselijk toezicht onder DORA Art.11 §3. Er werden geen bredere maatregelen genomen zonder de uitdrukkelijke goedkeuring van de operator van de exacte commando&#x27;s en de exacte reikwijdte. Die goedkeuring wordt geregistreerd. De uitgevoerde commando&#x27;s waren de goedgekeurde commando&#x27;s — woord voor woord. Afwijkingen worden architectonisch voorkomen.</p>
 
       <div class="timeline-wrap" style="margin-top:0.85rem">
-        <div class="timeline-pre" id="timelinePre">Timeline unlocks when Abigail finishes — watch the briefing first.</div>
+        <div class="timeline-pre" id="timelinePre">De tijdlijn wordt ontgrendeld wanneer Abigail klaar is — bekijk eerst de briefing.</div>
         <div class="timeline" id="timeline" hidden>
           <div class="timeline-row" data-step="0">
             <span class="tl-tier">L0</span>
+            
             <span class="tl-time">11:18 CEST</span>
-            <span class="tl-body"><strong>Detection.</strong> Container <code style="font-family:var(--font-mono);font-size:0.82rem;color:var(--amber)">team-member-app-server</code> caught by R-001: 8,095 restarts, no DB partner running. CPU 292%.</span>
-            <span class="tl-badge">Detected</span>
+            
+            <span class="tl-body"><strong>Detectie.</strong> Container <code style="font-family:var(--font-mono);font-size:0.82rem;color:var(--amber)">team-member-app-server</code> gedetecteerd door R-001: 8,095 herstart, geen DB-partner actief. CPU-292%e.</span>
+            
+            <span class="tl-badge">Gedetecteerd</span>
           </div>
           <div class="timeline-row" data-step="1">
             <span class="tl-tier">L1</span>
+            
             <span class="tl-time">11:18 CEST</span>
-            <span class="tl-body"><strong>Boundary check + autonomous remediation.</strong> Protected-resource guard passed — container had no <code style="font-family:var(--font-mono);font-size:0.82rem;color:var(--amber)">amleht</code> / <code style="font-family:var(--font-mono);font-size:0.82rem;color:var(--amber)">mcp</code> affiliation. L1 neutralised the zombie. CPU 292% → 15%, fan spin-down.</span>
-            <span class="tl-badge">Auto-resolved</span>
+            
+            <span class="tl-body"><strong>Grenscontrole + autonome herstelmaatregelen.</strong> Protected-resource guard geslaagd — container had geen <code style="font-family:var(--font-mono);font-size:0.82rem;color:var(--amber)">amleht</code> / <code style="font-family:var(--font-mono);font-size:0.82rem;color:var(--amber)">mcp</code>-affiliatie. L1 heeft de zombie geneutraliseerd. CPU-292% → 15%, ventilator draait langzamer.</span>
+            
+            <span class="tl-badge">Automatisch opgelost</span>
           </div>
           <div class="timeline-row" data-step="2">
             <span class="tl-tier">L2</span>
+            
             <span class="tl-time">13:18 CEST</span>
-            <span class="tl-body"><strong>Approval gate.</strong> Broader cleanup (images, build cache, stopped containers) bound and presented in plain English with exact commands and risk assessment. Operator approved scope; bound commands executed verbatim.</span>
-            <span class="tl-badge">Approved</span>
+            
+            <span class="tl-body"><strong>Goedkeuringspoort.</strong> Uitgebreidere opschoning (images, build-cache, gestopte containers) vastgelegd en gepresenteerd in begrijpelijk Engels met exacte commando&#x27;s en risicobeoordeling. Operator keurde de omvang goed; vastgelegde commando&#x27;s letterlijk uitgevoerd.</span>
+            
+            <span class="tl-badge">Goedgekeurd</span>
           </div>
           <div class="timeline-row" data-step="3">
-            <span class="tl-tier">&#10003;</span>
+            <span class="tl-tier">✓</span>
+            
             <span class="tl-time">13:20 CEST</span>
-            <span class="tl-body"><strong>Resolved.</strong> 14.36 GB reclaimed — containers 3.233 + build cache 2.757 + images 8.366. <code style="font-family:var(--font-mono);font-size:0.82rem;color:var(--amber)">pensive_chebyshev</code> and protected MCP image held throughout.</span>
-            <span class="tl-badge">Resolved</span>
+            
+            <span class="tl-body"><strong>Opgelost.</strong> 14.36 GB vrijgemaakt — containers 3.233 + buildcache 2.757 + images 8.366. <code style="font-family:var(--font-mono);font-size:0.82rem;color:var(--amber)">pensive_chebyshev</code> en beschermde MCP image gedurende het hele proces behouden.</span>
+            
+            <span class="tl-badge">Opgelost</span>
           </div>
         </div>
-        <button type="button" class="replay-btn" id="replayBtn">&#8634; Replay timeline</button>
+        <button type="button" class="replay-btn" id="replayBtn">↺ Tijdlijn opnieuw afspelen</button>
       </div>
     </div>
 
     <!-- ═════ §3 · MARKET / VALUE (persona-swapped) ═════ -->
     <div>
-      <div class="section-label">§ 3 · Two markets · one agent</div>
+      <div class="section-label">§ 3 · Twee markten · één agent</div>
       <!-- CTO default: existing two-market cards -->
       <div class="two-col persona-block" data-persona="cto">
         <div class="market-card">
-          <div class="market-tag">Market 1 · SME &amp; professional services</div>
-          <div class="market-title">A compliance posture, not a hope</div>
-          <p class="market-body">If you're not running a full MDM stack, Agent XVIII <strong>is</strong> your endpoint compliance posture. Lightweight. Sovereign. <strong>No per-device licensing.</strong> Packaged inside the existing amleht retainer — the audit trail lands on the same compliance chain as everything else.</p>
+          <div class="market-tag">Markt 1 · MKB &amp; professionele dienstverlening</div>
+          <div class="market-title">Een compliance-status, geen hoop</div>
+          <p class="market-body">Als u geen volledige MDM-stack gebruikt, <strong>is</strong> Agent XVIII uw compliance-houding voor eindpunten. Lichtgewicht. Soeverein. <strong>Geen licenties per apparaat.</strong> Inbegrepen in het bestaande amleht-abonnement — het audittraject komt in dezelfde compliance-keten terecht als al het andere.</p>
         </div>
         <div class="market-card">
-          <div class="market-tag">Market 2 · Enterprise / regulated FI</div>
-          <div class="market-title">Signed package · JFrog distribution</div>
-          <p class="market-body">For DNB-supervised institutions, distribution is a <strong>signed, versioned package via JFrog Artifactory</strong>. Staff install it the same way they install any approved internal tool. From first run, the device is an ICT asset on the compliance chain — <strong>DORA Art.11 / Art.12 evidence captured automatically</strong>.</p>
+          <div class="market-tag">Markt 2 · Ondernemingen / gereguleerde financiële instellingen</div>
+          <div class="market-title">Ondertekend pakket · Distributie van JFrog</div>
+          <p class="market-body">Voor instellingen die onder toezicht van de DNB staan, is de distributie een <strong>ondertekend pakket met versiebeheer via JFrog Artifactory</strong>. Medewerkers installeren het op dezelfde manier als elke andere goedgekeurde interne tool. Vanaf de eerste keer opstarten is het apparaat een ICT-middel in de compliance-keten — <strong>DORA Art.11 / Art.12 bewijs wordt automatisch vastgelegd</strong>.</p>
         </div>
       </div>
-      <p class="persona-market persona-block" data-persona="cfo">The question for budget approval is not the cost of the retainer. It is the cost of the alternative. A 45-minute autonomous resolution of a runaway process — detected, contained, cleaned, and logged to the compliance chain — is what a DNB-supervised institution would otherwise route through a P2 incident ticket, an out-of-hours engineer call, and a post-incident report. Agent XVIII handled all three layers. The compliance chain entry is automatic. The audit trail is immutable. The retainer cost is fixed. The alternative is not.</p>
-      <p class="persona-market persona-block" data-persona="ceo">The reputational risk for a DNB-supervised institution is not the incident. It is the absence of evidence that the incident was controlled. Agent XVIII produces that evidence automatically, on every endpoint, from first run. The compliance chain entry is not a report someone writes after the fact. It is a cryptographically signed record produced at the moment of resolution. That is what your examiner is looking for — and what most of your competitors cannot produce.</p>
-      <p class="persona-market persona-block" data-persona="cro">For a DNB-supervised institution, Agent XVIII produces three categories of compliance evidence automatically: ICT asset registration (the device is on the chain from first run), incident response evidence (L0 → L1 → L2 → resolved, timestamped), and continuity demonstration (autonomous L1 + human-gated L2 within 45 minutes). NIS2 Art.21 significant incident notification thresholds are monitored continuously. GDPR Art.33 breach notification triggers are assessed at L0. The evidence chain is the same chain that carries your DORA RTS submissions.</p>
+      <p class="persona-market persona-block" data-persona="cfo">De vraag voor de goedkeuring van het budget is niet de kosten van het abonnement. Het zijn de kosten van het alternatief. Een autonome oplossing van 45 minuten voor een op hol geslagen proces — gedetecteerd, ingeperkt, opgeschoond en geregistreerd in de compliance-keten — is wat een door de DNB toezicht gehouden instelling anders zou afhandelen via een P2-incidentticket, een telefoontje naar een technicus buiten kantooruren en een rapportage na het incident. Agent XVIII heeft alle drie de lagen afgehandeld. De invoer in de compliance-keten gebeurt automatisch. Het audittraject is onveranderlijk. De kosten van het retainer-contract zijn vast. Het alternatief is dat niet.</p>
+      <p class="persona-market persona-block" data-persona="ceo">Het reputatierisico voor een instelling die onder toezicht staat van de DNB, is niet het incident. Het is het ontbreken van bewijs dat het incident onder controle was. Agent XVIII produceert dat bewijs automatisch, op elk eindpunt, vanaf de eerste keer dat het wordt uitgevoerd. De invoer in de complianceketen is geen rapport dat iemand achteraf schrijft. Het is een cryptografisch ondertekend record dat wordt geproduceerd op het moment van oplossing. Dat is waar uw controleur naar op zoek is — en wat de meeste van uw concurrenten niet kunnen produceren.</p>
+      <p class="persona-market persona-block" data-persona="cro">Voor een DNB -gecontroleerde instelling produceert Agent XVIII automatisch drie categorieën van compliance-bewijs: ICT-activaregistratie (het apparaat staat vanaf de eerste keer opstarten in de keten), bewijs van incidentrespons (L0 → L1 → L2 → opgelost, met tijdstempel), en continuïteitsaantoning (autonoom L1 + door mensen gecontroleerd L2 binnen 45 min utes). NIS2 Art.21 drempels voor melding van significante incidenten worden continu gemonitord. GDPR Art.33 triggers voor melding van inbreuken worden beoordeeld op L0. De bewijsketen is dezelfde keten die uw DORA RTS-inzendingen vervoert.</p>
     </div>
 
     <!-- ═════ §4 · ATTESTATION (persona-swapped — RESOLVED ≠ ATTESTED in every view) ═════ -->
     <div>
-      <div class="section-label rust">§ 4 · Attestation · still pending (honest status)</div>
+      <div class="section-label rust">§ 4 · Verklaring · nog in behandeling (eerlijke status)</div>
       <!-- CTO default -->
       <div class="attest-block persona-block" data-persona="cto">
         <div class="attest-mark">~</div>
         <div>
           <div class="attest-label">RESOLVED ≠ ATTESTED</div>
-          <p class="attest-text"><code>AMLEHT-XVIII-001</code> is <strong>RESOLVED</strong>. It is <strong>not yet ATTESTED</strong>. Attestation requires Agent XII sealing the ticket on the chain — and the Agent XII binary deployment is the next major engineering milestone (<code>CHG-2026-001</code>, weeks away). Independent countersignature by Blank en Partners (Agents XIII–XV) is a separate commercial conversation that has not yet been initiated. <strong>This page records the work that was done, not work that was claimed.</strong> When the chain seals close, this section gets a green block and a block hash. Until then it stays amber.</p>
+          <p class="attest-text"><code>AMLEHT-XVIII-001</code> is <strong>RESOLVED</strong>. Het is <strong>nog niet ATTESTED</strong>. Voor de attestatie moet Agent XII het ticket in de keten afsluiten — en de binaire implementatie van Agent XII is de volgende belangrijke technische mijlpaal (<code>CHG-2026-001</code>, over enkele weken). Onafhankelijke medeondertekening door Blank en Partners (Agents XIII–XV) is een afzonderlijk commercieel gesprek dat nog niet is gestart. <strong>Deze pagina registreert het werk dat is gedaan, niet het werk dat is geclaimd.</strong> Wanneer de ketenverzegelingen sluiten, krijgt dit gedeelte een groen blok en een blokhash. Tot die tijd blijft het oranje.</p>
         </div>
       </div>
       <div class="attest-block persona-block" data-persona="cfo">
         <div class="attest-mark">~</div>
         <div>
           <div class="attest-label">RESOLVED ≠ ATTESTED</div>
-          <p class="attest-text">RESOLVED ≠ ATTESTED — and that is a budget line item, not a technicality. Agent XII chain attestation (<code>CHG-2026-001</code>) is the step that converts this resolved incident into regulator-ready evidence. Until that seal closes, the incident is resolved in operational terms. It is not yet evidence in regulatory terms. That distinction has a cost if a DNB examination occurs before the chain is sealed. It is on the roadmap. It is not yet done. That is the honest position.</p>
+          <p class="attest-text">RESOLVED ≠ ATTESTED — en dat is een begrotingspost, geen technische kwestie. Agent XII ketenattestatie (<code>CHG-2026-001</code>) is de stap die dit opgeloste incident omzet in bewijs dat klaar is voor de toezichthouder. Totdat die verzegeling sluit, is het incident in operationele termen opgelost. Het is nog geen bewijs in regelgevende termen. Dat onderscheid brengt kosten met zich mee als er een onderzoek van de DNB plaatsvindt voordat de keten is verzegeld. Het staat op de roadmap. Het is nog niet voltooid. Dat is de eerlijke stand van zaken.</p>
         </div>
       </div>
       <div class="attest-block persona-block" data-persona="ceo">
         <div class="attest-mark">~</div>
         <div>
           <div class="attest-label">RESOLVED ≠ ATTESTED</div>
-          <p class="attest-text">The honest position for your board: this incident is <strong>RESOLVED</strong>. It is <strong>not yet ATTESTED</strong> — meaning the Agent XII cryptographic seal that converts operational resolution into regulator-ready evidence has not yet closed. That milestone (<code>CHG-2026-001</code>) is on the engineering roadmap. Until it lands, the record exists. The seal does not. A board that understands that distinction is a board that understands amleht.</p>
+          <p class="attest-text">De eerlijke stand van zaken voor uw raad van bestuur: dit incident is &#x27;<strong>RESOLVED</strong>&#x27;. Het is <strong>nog niet &#x27;ATTESTED</strong>&#x27; — wat betekent dat het cryptografische zegel van de &#x27;Agent XII&#x27;, dat operationele oplossing omzet in bewijs dat aan de toezichthouder kan worden voorgelegd, nog niet is gesloten. Die mijlpaal (<code>CHG-2026-001</code>) staat op de technische roadmap. Totdat die is bereikt, bestaat het dossier wel, maar het zegel niet. Een raad van bestuur die dat onderscheid begrijpt, is een raad die begrijpt wat &#x27;amleht&#x27; inhoudt.</p>
         </div>
       </div>
       <div class="attest-block persona-block" data-persona="cro">
         <div class="attest-mark">~</div>
         <div>
-          <div class="attest-label">RESOLVED · NOT ATTESTED</div>
-          <p class="attest-text">Current status: <strong>RESOLVED · NOT ATTESTED</strong>. Agent XII seal (<code>CHG-2026-001</code>) is the step that closes this to regulatory evidence standard. Blank en Partners countersignature (Agents XIII–XV) is the independent professional opinion layer on top. Neither is closed yet. Both are on the roadmap. The CRO should treat the current state as operationally resolved, pending attestation. Schedule a review checkpoint when <code>CHG-2026-001</code> lands.</p>
+          <div class="attest-label">RESOLVED · NIET-ATTESTED</div>
+          <p class="attest-text">Huidige status: <strong>RESOLVED · GEEN ATTESTED</strong>. Agent XII-zegel (<code>CHG-2026-001</code>) is de stap die dit afsluit naar de norm voor regelgevend bewijs. Blank en Partners-medeondertekening (Agents XIII–XV) is de laag van onafhankelijk professioneel oordeel daarbovenop. Geen van beide is nog afgerond. Beide staan op de roadmap. De CRO moet de huidige toestand behandelen als operationeel opgelost, in afwachting van attestering. Plan een beoordelingsmoment in wanneer <code>CHG-2026-001</code> het binnenkomt.</p>
         </div>
       </div>
     </div>
 
     <!-- ═════ §5 · MOCK TRIAL · FICTIEF NV (CFO view only) ═════ -->
     <div class="persona-block" data-persona="cfo">
-      <div class="section-label">§ 5 · Mock trial · Fictief NV</div>
-      <div class="mocktrial-head">The CTO presents to the CFO — budget approval scenario</div>
-      <div class="mocktrial-sub">Fictief NV · Amsterdam · Internal budget review</div>
-      <p class="mocktrial-scenario">Fictief NV is a DNB-supervised financial institution and the 38th member of the Qivalis euro stablecoin consortium. Its CTO has received the AMLEHT-XVIII-001 incident record and is presenting to the CFO with a single objective: approval to formalise the amleht retainer as a recurring line item in the technology budget.</p>
+      <div class="section-label">§ 5 · Proefproces · Fictief NV</div>
+      <div class="mocktrial-head">De CTO presenteert aan de CFO — scenario voor budgetgoedkeuring</div>
+      <div class="mocktrial-sub">Fictief NV · Amsterdam · Interne begrotingsbeoordeling</div>
+      <p class="mocktrial-scenario">Fictief NV is een door de DNB gecontroleerde financiële instelling en het 38e lid van het Qivalis euro stablecoin-consortium. De CTO heeft het incidentrapport AMLEHT-XVIII-001 ontvangen en presenteert dit aan de CFO met één doel: goedkeuring om de amleht-retainer te formaliseren als een terugkerende post in het technologiebudget.</p>
       <div class="dialogue">
-        <div class="dia-row cto"><span class="dia-who">CTO</span>We had a runaway process on an endpoint last Tuesday. 292% CPU, 8,095 restart cycles, fan at full speed. We did not notice it. Agent XVIII did — autonomously, at L1, in under two hours from onset to resolution.</div>
-        <div class="dia-row cfo"><span class="dia-who">CFO</span>What did it cost us?</div>
-        <div class="dia-row cto"><span class="dia-who">CTO</span>45 minutes of Agent XVIII time. 14.36 gigabytes reclaimed. No engineer callout. No P2 ticket. No post-incident report to write — the compliance chain entry was automatic.</div>
-        <div class="dia-row cfo"><span class="dia-who">CFO</span>What would it have cost without it?</div>
-        <div class="dia-row cto"><span class="dia-who">CTO</span>A P2 callout at out-of-hours rates, a post-incident report for the DNB ICT register, and a gap in our DORA Art.11 evidence trail if the examiner had arrived before we'd written it up. The retainer cost is fixed. That scenario is not.</div>
-        <div class="dia-row cfo"><span class="dia-who">CFO</span>What is the attestation status?</div>
-        <div class="dia-row cto"><span class="dia-who">CTO</span>Resolved. Not yet attested — Agent XII chain seal is the next engineering milestone, weeks away. Until it lands, this is operationally closed. It is not yet regulator-ready evidence. That is the honest position.</div>
-        <div class="dia-row cfo"><span class="dia-who">CFO</span>Approved. Add it to the budget. Flag me when the chain seals.</div>
+        <div class="dia-row cto"><span class="dia-who">CTO:</span> Afgelopen dinsdag hadden we een uit de hand gelopen proces op een eindpunt. 292% CPU, 8,095 herstartcycli, ventilator op volle snelheid. We hadden het niet opgemerkt. Agent XVIII wel — autonoom, op L1, in minder dan twee uur van begin tot oplossing.</div>
+        <div class="dia-row cfo"><span class="dia-who">CFO</span> Wat heeft het ons gekost?</div>
+        <div class="dia-row cto"><span class="dia-who">CTO</span> 45 minuten aan Agent XVIII-tijd. 14.36 gigabytes teruggewonnen. Geen technicus ter plaatse. Geen P2-ticket. Geen rapport na het incident om te schrijven — de invoer in de compliance-keten gebeurde automatisch.</div>
+        <div class="dia-row cfo"><span class="dia-who">CFO</span> Wat zou het zonder dit hebben gekost?</div>
+        <div class="dia-row cto"><span class="dia-who">CTO:</span> Een P2-oproep tegen tarieven buiten kantooruren, een rapport na het incident voor het DNB ICT-register, en een gat in ons DORA Art.11 bewijstraject als de inspecteur was gearriveerd voordat we het hadden opgeschreven. De kosten voor het retainer-contract zijn vast. Dat scenario is dat niet.</div>
+        <div class="dia-row cfo"><span class="dia-who">CFO</span> Wat is de status van de attestering?</div>
+        <div class="dia-row cto"><span class="dia-who">CTO</span><span class="dia-who">: O</span>pgelost. Nog niet gecertificeerd — de ketenverzegeling van Agent XII is de volgende technische mijlpaal, over enkele weken. Totdat die er is, is dit operationeel afgesloten. Het is nog geen bewijs dat klaar is voor de toezichthouder. Dat is de eerlijke stand van zaken.</div>
+        <div class="dia-row cfo"><span class="dia-who">CFO:</span> Goedgekeurd. Voeg het toe aan de begroting. Laat het me weten wanneer de keten is verzegeld.</div>
       </div>
-      <div class="mocktrial-close">This is how amleht gets approved.</div>
+      <div class="mocktrial-close">Zo wordt &#x27;amleht&#x27; goedgekeurd.</div>
     </div>
 
   </div>
@@ -341,14 +355,16 @@
   <div class="chain-footer">
     <div class="chain-row">
       <span class="chain-dot"></span>
-      <span>AMLEHT-XVIII-001 · RESOLVED · NOT ATTESTED (CHG-2026-001 pending) · 14.36 GB reclaimed · 32/32 unit tests green</span>
-      <span style="margin-left:auto;opacity:0.55;">IntegrityMSP · amleht platform self-host · Thelma Principle enforced</span>
+      <span>AMLEHT-XVIII-001· RESOLVED · NIET ATTESTED (CHG-2026-001 in afwachting) · 14.36 GB teruggewonnen · 32/32 unit tests groen</span>
+      
+      <span style="margin-left:auto;opacity:0.55;">IntegrityMSP· amleht platform zelf gehost · Thelma Principle afgedwongen</span>
     </div>
   </div>
 
   <div class="memorial-footer">
-    <span class="memorial-text">In memory of Thelma &middot; Amsterdam</span>
-    <span class="footer-sig">amleht &middot; Agent XVIII Incident Show &middot; 27 May 2026</span>
+    <span class="memorial-text">Ter nagedachtenis aan Thelma · Amsterdam</span>
+    
+    <span class="footer-sig">amleht· Agent XVIII Incident Show · 27 mei 2026</span>
   </div>
 
 </div>
@@ -356,19 +372,19 @@
 <script>
 // ═════ Video gate + timeline reveal — pattern mirrors fictief-window.html ═════
 (function(){
-  var video      = document.getElementById('abigail-video');
-  var unmuteBtn  = document.getElementById('videoUnmute');
-  var timelinePre= document.getElementById('timelinePre');
-  var timeline   = document.getElementById('timeline');
-  var replayBtn  = document.getElementById('replayBtn');
-  var rows       = timeline ? timeline.querySelectorAll('.timeline-row') : [];
+  var video      = document.getElementById(&#x27;abigail-video&#x27;);
+  var unmuteBtn  = document.getElementById(&#x27;videoUnmute&#x27;);
+  var timelinePre= document.getElementById(&#x27;timelinePre&#x27;);
+  var timeline   = document.getElementById(&#x27;timeline&#x27;);
+  var replayBtn  = document.getElementById(&#x27;replayBtn&#x27;);
+  var rows       = timeline ? timeline.querySelectorAll(&#x27;.timeline-row&#x27;) : [];
 
   var STEP_DWELL_MS = 900;   // per row, matches Endpoint Health stage dwell
   var POST_DELAY_MS = 300;   // settle before replay button
 
-  function resetRows(){ rows.forEach(function(r){ r.classList.remove('active','done'); }); }
-  function showReplay(){ replayBtn.classList.add('visible'); }
-  function hideReplay(){ replayBtn.classList.remove('visible'); }
+  function resetRows(){ rows.forEach(function(r){ r.classList.remove(&#x27;active&#x27;,&#x27;done&#x27;); }); }
+  function showReplay(){ replayBtn.classList.add(&#x27;visible&#x27;); }
+  function hideReplay(){ replayBtn.classList.remove(&#x27;visible&#x27;); }
 
   function animateTimeline(onDone){
     hideReplay();
@@ -376,11 +392,11 @@
     if(!rows.length){ if(onDone) onDone(); return; }
     var delay = 0;
     rows.forEach(function(row, idx){
-      setTimeout(function(){ row.classList.add('active'); }, delay);
+      setTimeout(function(){ row.classList.add(&#x27;active&#x27;); }, delay);
       setTimeout(function(){
-        row.classList.remove('active');
-        row.classList.add('done');
-        if(idx === rows.length - 1 && onDone){
+        row.classList.remove(&#x27;active&#x27;);
+        row.classList.add(&#x27;done&#x27;);
+        if(idx === rows.length - 1 &amp;&amp; onDone){
           setTimeout(onDone, POST_DELAY_MS);
         }
       }, delay + STEP_DWELL_MS);
@@ -395,26 +411,26 @@
   }
 
   // Unmute toggle
-  if(unmuteBtn && video){
-    unmuteBtn.addEventListener('click', function(){
+  if(unmuteBtn &amp;&amp; video){
+    unmuteBtn.addEventListener(&#x27;click&#x27;, function(){
       if(video.muted){
         video.muted = false;
-        unmuteBtn.innerHTML = '&#128263; Mute';
-        unmuteBtn.title = 'Click to mute';
+        unmuteBtn.innerHTML = &#x27;&amp;#128263; Mute&#x27;;
+        unmuteBtn.title = &#x27;Click to mute&#x27;;
       } else {
         video.muted = true;
-        unmuteBtn.innerHTML = '&#128264; Unmute';
-        unmuteBtn.title = 'Click to unmute';
+        unmuteBtn.innerHTML = &#x27;&amp;#128264; Unmute&#x27;;
+        unmuteBtn.title = &#x27;Click to unmute&#x27;;
       }
     });
   }
 
   // Video → gate
   if(video){
-    video.addEventListener('ended', openGate);
+    video.addEventListener(&#x27;ended&#x27;, openGate);
     // If the MP4 fails to load (missing file during dev), reveal the gate
     // immediately so the page is still navigable for review.
-    video.addEventListener('error', openGate);
+    video.addEventListener(&#x27;error&#x27;, openGate);
   } else {
     // No video element at all — degrade gracefully.
     openGate();
@@ -422,43 +438,43 @@
 
   // Replay button — animation only, no video reload
   if(replayBtn){
-    replayBtn.addEventListener('click', function(){ animateTimeline(showReplay); });
+    replayBtn.addEventListener(&#x27;click&#x27;, function(){ animateTimeline(showReplay); });
   }
 })();
 
 // ═════ Persona toggle — vanilla JS, no libraries ═════
 (function(){
-  var pills = document.querySelectorAll('.persona-pill');
-  var blocks = document.querySelectorAll('.persona-block');
-  var body  = document.querySelector('.body');
+  var pills = document.querySelectorAll(&#x27;.persona-pill&#x27;);
+  var blocks = document.querySelectorAll(&#x27;.persona-block&#x27;);
+  var body  = document.querySelector(&#x27;.body&#x27;);
   var FADE_MS = 200;
 
   function apply(persona){
     blocks.forEach(function(el){
-      el.style.display = (el.getAttribute('data-persona') === persona) ? '' : 'none';
+      el.style.display = (el.getAttribute(&#x27;data-persona&#x27;) === persona) ? &#x27;&#x27; : &#x27;none&#x27;;
     });
     pills.forEach(function(p){
-      p.classList.toggle('active', p.getAttribute('data-persona') === persona);
+      p.classList.toggle(&#x27;active&#x27;, p.getAttribute(&#x27;data-persona&#x27;) === persona);
     });
   }
 
   function setPersona(persona){
     if(!body){ apply(persona); return; }
-    body.style.opacity = '0';                 // 200ms fade out
+    body.style.opacity = &#x27;0&#x27;;                 // 200ms fade out
     setTimeout(function(){
       apply(persona);                         // swap while invisible
-      body.style.opacity = '1';               // fade back in
+      body.style.opacity = &#x27;1&#x27;;               // fade back in
     }, FADE_MS);
   }
 
   pills.forEach(function(p){
-    p.addEventListener('click', function(){
-      setPersona(p.getAttribute('data-persona'));
+    p.addEventListener(&#x27;click&#x27;, function(){
+      setPersona(p.getAttribute(&#x27;data-persona&#x27;));
     });
   });
 
   // Initial state — CTO active on load (no fade on first paint)
-  apply('cto');
+  apply(&#x27;cto&#x27;);
 })();
 </script>
 
