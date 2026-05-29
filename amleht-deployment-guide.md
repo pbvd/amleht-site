@@ -290,6 +290,30 @@ amleht-site/
 └── README.md
 ```
 
+### Video & Binary Assets (Important)
+
+`.gitignore` in this repo excludes `*.mp4`, `*.zip`, `*.docx`, and `*.pdf`. **statichost deploys only what is committed to git** — anything matched by `.gitignore` is never pushed and therefore **404s on the live site**, even if the file sits in your local working copy. (This is why an early `amleht-aurora-backdrop.mp4` was 404 — it was on disk but gitignored.)
+
+To serve a new video (or other ignored binary) as a permanent asset, you must add an explicit un-ignore exception **and** commit the file:
+
+```bash
+# 1. place the file next to the page that references it
+cp render.mp4 demo/interactive/my-video.mp4
+
+# 2. add an exception line to .gitignore (the leading ! un-ignores it)
+echo '!demo/interactive/my-video.mp4' >> .gitignore
+
+# 3. reference it with a RELATIVE src in the HTML (domain-independent)
+#    <video src="my-video.mp4" autoplay muted playsinline></video>
+
+# 4. commit BOTH the file and the .gitignore change, then push
+git add .gitignore demo/interactive/my-video.mp4 demo/interactive/page.html
+git commit -m "feat(demo): add self-hosted my-video.mp4"
+git push   # webhook auto-deploys
+```
+
+Existing exceptions live at the bottom of `.gitignore` (`!demo/interactive/abigail-agent-xviii.mp4`, `!demo/interactive/abigail-agent-xviii-nl.mp4`). Prefer self-hosting renders this way over embedding third-party **presigned URLs** (e.g. HeyGen `?Expires&Signature&Key-Pair-Id`): those expire and throw `MalformedSignature` in the browser. Self-hosted assets have no expiry. After deploy, always verify with `curl -sI https://amleht.eu/<path>` → expect `HTTP 200`.
+
 ---
 
 ## Troubleshooting
@@ -305,6 +329,12 @@ Check the build log in the dashboard. For a pure HTML site with `public: .`, the
 
 **GoDaddy won't let me add ALIAS record?**
 Use the forwarding approach described above. Root domain forwards to www, www uses CNAME to statichost.
+
+**A video/MP4 (or other binary) 404s on the live site but exists locally?**
+It's almost certainly matched by `.gitignore` (`*.mp4`, `*.zip`, `*.docx`, `*.pdf`) and was never pushed. Add an exception line — `!path/to/file.mp4` — commit the file, and push. See "Video & Binary Assets" under Day-to-Day Workflow.
+
+**A page shows `MalformedSignature` / `Could not unencode Signature`?**
+That XML error comes from a third-party **presigned URL** embedded in the page (e.g. HeyGen `?Expires&Signature&Key-Pair-Id`) that has expired or been mangled — not from statichost. Replace it with a self-hosted asset per "Video & Binary Assets".
 
 ---
 
