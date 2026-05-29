@@ -6,3 +6,6 @@ CC-TASK-amleht-site.md
 *.zip
 *.docx
 *.pdf
+
+# Permanent served asset — NL Agent XVIII incident video (ADR/Path-B fix, no longer HeyGen presigned)
+!demo/interactive/abigail-agent-xviii-nl.mp4
