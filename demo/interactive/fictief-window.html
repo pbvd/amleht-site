@@ -1388,7 +1388,7 @@ if(document.readyState==='complete'){
   if(sessionStorage.getItem('amleht_dashboard_pip_seen')) return;
 
   function init(){
-    var url = "https://files2.heygen.ai/aws_pacific/avatar_tmp/c6977c5aa8584810bd35bba1d24ea2a5/86fda4a6c6894412abd6ec4144cf90b7.mp4?Expires=1780259148&Signature=aGFNG~V0PswrPkXBnDUgDH5J1ovvUi6GgwHiJaPDFiiHur2lyTQv3HzlXnG1~REfOMUzoy4-r4X-wV3bD~cJUkkkGtQZSroq-KqEXl59oA7O0UppgmUzg-XZqRkbkTbmunxSRUzQ8gexe1hLj9WbJmNI3C4ex3hiPeUCNVtgoLsi5P3SMRHHZ81dQvgf29gAXIqNUXI4TLa~ep2bx2APThWUBMbeSYiG63XcJhtVVc5mQF970riJMPICyIJeB0QnCL5h~n4CRSSX2ugKGXQxWYji94DYDITeKwFc8KVxBaTp8dTi8l8RsycYvb0DgQmeKXfNHecrzTreogJTkqalgQ__&Key-Pair-Id=K38HBHX5LX3X2H";
+    var url = "../heygen-clips/clip-4b-v3-live-platform-dashboard.mp4";
     var pip = document.createElement('div');
     pip.id = 'amleht-dash-pip';
 
@@ -1406,11 +1406,24 @@ if(document.readyState==='complete'){
       }
     };
 
+    var _dashDone = false;
+    function removeDashPip(){
+      if(_dashDone) return; _dashDone = true;
+      try { sessionStorage.setItem('amleht_dashboard_pip_seen','1'); } catch(e){}
+      if(pip && pip.parentNode) pip.remove();
+      if (typeof window.__amlehtPipelineSkipToReplay === 'function') window.__amlehtPipelineSkipToReplay();
+    }
     var video = document.createElement('video');
     video.src = url;
     video.autoplay = true;
+    video.muted = true;
     video.controls = false;
     video.playsInline = true;
+    video.setAttribute('playsinline', '');
+    video.onerror = removeDashPip;
+    var _playStarted = false;
+    video.addEventListener('playing', function(){ _playStarted = true; video.muted = false; }, { once: true });
+    setTimeout(function(){ if(!_playStarted) removeDashPip(); }, 6000);
     video.onended = function(){
       sessionStorage.setItem('amleht_dashboard_pip_seen','1');
       setTimeout(function(){ pip.remove(); }, 2000);
@@ -1449,6 +1462,7 @@ if(document.readyState==='complete'){
     pip.appendChild(unmuteBtn);
     pip.appendChild(closeBtn);
     document.body.appendChild(pip);
+    video.play().catch(removeDashPip);
   }
 
   if(document.readyState === 'loading'){
