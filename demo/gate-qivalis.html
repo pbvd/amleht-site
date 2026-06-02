@@ -505,6 +505,8 @@ function showPanel(i){
     document.getElementById('transition-panel').style.display='flex';
   } else if(panel.type === 'dashboard'){
     // Navigate to dashboard
+    var existingPip = document.getElementById('amleht-pip');
+    if(existingPip) existingPip.remove();
     window.location.href = DASHBOARD;
     return;
   }
@@ -619,6 +621,9 @@ function showPip(panelIndex) {
   video.play().catch(function(e){
     console.warn('pip autoplay blocked:', e);
   });
+  video.addEventListener('playing', function() {
+    video.muted = false;
+  }, { once: true });
 }
 
 function removePip() {
