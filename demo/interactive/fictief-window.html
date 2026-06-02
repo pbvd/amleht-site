@@ -1462,7 +1462,12 @@ if(document.readyState==='complete'){
     pip.appendChild(unmuteBtn);
     pip.appendChild(closeBtn);
     document.body.appendChild(pip);
-    video.play().catch(removeDashPip);
+    video.addEventListener('canplay', function() {
+      video.play().catch(function(e) {
+        console.warn('dash pip blocked:', e);
+        removeDashPip();
+      });
+    }, { once: true });
   }
 
   if(document.readyState === 'loading'){
