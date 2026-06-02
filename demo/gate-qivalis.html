@@ -592,6 +592,8 @@ function showPip(panelIndex) {
   var video = document.createElement('video');
   video.src = url;
   video.autoplay = true;
+  video.muted = true;
+  video.setAttribute('playsinline', '');
   video.controls = false;
   video.style.cssText = 'width:100%;height:100%;object-fit:cover;';
   video.onended = function() {
@@ -614,6 +616,9 @@ function showPip(panelIndex) {
   pip.appendChild(unmuteBtn);
   pip.appendChild(closeBtn);
   document.body.appendChild(pip);
+  video.play().catch(function(e){
+    console.warn('pip autoplay blocked:', e);
+  });
 }
 
 function removePip() {
