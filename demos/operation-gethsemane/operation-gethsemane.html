@@ -630,7 +630,7 @@ body{
 
       <!-- Zone labels -->
       <text x="88" y="222" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#B8952A" letter-spacing="2" opacity="0.7">AMSTERDAM</text>
-      <text x="88" y="234" text-anchor="middle" font-family="JetBrains Mono" font-size="6.5" fill="#B8952A" opacity="0.5">Nebius B.V.</text>
+      <text x="88" y="234" text-anchor="middle" font-family="JetBrains Mono" font-size="6.5" fill="#B8952A" opacity="0.5">Nebius Group N.V.</text>
       <text x="612" y="222" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#4A7FD4" letter-spacing="2" opacity="0.7">HELSINKI</text>
       <text x="612" y="234" text-anchor="middle" font-family="JetBrains Mono" font-size="6.5" fill="#4A7FD4" opacity="0.5">eu-north1</text>
       <text x="350" y="440" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#38BD94" letter-spacing="2" opacity="0.7">BIERE</text>
@@ -647,8 +647,8 @@ body{
       <g id="nodes-layer"></g>
     </svg>
     <div class="zone-bar">
-      <span class="zone-pill amsterdam">⬡ AMSTERDAM · Nebius B.V. · Orderer Primary</span>
-      <span class="zone-pill finland">⬡ FINLAND · eu-north1 · Orderer 2 · Nebius B.V.</span>
+      <span class="zone-pill amsterdam">⬡ AMSTERDAM · Nebius Group N.V. · Orderer Primary</span>
+      <span class="zone-pill finland">⬡ FINLAND · eu-north1 · Orderer 2 · Nebius Group N.V.</span>
       <span class="zone-pill biere">⬡ BIERE · Zone DE · BSI C5:2020 · Orderer 3</span>
     </div>
   </div>
@@ -1053,7 +1053,7 @@ function runGenesis() {
     });
   }, 200);
 
-  addBlock('genesis', 'GENESIS', 'Consortium channel created. 13 institutions enrolled. Orderers: Amsterdam · Nebius B.V. (Zone NL) · Helsinki · Nebius B.V. (Zone FI) · Biere · Deutsche Telekom T Cloud Public (Zone DE). Raft consensus: 3-node quorum.', 400);
+  addBlock('genesis', 'GENESIS', 'Consortium channel created. 13 institutions enrolled. Orderers: Amsterdam · Nebius Group N.V. (Zone NL) · Helsinki · Nebius Group N.V. (Zone FI) · Biere · Deutsche Telekom T Cloud Public (Zone DE). Raft consensus: 3-node quorum.', 400);
   addEvent('agentxii', 'AGENT XII', '', 'Hyperledger Fabric channel online. IntegrityMSP active. Recursive trust loop initialised.', 600);
   addEvent('agent1', 'AGENT I', 'ok', 'All 13 node heartbeats confirmed. Attestation monitoring active.', 900);
   addEvent('sys', 'SYSTEM', '', `Scenario ${scenario}: ${scenario===1?'Fictief NV':'Bank VII'} designated for integrity test.`, 1200);
