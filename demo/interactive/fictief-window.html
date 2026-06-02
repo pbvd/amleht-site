@@ -329,7 +329,7 @@
     <div class="ov-line">The data is real — EUR/USD, €STR overnight rate, and Dutch market sentiment updated every five minutes from the ECB Data Portal and Finnhub.</div>
     <div class="ov-line">In the next thirty minutes you will see <strong>three regulatory events fire in real time</strong> — and watch the compliance chain respond before a human could reach for the phone.</div>
   </div>
-  <button class="ov-btn" onclick="document.getElementById('amleht-welcome-overlay').style.display='none';sessionStorage.setItem('amleht_welcome_seen','1');">
+  <button class="ov-btn" onclick="document.getElementById('amleht-welcome-overlay').style.display='none';sessionStorage.setItem('amleht_welcome_seen','1');var dashVid = document.querySelector('#amleht-dash-pip video'); if(dashVid) { dashVid.muted = false; dashVid.play(); }">
     Enter the platform →
   </button>
   <div class="ov-footer">
