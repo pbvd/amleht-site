@@ -10,3 +10,6 @@ CC-TASK-amleht-site.md
 # Permanent served asset — NL Agent XVIII incident video (ADR/Path-B fix, no longer HeyGen presigned)
 !demo/interactive/abigail-agent-xviii-nl.mp4
 !demo/interactive/abigail-agent-xviii.mp4
+
+# Permanent served assets — Window to the World tour clips (v4, EN-GB Abigail)
+!demo/heygen-clips/*.mp4
