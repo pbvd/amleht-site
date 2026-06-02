@@ -193,7 +193,7 @@
   <div class="lg-item"><div class="lg-dot" style="background:#a47fe8"></div>Azure</div>
   <div class="lg-item"><div class="lg-dot" style="background:#ff8c42"></div>Equinix</div>
   <div class="lg-item"><div class="lg-dot" style="background:#f0d060"></div>Fictief NV · FNV</div>
-  <div class="lg-item"><div class="lg-dot" style="background:#d4a843"></div>Rail 1 · Nebius B.V.</div>
+  <div class="lg-item"><div class="lg-dot" style="background:#d4a843"></div>Rail 1 · Nebius Group N.V.</div>
   <div class="lg-item"><div class="lg-dot" style="background:#2dd472"></div>Rail 2 · Scaleway</div>
   <div class="lg-item"><div class="lg-dot" style="background:#ff4757"></div>Isolated · Judas</div>
 </div>
@@ -328,11 +328,11 @@ function getLayout() {
   const agentZero = { x: cx, y: ellipseCY };
 
   // Spine nodes
-  const spineA = { x: cx - W * 0.18, y: H * 0.62, label: 'SPINE A', sublabel: 'Nebius B.V. · Helsinki', color: '#3d9eff' };
+  const spineA = { x: cx - W * 0.18, y: H * 0.62, label: 'SPINE A', sublabel: 'Nebius Group N.V. · Helsinki', color: '#3d9eff' };
   const spineB = { x: cx + W * 0.18, y: H * 0.62, label: 'SPINE B', sublabel: 'Scaleway · Paris', color: '#2dd472' };
 
   // Rail endpoints (inference nodes)
-  const rail1 = { x: cx - W * 0.22, y: H * 0.80, label: 'RAIL 1', sublabel: 'Nebius B.V. NL · DeepSeek', color: '#3d9eff' };
+  const rail1 = { x: cx - W * 0.22, y: H * 0.80, label: 'RAIL 1', sublabel: 'Nebius Group N.V. NL · DeepSeek', color: '#3d9eff' };
   const rail2 = { x: cx + W * 0.22, y: H * 0.80, label: 'RAIL 2', sublabel: 'Scaleway FR · Mistral', color: '#2dd472' };
 
   // Agent XII — The Tablet — Mount of Olives
@@ -620,7 +620,7 @@ function draw() {
     ctx.textAlign = 'center';
     ctx.fillText('SPINE A', spineA.x, spineA.y + 30);
     ctx.fillStyle = 'rgba(61,158,255,0.35)';
-    ctx.fillText('Nebius B.V. · NL', spineA.x, spineA.y + 40);
+    ctx.fillText('Nebius Group N.V. · NL', spineA.x, spineA.y + 40);
     ctx.restore();
 
     // SPINE B node
