@@ -602,6 +602,34 @@ function showPip(panelIndex) {
     setTimeout(removePip, 2000);
   };
 
+  // ── AUTO-FIRE TRIGGER (panel 4 only) ──────────────────────────
+  // At the "watch what happens" beat (clip end − 7s) signal the server
+  // to auto-fire a randomised, diversity-enforced trio of scenarios, so
+  // the dashboard already has live events running when the viewer clicks
+  // ENTER. KEYLESS: the browser only signals intent — ALL scenario
+  // selection logic and the fire API key live server-side on the Nebius
+  // admin VM. Fires at most once per session (sessionStorage-guarded).
+  if (panelIndex === 4) {
+    var AUTOFIRE_ENDPOINT = 'https://api.amleht.eu/demo/autofire';
+    var autofireSent = false;
+    video.addEventListener('timeupdate', function() {
+      if (autofireSent) return;
+      if (sessionStorage.getItem('amleht_autofire_done')) { autofireSent = true; return; }
+      var d = video.duration;
+      if (!isFinite(d) || d <= 0) return;
+      if (video.currentTime >= d - 7) {
+        autofireSent = true;
+        sessionStorage.setItem('amleht_autofire_done', '1');
+        try {
+          // Fire-and-forget; keepalive lets it survive the imminent
+          // navigation to the dashboard. Response is intentionally
+          // ignored — the selection is never exposed to the browser.
+          fetch(AUTOFIRE_ENDPOINT, { method: 'POST', mode: 'cors', keepalive: true });
+        } catch (e) { /* non-blocking — the demo proceeds regardless */ }
+      }
+    });
+  }
+
   unmuteBtn.onclick = function() {
     if(video.muted) {
       video.muted = false;
