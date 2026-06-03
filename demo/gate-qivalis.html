@@ -504,10 +504,6 @@ function showPanel(i){
   } else if(panel.type === 'transition'){
     document.getElementById('transition-panel').style.display='flex';
   } else if(panel.type === 'dashboard'){
-    // ENTER-click fallback: if the viewer clicked through before the 10s
-    // timeupdate trigger fired, fire the autofire trio now so the dashboard
-    // still has live events running on arrival.
-    fireAutofireOnce();
     // Navigate to dashboard
     var existingPip = document.getElementById('amleht-pip');
     if(existingPip) existingPip.remove();
@@ -551,8 +547,7 @@ var PANEL_CLIPS = {
 };
 
 // Fire the keyless autofire trigger at most once per session. Called by the
-// panel-4 timeupdate (at 10s) AND by the dashboard navigation (ENTER-click
-// fallback) so the trio fires even if the viewer clicks through before 10s.
+// panel-4 timeupdate (at 10s) once playback is genuinely under way.
 function fireAutofireOnce() {
   if (sessionStorage.getItem('amleht_autofire_done')) return;
   sessionStorage.setItem('amleht_autofire_done', '1');
@@ -627,13 +622,11 @@ function showPip(panelIndex) {
   // server-side. Fires at most once per session (see fireAutofireOnce).
   // Fixed 10s threshold replaces the old (duration − 7s): clip-4 is ~100s and
   // viewers click ENTER long before 93s, so the late trigger never fired.
-  // The ENTER-click fallback (showPanel dashboard branch) covers <10s exits.
   if (panelIndex === 4) {
-    var autofireSent = false;
     video.addEventListener('timeupdate', function() {
-      if (autofireSent) return;
-      if (video.currentTime >= 10) {
-        autofireSent = true;
+      if (video.currentTime >= 10 &&
+          !video.paused &&
+          !video.ended) {
         fireAutofireOnce();
       }
     });
