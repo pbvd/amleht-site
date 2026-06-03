@@ -504,6 +504,10 @@ function showPanel(i){
   } else if(panel.type === 'transition'){
     document.getElementById('transition-panel').style.display='flex';
   } else if(panel.type === 'dashboard'){
+    // ENTER-click fallback: if the viewer clicked through before the 10s
+    // timeupdate trigger fired, fire the autofire trio now so the dashboard
+    // still has live events running on arrival.
+    fireAutofireOnce();
     // Navigate to dashboard
     var existingPip = document.getElementById('amleht-pip');
     if(existingPip) existingPip.remove();
@@ -545,6 +549,19 @@ var PANEL_CLIPS = {
   3: '3',   // Dfns custody (v3)
   4: '4a'   // Coming Soon (v4) — Zone DE · SAP RISE · Agent Twenty · Qivalis private network
 };
+
+// Fire the keyless autofire trigger at most once per session. Called by the
+// panel-4 timeupdate (at 10s) AND by the dashboard navigation (ENTER-click
+// fallback) so the trio fires even if the viewer clicks through before 10s.
+function fireAutofireOnce() {
+  if (sessionStorage.getItem('amleht_autofire_done')) return;
+  sessionStorage.setItem('amleht_autofire_done', '1');
+  try {
+    // Fire-and-forget; keepalive lets it survive the imminent navigation.
+    // Response is intentionally ignored — selection never reaches the browser.
+    fetch('https://api.amleht.eu/demo/autofire', { method: 'POST', mode: 'cors', keepalive: true });
+  } catch (e) { /* non-blocking — the demo proceeds regardless */ }
+}
 
 function showPip(panelIndex) {
   removePip();
@@ -603,29 +620,21 @@ function showPip(panelIndex) {
   };
 
   // ── AUTO-FIRE TRIGGER (panel 4 only) ──────────────────────────
-  // At the "watch what happens" beat (clip end − 7s) signal the server
-  // to auto-fire a randomised, diversity-enforced trio of scenarios, so
-  // the dashboard already has live events running when the viewer clicks
-  // ENTER. KEYLESS: the browser only signals intent — ALL scenario
-  // selection logic and the fire API key live server-side on the Nebius
-  // admin VM. Fires at most once per session (sessionStorage-guarded).
+  // Signal the server to auto-fire a randomised, diversity-enforced trio of
+  // scenarios EARLY in clip-4 (at 10s), so the dashboard already has live
+  // events running when the viewer clicks ENTER. KEYLESS: the browser only
+  // signals intent — ALL scenario selection logic and the fire API key live
+  // server-side. Fires at most once per session (see fireAutofireOnce).
+  // Fixed 10s threshold replaces the old (duration − 7s): clip-4 is ~100s and
+  // viewers click ENTER long before 93s, so the late trigger never fired.
+  // The ENTER-click fallback (showPanel dashboard branch) covers <10s exits.
   if (panelIndex === 4) {
-    var AUTOFIRE_ENDPOINT = 'https://api.amleht.eu/demo/autofire';
     var autofireSent = false;
     video.addEventListener('timeupdate', function() {
       if (autofireSent) return;
-      if (sessionStorage.getItem('amleht_autofire_done')) { autofireSent = true; return; }
-      var d = video.duration;
-      if (!isFinite(d) || d <= 0) return;
-      if (video.currentTime >= d - 7) {
+      if (video.currentTime >= 10) {
         autofireSent = true;
-        sessionStorage.setItem('amleht_autofire_done', '1');
-        try {
-          // Fire-and-forget; keepalive lets it survive the imminent
-          // navigation to the dashboard. Response is intentionally
-          // ignored — the selection is never exposed to the browser.
-          fetch(AUTOFIRE_ENDPOINT, { method: 'POST', mode: 'cors', keepalive: true });
-        } catch (e) { /* non-blocking — the demo proceeds regardless */ }
+        fireAutofireOnce();
       }
     });
   }
