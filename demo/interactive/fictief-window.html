@@ -1388,7 +1388,7 @@ if(document.readyState==='complete'){
   if(sessionStorage.getItem('amleht_dashboard_pip_seen')) return;
 
   function init(){
-    var url = "../heygen-clips/clip-4b-v3-live-platform-dashboard.mp4";
+    var url = "../heygen-clips/clip-4b-v4-live-platform-dashboard.mp4";
     var pip = document.createElement('div');
     pip.id = 'amleht-dash-pip';
 
@@ -1418,13 +1418,14 @@ if(document.readyState==='complete'){
     // panel.") — NOT on clip load, and no longer pre-fired from the gate
     // page (relocated here 2026-06-07). KEYLESS: the browser only signals
     // intent — scenario selection and the fire API key live server-side.
-    // Offset: 60% of clip duration — safe default until the v4 render is
-    // timed; replace with a fixed seconds offset after render.
-    var CUE_FRACTION = 0.60;
+    // Offset: pinned to 28.0s of the v4 render (f166a827, 45.4s) — the
+    // phrase runs 24.60–29.36s, so events land as Abigail says "watch the
+    // centre panel". Re-time if the clip is ever re-rendered.
+    var CUE_SECONDS = 28.0;
     var cueFired = false;
     video.addEventListener('timeupdate', function(){
-      if (cueFired || !video.duration) return;
-      if (video.currentTime >= video.duration * CUE_FRACTION &&
+      if (cueFired) return;
+      if (video.currentTime >= CUE_SECONDS &&
           !video.paused && !video.ended) {
         cueFired = true;
         if (sessionStorage.getItem('amleht_autofire_done')) return;
