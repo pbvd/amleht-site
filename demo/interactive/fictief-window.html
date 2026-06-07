@@ -1109,7 +1109,7 @@ var STEPS = [
   },
   {
     title: "The Immutable Chain",
-    body: "Every event is <strong>timestamped, hashed, and chain-attested</strong> on Hyperledger Fabric running on Nebius Group N.V. Netherlands. This is what the DNB sees when they ask for proof. Not a PDF. A blockchain URL.",
+    body: "Every event is <strong>timestamped, hashed, and chain-attested</strong> on Hyperledger Fabric running across two sovereign zones — Zone FI (Nebius Finland, Helsinki) and Zone FR (Nebius France, Paris). This is what the DNB sees when they ask for proof. Not a PDF. A blockchain URL.",
     target: ".event-feed",
     cardPos: "left",
     btnText: "Show me the scenarios →"
@@ -1411,6 +1411,30 @@ if(document.readyState==='complete'){
     video.autoplay = true;
     video.controls = false;
     video.playsInline = true;
+
+    // ── CUE-POINT EVENT TRIGGER (clip-4b) ─────────────────────────
+    // Live compliance events fire when Abigail reaches the trigger phrase
+    // ("In a moment, a regulatory event will fire. Watch the centre
+    // panel.") — NOT on clip load, and no longer pre-fired from the gate
+    // page (relocated here 2026-06-07). KEYLESS: the browser only signals
+    // intent — scenario selection and the fire API key live server-side.
+    // Offset: 60% of clip duration — safe default until the v4 render is
+    // timed; replace with a fixed seconds offset after render.
+    var CUE_FRACTION = 0.60;
+    var cueFired = false;
+    video.addEventListener('timeupdate', function(){
+      if (cueFired || !video.duration) return;
+      if (video.currentTime >= video.duration * CUE_FRACTION &&
+          !video.paused && !video.ended) {
+        cueFired = true;
+        if (sessionStorage.getItem('amleht_autofire_done')) return;
+        sessionStorage.setItem('amleht_autofire_done', '1');
+        try {
+          fetch('https://api.amleht.eu/demo/autofire', { method: 'POST', mode: 'cors', keepalive: true });
+        } catch (e) { /* non-blocking — the demo proceeds regardless */ }
+      }
+    });
+
     video.onended = function(){
       sessionStorage.setItem('amleht_dashboard_pip_seen','1');
       setTimeout(function(){ pip.remove(); }, 2000);

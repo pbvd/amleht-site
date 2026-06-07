@@ -202,7 +202,7 @@ body::before{
 .welcome-line strong{color:var(--cream);font-weight:500;}
 
 /* transition panel (panel 4) */
-#transition-panel{position:absolute;top:0;left:0;right:0;bottom:64px;display:flex;align-items:center;justify-content:center;padding:2rem;overflow-y:auto;}
+#transition-panel,#whatnext-panel{position:absolute;top:0;left:0;right:0;bottom:64px;display:flex;align-items:center;justify-content:center;padding:2rem;overflow-y:auto;}
 .transition-inner{
   max-width:560px;width:100%;text-align:center;
 }
@@ -321,7 +321,7 @@ body::before{
   </div>
   <div class="gate-footer">
     <span class="memorial">In memory of Thelma · Amsterdam</span>
-    <span class="platform-tag">amleht · Nebius Group N.V. Netherlands · Deutsche Telekom T Cloud Public · Zone NL + Zone DE · DORA Art.11 provider independence</span>
+    <span class="platform-tag">amleht · Nebius Finland · Nebius France · Zone FI + Zone FR · DORA Art.11 provider independence</span>
   </div>
 </div>
 
@@ -351,7 +351,21 @@ body::before{
       <div class="transition-body">
         Three questions. Three answers. All built and shipped before this call.<br><br>
         What follows is the live platform. Fictief NV — the 38th member of the Qivalis bank group — trading right now. The data is real. The chain is live. Regulatory events will fire in real time. Watch what happens.<br><br>
-        Fictief NV runs live compliance attestation across three sovereign zones — Zone NL (Nebius Group N.V., DNB perimeter), Zone FI (Nebius Finland, Helsinki), and Zone DE (Deutsche Telekom T Cloud Public, BaFin perimeter) — simultaneously. Chain-attested. Blank en Partners countersigned.
+        Fictief NV runs live compliance attestation across two sovereign zones — Zone FI (Nebius Finland, Helsinki) and Zone FR (Nebius France, Paris) — simultaneously. Chain-attested. Blank en Partners countersigned.
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel 5: What Comes Next -->
+  <div id="whatnext-panel" style="display:none;">
+    <div class="transition-inner">
+      <div class="transition-num">◆</div>
+      <div class="transition-title">What <em>comes next</em></div>
+      <div class="transition-body">
+        Fictief NV is the 38th member of the Qivalis consortium — the permanent digital twin. Every capability amleht builds is proven here before any of the 37 live institutions see it.<br><br>
+        Today: two sovereign zones live across two EU jurisdictions. Zone FI — Nebius Finland, Helsinki. Zone FR — Nebius France, Paris. 1,909 kilometres between them.<br><br>
+        Q4 2026: Zone DE — Deutsche Telekom T Cloud Public, Biere. Three sovereign zones. Three jurisdictions. Full DORA Article 11 geographic separation on all legs.<br><br>
+        The compliance chain that runs Fictief NV is the same chain that will run your institution. The attestation you see here is the attestation your auditors will read.
       </div>
     </div>
   </div>
@@ -392,6 +406,7 @@ var PANELS = [
     url: 'https://amleht.eu/documents/SIG-112-dfns-strategic-partner.html',
     intro: 'The Custody Question — Answered' },
   { type: 'transition', label: 'Live System' },
+  { type: 'whatnext', label: 'What Comes Next' },
   { type: 'dashboard', label: 'Window to the World' }
 ];
 
@@ -493,6 +508,7 @@ function showPanel(i){
   // Hide all
   document.getElementById('welcome-panel').style.display='none';
   document.getElementById('transition-panel').style.display='none';
+  document.getElementById('whatnext-panel').style.display='none';
   document.getElementById('tour-iframe').style.display='none';
 
   if(panel.type === 'welcome'){
@@ -503,6 +519,8 @@ function showPanel(i){
     if(iframe.src !== panel.url) iframe.src = panel.url;
   } else if(panel.type === 'transition'){
     document.getElementById('transition-panel').style.display='flex';
+  } else if(panel.type === 'whatnext'){
+    document.getElementById('whatnext-panel').style.display='flex';
   } else if(panel.type === 'dashboard'){
     // Navigate to dashboard
     var existingPip = document.getElementById('amleht-pip');
@@ -541,22 +559,18 @@ var CLIP_URLS = {
 var PANEL_CLIPS = {
   0: '0',   // Infrastructure Update — two-pillar EN-GB (2026-06-01)
   1: '1',   // Operation Appia (v4)
-  2: '2',   // Operation Gethsemane (v4) — three sovereign zones
+  2: '2',   // Operation Gethsemane (v4) — two sovereign zones live + Zone DE planned Q4 2026
   3: '3',   // Dfns custody (v3)
   4: '4a'   // Coming Soon (v4) — Zone DE · SAP RISE · Agent Twenty · Qivalis private network
 };
 
-// Fire the keyless autofire trigger at most once per session. Called by the
-// panel-4 timeupdate (at 10s) once playback is genuinely under way.
-function fireAutofireOnce() {
-  if (sessionStorage.getItem('amleht_autofire_done')) return;
-  sessionStorage.setItem('amleht_autofire_done', '1');
-  try {
-    // Fire-and-forget; keepalive lets it survive the imminent navigation.
-    // Response is intentionally ignored — selection never reaches the browser.
-    fetch('https://api.amleht.eu/demo/autofire', { method: 'POST', mode: 'cors', keepalive: true });
-  } catch (e) { /* non-blocking — the demo proceeds regardless */ }
-}
+// AUTOFIRE RELOCATED (2026-06-07): the keyless autofire trigger no longer
+// fires from this page. It previously pre-fired at 10s of clip-4 (panel 4),
+// so events were already running before the viewer entered the dashboard.
+// It now fires as a cue-point trigger inside fictief-window.html — when
+// Abigail reaches the trigger phrase in clip-4b ("In a moment, a regulatory
+// event will fire. Watch the centre panel."). Same sessionStorage key
+// (amleht_autofire_done), same once-per-session guarantee.
 
 function showPip(panelIndex) {
   removePip();
@@ -614,23 +628,8 @@ function showPip(panelIndex) {
     setTimeout(removePip, 2000);
   };
 
-  // ── AUTO-FIRE TRIGGER (panel 4 only) ──────────────────────────
-  // Signal the server to auto-fire a randomised, diversity-enforced trio of
-  // scenarios EARLY in clip-4 (at 10s), so the dashboard already has live
-  // events running when the viewer clicks ENTER. KEYLESS: the browser only
-  // signals intent — ALL scenario selection logic and the fire API key live
-  // server-side. Fires at most once per session (see fireAutofireOnce).
-  // Fixed 10s threshold replaces the old (duration − 7s): clip-4 is ~100s and
-  // viewers click ENTER long before 93s, so the late trigger never fired.
-  if (panelIndex === 4) {
-    video.addEventListener('timeupdate', function() {
-      if (video.currentTime >= 10 &&
-          !video.paused &&
-          !video.ended) {
-        fireAutofireOnce();
-      }
-    });
-  }
+  // (Auto-fire trigger removed 2026-06-07 — events now fire from the
+  // clip-4b cue-point inside fictief-window.html, not before entry.)
 
   unmuteBtn.onclick = function() {
     if(video.muted) {

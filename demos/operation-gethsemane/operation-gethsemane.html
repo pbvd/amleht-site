@@ -214,9 +214,9 @@ body{
   text-transform:uppercase;padding:3px 10px;
   border:1px solid var(--border);
 }
-.zone-pill.amsterdam{border-color:rgba(184,149,42,.25);color:var(--gold);}
+.zone-pill.paris{border-color:rgba(184,149,42,.25);color:var(--gold);}
 .zone-pill.finland{border-color:rgba(73,127,212,.25);color:var(--cobalt-b);}
-.zone-pill.biere{border-color:rgba(56,189,148,.25);color:var(--teal,#38BD94);}
+.zone-pill.biere{border-color:rgba(102,102,102,.35);color:#666666;}
 
 /* RIGHT PANEL */
 #right-panel{
@@ -582,11 +582,11 @@ body{
 <div id="main">
   <!-- Network Panel -->
   <div id="network-panel">
-    <div id="net-label">⬡ QIVALIS CONSORTIUM NETWORK · 13 INSTITUTIONS · 3 SOVEREIGN ZONES</div>
+    <div id="net-label">⬡ QIVALIS CONSORTIUM NETWORK · 13 INSTITUTIONS · 2 SOVEREIGN ZONES LIVE</div>
     <svg id="network-svg" viewBox="0 0 700 510" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <!-- Amsterdam zone glow -->
-        <radialGradient id="amsterdamGlow" cx="50%" cy="50%" r="50%">
+        <!-- Paris zone glow (Zone FR) -->
+        <radialGradient id="parisGlow" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stop-color="#B8952A" stop-opacity="0.25"/>
           <stop offset="100%" stop-color="#B8952A" stop-opacity="0"/>
         </radialGradient>
@@ -595,10 +595,10 @@ body{
           <stop offset="0%" stop-color="#4A7FD4" stop-opacity="0.22"/>
           <stop offset="100%" stop-color="#4A7FD4" stop-opacity="0"/>
         </radialGradient>
-        <!-- Biere zone glow (Zone DE) -->
+        <!-- Biere zone glow (Zone DE — planned Q4 2026, muted) -->
         <radialGradient id="biereGlow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#38BD94" stop-opacity="0.2"/>
-          <stop offset="100%" stop-color="#38BD94" stop-opacity="0"/>
+          <stop offset="0%" stop-color="#666666" stop-opacity="0.15"/>
+          <stop offset="100%" stop-color="#666666" stop-opacity="0"/>
         </radialGradient>
         <!-- Node glows -->
         <filter id="glow-green" x="-80%" y="-80%" width="260%" height="260%">
@@ -624,20 +624,23 @@ body{
       </defs>
 
       <!-- Zone glows -->
-      <ellipse id="amsterdam-glow" cx="88" cy="230" rx="78" ry="70" fill="url(#amsterdamGlow)" class="zone-glow"/>
+      <ellipse id="paris-glow" cx="88" cy="230" rx="78" ry="70" fill="url(#parisGlow)" class="zone-glow"/>
       <ellipse id="finland-glow" cx="612" cy="230" rx="78" ry="70" fill="url(#finlandGlow)" class="zone-glow"/>
       <ellipse id="biere-glow" cx="350" cy="448" rx="92" ry="56" fill="url(#biereGlow)" class="zone-glow"/>
 
       <!-- Zone labels -->
-      <text x="88" y="222" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#B8952A" letter-spacing="2" opacity="0.7">AMSTERDAM</text>
-      <text x="88" y="234" text-anchor="middle" font-family="JetBrains Mono" font-size="6.5" fill="#B8952A" opacity="0.5">Nebius Group N.V.</text>
+      <text x="88" y="222" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#B8952A" letter-spacing="2" opacity="0.7">PARIS</text>
+      <text x="88" y="234" text-anchor="middle" font-family="JetBrains Mono" font-size="6.5" fill="#B8952A" opacity="0.5">Zone FR · Nebius France</text>
       <text x="612" y="222" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#4A7FD4" letter-spacing="2" opacity="0.7">HELSINKI</text>
-      <text x="612" y="234" text-anchor="middle" font-family="JetBrains Mono" font-size="6.5" fill="#4A7FD4" opacity="0.5">eu-north1</text>
-      <text x="350" y="440" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#38BD94" letter-spacing="2" opacity="0.7">BIERE</text>
-      <text x="350" y="452" text-anchor="middle" font-family="JetBrains Mono" font-size="6.5" fill="#38BD94" opacity="0.5">Deutsche Telekom T Cloud Public</text>
+      <text x="612" y="234" text-anchor="middle" font-family="JetBrains Mono" font-size="6.5" fill="#4A7FD4" opacity="0.5">Zone FI · Nebius Finland</text>
+      <text x="350" y="440" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#666666" letter-spacing="2" opacity="0.7">BIERE</text>
+      <text x="350" y="452" text-anchor="middle" font-family="JetBrains Mono" font-size="6.5" fill="#666666" opacity="0.5">Deutsche Telekom T Cloud Public</text>
+      <text x="350" y="464" text-anchor="middle" font-family="JetBrains Mono" font-size="6.5" fill="#666666" opacity="0.5">* Zone DE · Planned Q4 2026</text>
 
       <!-- Orderer connection line between zones -->
       <line x1="120" y1="230" x2="580" y2="230" stroke="#1A2238" stroke-width="1" stroke-dasharray="4,6"/>
+      <!-- Distance marker — Zone FI ↔ Zone FR -->
+      <text x="350" y="243" text-anchor="middle" font-family="JetBrains Mono" font-size="6.5" fill="#FFFFFF" opacity="0.4" letter-spacing="1">1,909 km between sovereign zones</text>
 
       <!-- Connections layer (rendered by JS) -->
       <g id="connections-layer"></g>
@@ -647,9 +650,9 @@ body{
       <g id="nodes-layer"></g>
     </svg>
     <div class="zone-bar">
-      <span class="zone-pill amsterdam">⬡ AMSTERDAM · Nebius Group N.V. · Orderer Primary</span>
-      <span class="zone-pill finland">⬡ FINLAND · eu-north1 · Orderer 2 · Nebius Group N.V.</span>
-      <span class="zone-pill biere">⬡ BIERE · Zone DE · BSI C5:2020 · Orderer 3</span>
+      <span class="zone-pill paris">⬡ PARIS · Nebius France · Zone FR · Orderer Primary</span>
+      <span class="zone-pill finland">⬡ HELSINKI · Zone FI · Nebius Finland · Orderer 2</span>
+      <span class="zone-pill biere">⬡ BIERE · Zone DE · DT T-Cloud · BSI C5:2020 · Orderer B · * Planned Q4 2026</span>
     </div>
   </div>
 
@@ -724,9 +727,9 @@ body{
 <script>
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const CX=350, CY=225, RX=230, RY=155;
-const AMSTERDAM = {x:88,  y:230};
+const PARIS     = {x:88,  y:230};
 const FINLAND   = {x:612, y:230};
-const BIERE     = {x:350, y:448};
+const BIERE     = {x:350, y:448}; // Zone DE — planned Q4 2026, no live traffic
 
 const BANKS = [
   {id:0,  roman:'I',    name:'Bank I',    cloud:'AWS',     cc:'#FF9900'},
@@ -741,7 +744,7 @@ const BANKS = [
   {id:9,  roman:'X',    name:'Bank X',    cloud:'Azure',   cc:'#0078D4'},
   {id:10, roman:'XI',   name:'Bank XI',   cloud:'GCP',     cc:'#34A853'},
   {id:11, roman:'XII',  name:'Bank XII',  cloud:'Equinix', cc:'#E52222'},
-  {id:12, roman:'FNV',  name:'Fictief NV',cloud:'Nebius NL', cc:'#B8952A', fictief:true},
+  {id:12, roman:'FNV',  name:'Fictief NV',cloud:'Nebius · Zone FI', cc:'#B8952A', fictief:true},
 ];
 
 // Compute positions: FNV at bottom (90°), banks I-XII from top (270°) clockwise
@@ -775,16 +778,16 @@ function initSVG() {
   nodeLayer.innerHTML = '';
 
   BANKS.forEach(b => {
-    // Connection to Amsterdam
-    const lm = makeLine(b.x, b.y, AMSTERDAM.x, AMSTERDAM.y, b.id === 12 ? '#B8952A' : '#2952A3');
+    // Connection to Paris (Zone FR)
+    const lm = makeLine(b.x, b.y, PARIS.x, PARIS.y, b.id === 12 ? '#B8952A' : '#2952A3');
     lm.id = `conn-m-${b.id}`;
     connLayer.appendChild(lm);
     // Connection to Finland
     const ls = makeLine(b.x, b.y, FINLAND.x, FINLAND.y, b.id === 12 ? '#B8952A' : '#4A7FD4');
     ls.id = `conn-s-${b.id}`;
     connLayer.appendChild(ls);
-    // Connection to Biere (Zone DE)
-    const lb = makeLine(b.x, b.y, BIERE.x, BIERE.y, 'rgba(56,189,148,0.3)');
+    // Connection to Biere (Zone DE — planned, muted)
+    const lb = makeLine(b.x, b.y, BIERE.x, BIERE.y, 'rgba(102,102,102,0.18)');
     lb.id = `conn-b-${b.id}`;
     connLayer.appendChild(lb);
   });
@@ -904,7 +907,7 @@ function spawnParticle(fromIdx, state) {
   const color = state === 'breach' ? '#C41230' : state === 'warning' ? '#E8A020'
     : b.fictief ? '#B8952A' : '#2ECC71';
 
-  [AMSTERDAM, FINLAND, BIERE].forEach(zone => {
+  [PARIS, FINLAND].forEach(zone => { // Biere excluded — Zone DE planned Q4 2026, no live attestation traffic
     const p = document.createElementNS(SVG_NS, 'circle');
     p.setAttribute('r', '2.5');
     p.setAttribute('fill', color);
@@ -1053,7 +1056,7 @@ function runGenesis() {
     });
   }, 200);
 
-  addBlock('genesis', 'GENESIS', 'Consortium channel created. 13 institutions enrolled. Orderers: Amsterdam · Nebius Group N.V. (Zone NL) · Helsinki · Nebius Group N.V. (Zone FI) · Biere · Deutsche Telekom T Cloud Public (Zone DE). Raft consensus: 3-node quorum.', 400);
+  addBlock('genesis', 'GENESIS', 'Consortium channel created. 13 institutions enrolled. Orderers: Helsinki · Nebius Finland (Zone FI) · Paris · Nebius France (Zone FR). Raft consensus: quorum across two sovereign zones.', 400);
   addEvent('agentxii', 'AGENT XII', '', 'Hyperledger Fabric channel online. IntegrityMSP active. Recursive trust loop initialised.', 600);
   addEvent('agent1', 'AGENT I', 'ok', 'All 13 node heartbeats confirmed. Attestation monitoring active.', 900);
   addEvent('sys', 'SYSTEM', '', `Scenario ${scenario}: ${scenario===1?'Fictief NV':'Bank VII'} designated for integrity test.`, 1200);
@@ -1189,7 +1192,7 @@ function showRevelation() {
 
   // Build full chain record
   const chainEntries = [
-    {type:'genesis',   inst:'GENESIS',       event:'Consortium channel created. 13 institutions enrolled. 3-node Raft orderers across Amsterdam (Zone NL), Helsinki (Zone FI) and Biere (Zone DE) sovereign zones.',                                                tag:'',                   delay:100},
+    {type:'genesis',   inst:'GENESIS',       event:'Consortium channel created. 13 institutions enrolled. Raft orderers across Helsinki (Zone FI) and Paris (Zone FR) sovereign zones.',                                                tag:'',                   delay:100},
     {type:'normal',    inst:'Bank III',       event:'ICT attestation verified. DORA Art.17 log entry confirmed. GCP peering VPC healthy.',                                                                             tag:'',                   delay:200},
     {type:'normal',    inst:'Bank VIII',      event:'ICT attestation verified. DORA Art.17 log entry confirmed. Equinix peering VPC healthy.',                                                                         tag:'',                   delay:280},
     {type:'normal',    inst:judas.name,       event:`ICT attestation verified. ${judas.cloud} peering VPC healthy. All parameters nominal. DORA Art.17 log entry confirmed.`,                                         tag:'LAST HONEST ATTESTATION', delay:360, isLastHonest:true},
