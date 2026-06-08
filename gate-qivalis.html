@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>amleht · The 38th Bank Tour</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Jost:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0B1220;--navy-mid:#111827;--navy-light:#1a2540;
+  --amber:#c8933a;--amber-glow:rgba(200,147,58,0.12);
+  --amber-border:rgba(200,147,58,0.28);--amber-pale:rgba(200,147,58,0.06);
+  --green:#00c896;--green-glow:rgba(0,200,150,0.12);
+  --green-border:rgba(0,200,150,0.28);
+  --cream:#f0ebe0;--cream-dim:rgba(240,235,224,0.55);
+  --muted:rgba(240,235,224,0.32);--border:rgba(240,235,224,0.07);
+  --font-serif:'Cormorant Garamond',Georgia,serif;
+  --font-sans:'Jost',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+body{background:var(--navy);color:var(--cream);font-family:var(--font-sans);}
+
+/* ── GATE SCREEN ── */
+#gate-screen{
+  position:fixed;inset:0;z-index:100;
+  background:var(--navy);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:2rem;
+}
+body::before{
+  content:'';position:fixed;top:-20%;left:-20%;width:60%;height:60%;
+  background:radial-gradient(ellipse,rgba(200,147,58,0.04) 0%,transparent 65%);
+  pointer-events:none;z-index:0;
+}
+.wordmark{
+  font-family:var(--font-serif);font-size:2.8rem;font-weight:300;
+  letter-spacing:0.25em;color:var(--cream);text-transform:lowercase;
+  margin-bottom:0.35rem;position:relative;z-index:1;
+  animation:fadeUp 0.8s ease both;
+}
+.wordmark span{color:var(--amber);}
+.tagline{
+  font-family:var(--font-mono);font-size:0.6rem;
+  letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);
+  margin-bottom:3rem;position:relative;z-index:1;
+  animation:fadeUp 0.8s ease 0.1s both;
+}
+.divider{
+  width:100%;max-width:480px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--amber-border),transparent);
+  margin-bottom:3rem;position:relative;z-index:1;
+  animation:fadeUp 0.8s ease 0.2s both;
+}
+.gate-card{
+  width:100%;max-width:480px;
+  background:var(--navy-mid);
+  border:1px solid var(--amber-border);border-top:2px solid var(--amber);
+  border-radius:3px;padding:2rem;
+  box-shadow:0 0 60px rgba(200,147,58,0.06),0 4px 40px rgba(0,0,0,0.5);
+  position:relative;z-index:1;
+  animation:fadeUp 0.8s ease 0.3s both;
+}
+.gate-label{
+  font-family:var(--font-mono);font-size:0.6rem;font-weight:700;
+  letter-spacing:0.18em;text-transform:uppercase;color:var(--amber);
+  margin-bottom:0.6rem;display:flex;align-items:center;gap:0.5rem;
+}
+.gate-label::before{
+  content:'';display:inline-block;width:6px;height:6px;border-radius:50%;
+  background:var(--amber);animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(200,147,58,0.5);}
+  50%{opacity:0.7;box-shadow:0 0 0 6px rgba(200,147,58,0);}
+}
+.gate-heading{
+  font-family:var(--font-serif);font-size:1.5rem;font-weight:400;
+  color:var(--cream);line-height:1.2;margin-bottom:0.3rem;
+}
+.gate-heading em{font-style:italic;color:var(--amber);}
+.gate-personal{
+  font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.1em;
+  color:rgba(200,147,58,0.6);margin-bottom:1.5rem;
+}
+.gate-sub{
+  font-size:0.8rem;color:var(--cream-dim);line-height:1.6;margin-bottom:1.75rem;
+}
+.input-label{
+  font-family:var(--font-mono);font-size:0.58rem;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--muted);display:block;margin-bottom:0.5rem;
+}
+.passphrase-input{
+  width:100%;background:rgba(11,18,32,0.8);
+  border:1px solid var(--amber-border);border-radius:2px;
+  padding:0.75rem 1rem;font-family:var(--font-mono);
+  font-size:0.85rem;letter-spacing:0.08em;color:var(--cream);
+  outline:none;transition:border-color 0.2s,box-shadow 0.2s;
+  caret-color:var(--amber);margin-bottom:1rem;
+}
+.passphrase-input:focus{
+  border-color:var(--amber);box-shadow:0 0 0 3px rgba(200,147,58,0.08);
+}
+.passphrase-input.error{
+  border-color:rgba(192,23,43,0.6);
+  animation:shake 0.35s ease;
+}
+@keyframes shake{
+  0%,100%{transform:translateX(0);}20%{transform:translateX(-6px);}
+  40%{transform:translateX(6px);}60%{transform:translateX(-4px);}
+  80%{transform:translateX(4px);}
+}
+.enter-btn{
+  width:100%;background:var(--amber);color:var(--navy);
+  border:none;border-radius:2px;padding:0.8rem 1rem;
+  font-family:var(--font-sans);font-size:0.78rem;font-weight:600;
+  letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;
+  transition:background 0.2s,transform 0.1s,box-shadow 0.2s;
+}
+.enter-btn:hover{background:#d9a04a;box-shadow:0 0 20px rgba(200,147,58,0.25);}
+.enter-btn:active{transform:translateY(1px);}
+.error-msg{
+  font-family:var(--font-mono);font-size:0.62rem;color:rgba(192,23,43,0.85);
+  margin-top:0.6rem;text-align:center;min-height:1em;
+  opacity:0;transition:opacity 0.2s;
+}
+.error-msg.visible{opacity:1;}
+.gate-footer{
+  margin-top:2rem;text-align:center;position:relative;z-index:1;
+  animation:fadeUp 0.8s ease 0.4s both;
+}
+.memorial{
+  font-family:var(--font-serif);font-style:italic;
+  font-size:0.78rem;color:var(--muted);display:block;margin-bottom:0.3rem;
+}
+.platform-tag{
+  font-family:var(--font-mono);font-size:0.55rem;
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:rgba(240,235,224,0.18);
+}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(14px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* ── TOUR SHELL ── */
+#tour-shell{
+  position:fixed;inset:0;z-index:50;
+  display:none;background:var(--navy);
+}
+
+/* iframe panel */
+#tour-iframe{
+  position:absolute;
+  top:0;left:0;right:0;bottom:64px;
+  width:100%;
+  height:calc(100vh - 64px);
+  border:none;
+  background:#0B1220;
+  display:block;
+}
+
+/* welcome panel (panel 0) */
+#welcome-panel{position:absolute;top:0;left:0;right:0;bottom:64px;display:flex;align-items:center;justify-content:center;padding:2rem;overflow-y:auto;}
+.welcome-inner{
+  max-width:620px;width:100%;
+  background:var(--navy-mid);
+  border:1px solid var(--amber-border);border-top:2px solid var(--amber);
+  border-radius:3px;padding:2.5rem;
+  box-shadow:0 0 80px rgba(200,147,58,0.06);
+}
+.welcome-tag{
+  font-family:var(--font-mono);font-size:0.6rem;font-weight:700;
+  letter-spacing:0.18em;text-transform:uppercase;color:var(--amber);
+  margin-bottom:0.6rem;display:flex;align-items:center;gap:0.5rem;
+}
+.welcome-tag::before{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:var(--amber);animation:pulse 2s ease-in-out infinite;
+}
+.welcome-title{
+  font-family:var(--font-serif);font-size:2rem;font-weight:400;
+  color:var(--cream);line-height:1.2;margin-bottom:0.5rem;
+}
+.welcome-title em{font-style:italic;color:var(--amber);}
+.welcome-sub{
+  font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:1.75rem;
+}
+.welcome-body{
+  border-left:2px solid var(--amber-border);
+  padding-left:1.25rem;margin-bottom:1.75rem;
+}
+.welcome-line{
+  font-size:0.88rem;font-weight:300;
+  color:var(--cream-dim);line-height:1.7;margin-bottom:0.5rem;
+}
+.welcome-line:last-child{margin-bottom:0;}
+.welcome-line strong{color:var(--cream);font-weight:500;}
+
+/* transition panel (panel 4) */
+#transition-panel,#whatnext-panel{position:absolute;top:0;left:0;right:0;bottom:64px;display:flex;align-items:center;justify-content:center;padding:2rem;overflow-y:auto;}
+.transition-inner{
+  max-width:560px;width:100%;text-align:center;
+}
+.transition-num{
+  font-family:var(--font-serif);font-size:5rem;font-weight:300;
+  color:var(--amber);opacity:0.3;line-height:1;margin-bottom:1rem;
+}
+.transition-title{
+  font-family:var(--font-serif);font-size:1.8rem;font-weight:300;
+  color:var(--cream);line-height:1.2;margin-bottom:1rem;
+}
+.transition-title em{font-style:italic;color:var(--amber);}
+.transition-body{
+  font-size:0.88rem;font-weight:300;
+  color:var(--cream-dim);line-height:1.7;max-width:440px;margin:0 auto;
+}
+
+/* ── PERSISTENT NAV BAR ── */
+#tour-nav{
+  position:fixed;bottom:0;left:0;right:0;height:64px;
+  background:rgba(11,18,32,0.97);
+  border-top:1px solid var(--amber-border);
+  display:flex !important;align-items:center;
+  justify-content:space-between;padding:0 1.5rem;
+  backdrop-filter:blur(8px);
+  z-index:100;
+}
+.nav-brand{
+  display:flex;align-items:center;gap:0.75rem;
+  font-family:var(--font-mono);font-size:0.6rem;
+  letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);
+}
+.nav-brand strong{
+  font-family:var(--font-serif);font-size:1rem;
+  font-weight:300;letter-spacing:0.15em;color:var(--cream);
+}
+.nav-brand strong span{color:var(--amber);}
+.nav-dots{display:flex;gap:6px;align-items:center;}
+.nav-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:rgba(200,147,58,0.2);
+  transition:background 0.2s,transform 0.2s;cursor:pointer;
+}
+.nav-dot.active{background:var(--amber);transform:scale(1.3);}
+.nav-dot.done{background:rgba(200,147,58,0.5);}
+.nav-actions{display:flex;align-items:center;gap:0.75rem;}
+.nav-skip{
+  font-family:var(--font-mono);font-size:0.6rem;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--muted);background:none;border:none;
+  cursor:pointer;padding:0.4rem 0.75rem;
+  transition:color 0.2s;
+}
+.nav-skip:hover{color:var(--cream-dim);}
+.nav-back{
+  font-family:var(--font-mono);font-size:0.6rem;font-weight:500;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--amber);background:rgba(200,147,58,0.08);
+  border:1px solid var(--amber);border-radius:2px;
+  padding:0.5rem 0.85rem;cursor:pointer;
+  transition:color 0.2s,border-color 0.2s,opacity 0.2s,background 0.2s;
+}
+.nav-back:hover:not(:disabled){color:var(--amber-light, #d9a04a);border-color:var(--amber);}
+.nav-back:disabled{opacity:0.3;cursor:not-allowed;}
+.nav-label{
+  font-family:var(--font-mono);font-size:0.58rem;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--muted);
+}
+.nav-next{
+  background:var(--amber);color:var(--navy);
+  border:none;border-radius:2px;
+  padding:0.5rem 1.25rem;
+  font-family:var(--font-mono);font-size:0.68rem;
+  font-weight:500;letter-spacing:0.1em;text-transform:uppercase;
+  cursor:pointer;transition:background 0.2s,box-shadow 0.2s,transform 0.1s;
+  white-space:nowrap;
+}
+.nav-next:hover{
+  background:#d9a04a;box-shadow:0 0 16px rgba(200,147,58,0.3);
+}
+.nav-next:active{transform:translateY(1px);}
+.nav-next.final{background:var(--green);color:#080b0f;}
+.nav-next.final:hover{background:#00d9a6;}
+
+@media(max-width:600px){
+  .nav-brand .nav-label{display:none;}
+  .nav-skip{display:none;}
+  .nav-dots{display:none;}
+  #tour-nav{padding:0 0.75rem;gap:0.5rem;}
+  .nav-actions{gap:0.5rem;flex:1;justify-content:flex-end;}
+  .nav-next{padding:0.5rem 0.9rem;font-size:0.66rem;}
+  .nav-back{padding:0.5rem 0.7rem;font-size:0.66rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- ── GATE SCREEN ── -->
+<div id="gate-screen">
+  <div class="wordmark">aml<span>eh</span>t</div>
+  <div class="tagline">EU Sovereign Multi-Agent Compliance Platform · DORA Art.11 Two-Provider Architecture</div>
+  <div class="divider"></div>
+  <div class="gate-card">
+    <div class="gate-label">By invitation · The 38th Bank Tour</div>
+    <h1 class="gate-heading">Fictief NV — <em>Window to the World</em></h1>
+    <div class="gate-personal">Prepared for Jan-Olivier Sell · Qivalis consortium · May 2026</div>
+    <p class="gate-sub">Enter the passphrase provided in your briefing to begin the guided tour.</p>
+    <label class="input-label" for="passphrase">Passphrase</label>
+    <input type="password" id="passphrase" class="passphrase-input"
+      placeholder="· · · · · · · ·"
+      autocomplete="off" autocorrect="off"
+      autocapitalize="off" spellcheck="false"/>
+    <button class="enter-btn" onclick="attemptEntry()">Begin the tour →</button>
+    <div class="error-msg" id="errorMsg">Passphrase not recognised.</div>
+  </div>
+  <div class="gate-footer">
+    <span class="memorial">In memory of Thelma · Amsterdam</span>
+    <span class="platform-tag">amleht · Nebius Finland · Nebius France · Zone FI + Zone FR · DORA Art.11 provider independence</span>
+  </div>
+</div>
+
+<!-- ── TOUR SHELL ── -->
+<div id="tour-shell">
+
+  <!-- Panel 0: Welcome -->
+  <div id="welcome-panel">
+    <div class="welcome-inner">
+      <div class="welcome-tag">The 38th Bank Tour · amleht</div>
+      <div class="welcome-title">Before the answers — <em>how the platform works</em></div>
+      <div class="welcome-sub">Answers built before you asked them</div>
+      <div class="welcome-body">
+        <div class="welcome-line">Three questions were asked publicly about consortium stablecoin infrastructure. <strong>None were answered.</strong></div>
+        <div class="welcome-line">amleht built the answers — before this call, before Qivalis became 37 banks, before anyone asked us to.</div>
+        <div class="welcome-line">You will see each answer in the next three panels. Then the live system. Then three regulatory events will fire in real time.</div>
+        <div class="welcome-line"><strong>The whole journey takes thirty minutes. You can skip at any point.</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel 4: Transition to live system -->
+  <div id="transition-panel" style="display:none;">
+    <div class="transition-inner">
+      <div class="transition-num">◆</div>
+      <div class="transition-title">Now — <em>the live system</em></div>
+      <div class="transition-body">
+        Three questions. Three answers. All built and shipped before this call.<br><br>
+        What follows is the live platform. Fictief NV — the 38th member of the Qivalis bank group — trading right now. The data is real. The chain is live. Regulatory events will fire in real time. Watch what happens.<br><br>
+        Fictief NV runs live compliance attestation across two sovereign zones — Zone FI (Nebius Finland, Helsinki) and Zone FR (Nebius France, Paris) — simultaneously. Chain-attested. Blank en Partners countersigned.
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel 5: What Comes Next -->
+  <div id="whatnext-panel" style="display:none;">
+    <div class="transition-inner">
+      <div class="transition-num">◆</div>
+      <div class="transition-title">What <em>comes next</em></div>
+      <div class="transition-body">
+        Fictief NV is the 38th member of the Qivalis consortium — the permanent digital twin. Every capability amleht builds is proven here before any of the 37 live institutions see it.<br><br>
+        Today: two sovereign zones live across two EU jurisdictions. Zone FI — Nebius Finland, Helsinki. Zone FR — Nebius France, Paris. 1,909 kilometres between them.<br><br>
+        Q4 2026: Zone DE — Deutsche Telekom T Cloud Public, Biere. Three sovereign zones. Three jurisdictions. Full DORA Article 11 geographic separation on all legs.<br><br>
+        The compliance chain that runs Fictief NV is the same chain that will run your institution. The attestation you see here is the attestation your auditors will read.
+      </div>
+    </div>
+  </div>
+
+  <!-- iframe for panels 1-3 -->
+  <iframe id="tour-iframe" style="display:none;" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+
+  <!-- Persistent nav bar -->
+  <div id="tour-nav">
+    <div class="nav-brand">
+      <strong>aml<span>eh</span>t</strong>
+      <span class="nav-label">The 38th Bank Tour</span>
+    </div>
+    <div class="nav-dots" id="navDots"></div>
+    <div class="nav-actions">
+      <button class="nav-back" id="navBack" onclick="prevPanel()" title="Previous slide">← Back</button>
+      <button class="nav-skip" onclick="skipTour()">Skip tour ↗</button>
+      <button class="nav-next" id="navNext" onclick="nextPanel()">Next →</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var PASSPHRASE = 'qivalis';
+var SESSION_MINUTES = 60;
+var DASHBOARD = 'https://amleht.eu/demo/interactive/fictief-window.html';
+
+var PANELS = [
+  { type: 'welcome', label: 'Welcome' },
+  { type: 'iframe',  label: 'KfW Answer',
+    url: 'https://amleht.eu/demos/operation-appia/operation-appia-demo.html',
+    intro: 'The KfW Question — Answered' },
+  { type: 'iframe',  label: 'Consortium Integrity',
+    url: 'https://amleht.eu/demos/operation-gethsemane/operation-gethsemane.html',
+    intro: 'The Adversarial Member Question — Answered' },
+  { type: 'iframe',  label: 'Custody Stack',
+    url: 'https://amleht.eu/documents/SIG-112-dfns-strategic-partner.html',
+    intro: 'The Custody Question — Answered' },
+  { type: 'transition', label: 'Live System' },
+  { type: 'whatnext', label: 'What Comes Next' },
+  { type: 'dashboard', label: 'Window to the World' }
+];
+
+var current = 0;
+
+// Check session
+(function(){
+  var v = sessionStorage.getItem('amleht_gate_qivalis');
+  if(v){
+    var d = JSON.parse(v);
+    if((Date.now()-d.ts)/60000 < SESSION_MINUTES){
+      startTour();
+    }
+  }
+})();
+
+document.getElementById('passphrase').addEventListener('keydown',function(e){
+  if(e.key==='Enter') attemptEntry();
+});
+
+function attemptEntry(){
+  var input = document.getElementById('passphrase');
+  var err = document.getElementById('errorMsg');
+  var val = input.value.trim().toLowerCase();
+  if(val === PASSPHRASE){
+    sessionStorage.setItem('amleht_gate_qivalis',
+      JSON.stringify({ts:Date.now(),slot:'qivalis-bespoke'}));
+    sessionStorage.setItem('amleht_gate_verified',
+      JSON.stringify({verifiedAt:Date.now(),slot:'qivalis-bespoke'}));
+    sessionStorage.setItem('amleht_welcome_target','sell');
+    sessionStorage.setItem('amleht_tour_done','1');
+    startTour();
+  } else {
+    input.classList.add('error');
+    err.classList.add('visible');
+    input.value='';
+    setTimeout(function(){input.classList.remove('error');},400);
+    setTimeout(function(){input.focus();},50);
+  }
+}
+
+function startTour(){
+  document.getElementById('gate-screen').style.display='none';
+  document.getElementById('tour-shell').style.display='block';
+  buildDots();
+  // Honour ?panel=N URL param (used by Back-to-Tour from fictief-window dashboard).
+  var qp = new URLSearchParams(window.location.search);
+  var startPanel = parseInt(qp.get('panel'), 10);
+  if (!isNaN(startPanel) && startPanel >= 0 && startPanel < PANELS.length) {
+    showPanel(startPanel);
+  } else {
+    showPanel(0);
+  }
+}
+
+function buildDots(){
+  var dots = document.getElementById('navDots');
+  dots.innerHTML = '';
+  PANELS.forEach(function(_,i){
+    var d = document.createElement('div');
+    d.className = 'nav-dot' + (i===0?' active':'');
+    d.onclick = function(){ showPanel(i); };
+    d.title = PANELS[i].label;
+    dots.appendChild(d);
+  });
+}
+
+function updateDots(i){
+  var dots = document.querySelectorAll('.nav-dot');
+  dots.forEach(function(d,di){
+    d.classList.toggle('active', di===i);
+    d.classList.toggle('done', di<i);
+  });
+}
+
+function updateNav(i){
+  var btn = document.getElementById('navNext');
+  var backBtn = document.getElementById('navBack');
+  if(backBtn) backBtn.disabled = (i === 0);
+  var isLast = (i >= PANELS.length-2);
+  // Dashboard panel navigates away immediately (window.location.href) so we
+  // never need to hide the nav. Keep nav always visible while tour-shell is shown.
+  document.getElementById('tour-nav').style.display='flex';
+  if(isLast){
+    // Mobile gets the short CTA; desktop gets the full label
+    btn.textContent = (window.innerWidth < 600) ? 'Enter →' : 'Enter the platform →';
+    btn.classList.add('final');
+  } else {
+    btn.classList.remove('final');
+    var next = PANELS[i+1];
+    btn.textContent = (next.intro || next.label) + ' →';
+  }
+}
+
+function showPanel(i){
+  current = i;
+  var panel = PANELS[i];
+
+  // Hide all
+  document.getElementById('welcome-panel').style.display='none';
+  document.getElementById('transition-panel').style.display='none';
+  document.getElementById('whatnext-panel').style.display='none';
+  document.getElementById('tour-iframe').style.display='none';
+
+  if(panel.type === 'welcome'){
+    document.getElementById('welcome-panel').style.display='flex';
+  } else if(panel.type === 'iframe'){
+    var iframe = document.getElementById('tour-iframe');
+    iframe.style.display='block';
+    if(iframe.src !== panel.url) iframe.src = panel.url;
+  } else if(panel.type === 'transition'){
+    document.getElementById('transition-panel').style.display='flex';
+  } else if(panel.type === 'whatnext'){
+    document.getElementById('whatnext-panel').style.display='flex';
+  } else if(panel.type === 'dashboard'){
+    // Navigate to dashboard
+    var existingPip = document.getElementById('amleht-pip');
+    if(existingPip) existingPip.remove();
+    window.location.href = DASHBOARD;
+    return;
+  }
+
+  updateDots(i);
+  updateNav(i);
+  showPip(i);
+}
+
+function nextPanel(){
+  if(current < PANELS.length-1){
+    showPanel(current+1);
+  }
+}
+
+function prevPanel(){
+  if(current > 0){
+    showPanel(current-1);
+  }
+}
+
+
+// ── ABIGAIL PIP SYSTEM ──
+var CLIP_URLS = {
+  "0":  "heygen-clips/clip-0-v3-infrastructure-update.mp4",
+  "1":  "heygen-clips/clip-1-v4-operation-appia.mp4",
+  "2":  "heygen-clips/clip-2-v5-operation-gethsemane.mp4",
+  "3":  "heygen-clips/clip-3-v3-dfns-custody.mp4",
+  "4a": "heygen-clips/clip-4-v5-coming-soon.mp4"
+};
+
+var PANEL_CLIPS = {
+  0: '0',   // Infrastructure Update — two-pillar EN-GB (2026-06-01)
+  1: '1',   // Operation Appia (v4)
+  2: '2',   // Operation Gethsemane (v4) — two sovereign zones live + Zone DE planned Q4 2026
+  3: '3',   // DFNS custody (v3)
+  4: '4a'   // Coming Soon (v4) — Zone DE · SAP RISE · Agent Twenty · Qivalis private network
+};
+
+// AUTOFIRE RELOCATED (2026-06-07): the keyless autofire trigger no longer
+// fires from this page. It previously pre-fired at 10s of clip-4 (panel 4),
+// so events were already running before the viewer entered the dashboard.
+// It now fires as a cue-point trigger inside fictief-window.html — when
+// Abigail reaches the trigger phrase in clip-4b ("In a moment, a regulatory
+// event will fire. Watch the centre panel."). Same sessionStorage key
+// (amleht_autofire_done), same once-per-session guarantee.
+
+function showPip(panelIndex) {
+  removePip();
+  var clipNum = PANEL_CLIPS[panelIndex];
+  if(clipNum === undefined) return;
+  var url = CLIP_URLS[clipNum];
+  if(!url) return;
+
+  var pip = document.createElement('div');
+  pip.id = 'amleht-pip';
+  pip.style.cssText = [
+    'position:fixed','bottom:100px','right:30px',
+    'width:480px','height:270px','border-radius:8px','overflow:hidden',
+    'box-shadow:0 8px 32px rgba(0,0,0,0.8),0 0 0 1px rgba(200,147,58,0.4)',
+    'z-index:9000','background:#0B1220',
+    'animation:pipIn 0.4s ease both'
+  ].join(';');
+
+  var style = document.createElement('style');
+  style.textContent = '@keyframes pipIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}';
+  document.head.appendChild(style);
+
+  var closeBtn = document.createElement('button');
+  closeBtn.textContent = '×';
+  closeBtn.style.cssText = [
+    'position:absolute','top:6px','right:8px',
+    'background:rgba(0,0,0,0.6)','color:#f0ebe0',
+    'border:none','border-radius:50%',
+    'width:22px','height:22px','font-size:14px',
+    'cursor:pointer','z-index:1',
+    'display:flex','align-items:center','justify-content:center','line-height:1'
+  ].join(';');
+  closeBtn.onclick = removePip;
+
+  var unmuteBtn = document.createElement('button');
+  unmuteBtn.textContent = '🔊';
+  unmuteBtn.title = 'Click to mute';
+  unmuteBtn.style.cssText = [
+    'position:absolute','top:6px','right:34px',
+    'background:rgba(0,0,0,0.6)','color:#f0ebe0',
+    'border:none','border-radius:50%',
+    'width:22px','height:22px','font-size:11px',
+    'cursor:pointer','z-index:1',
+    'display:flex','align-items:center','justify-content:center','line-height:1'
+  ].join(';');
+
+  var video = document.createElement('video');
+  video.src = url;
+  video.autoplay = true;
+  video.muted = true;
+  video.setAttribute('playsinline', '');
+  video.controls = false;
+  video.style.cssText = 'width:100%;height:100%;object-fit:cover;';
+  video.onended = function() {
+    setTimeout(removePip, 2000);
+  };
+
+  // (Auto-fire trigger removed 2026-06-07 — events now fire from the
+  // clip-4b cue-point inside fictief-window.html, not before entry.)
+
+  unmuteBtn.onclick = function() {
+    if(video.muted) {
+      video.muted = false;
+      unmuteBtn.textContent = '🔊';
+      unmuteBtn.title = 'Click to mute';
+    } else {
+      video.muted = true;
+      unmuteBtn.textContent = '🔇';
+      unmuteBtn.title = 'Click to unmute';
+    }
+  };
+
+  pip.appendChild(video);
+  pip.appendChild(unmuteBtn);
+  pip.appendChild(closeBtn);
+  document.body.appendChild(pip);
+  video.play().catch(function(e){
+    console.warn('pip autoplay blocked:', e);
+  });
+  video.addEventListener('playing', function() {
+    video.muted = false;
+  }, { once: true });
+}
+
+function removePip() {
+  var existing = document.getElementById('amleht-pip');
+  if(existing) existing.remove();
+}
+
+function skipTour(){
+  sessionStorage.setItem('amleht_tour_done','1');
+  window.location.href = DASHBOARD;
+}
+
+// Keep CTA text correct if viewport changes (rotate device, resize window).
+window.addEventListener('resize', function() {
+  if (typeof current === 'number' && typeof updateNav === 'function') {
+    updateNav(current);
+  }
+});
+</script>
+
+</body>
+</html>
