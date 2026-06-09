@@ -421,17 +421,6 @@ var userActivated = false;
   window.addEventListener(evt, function(){ userActivated = true; }, { once:true, capture:true });
 });
 
-// Check session
-(function(){
-  var v = sessionStorage.getItem('amleht_gate_qivalis');
-  if(v){
-    var d = JSON.parse(v);
-    if((Date.now()-d.ts)/60000 < SESSION_MINUTES){
-      startTour();
-    }
-  }
-})();
-
 document.getElementById('passphrase').addEventListener('keydown',function(e){
   if(e.key==='Enter') attemptEntry();
 });
@@ -710,6 +699,21 @@ window.addEventListener('resize', function() {
     updateNav(current);
   }
 });
+
+// Check session — MUST run last: it can call startTour() -> showPip(), which
+// reads CLIP_URLS / PANEL_CLIPS. Those are assigned mid-script, so the tour
+// must be triggered from here (after all declarations) — triggering it earlier
+// threw "Cannot read properties of undefined" in showPip and blanked the pip on
+// every refresh (fresh entry worked only because attemptEntry fires post-parse).
+(function(){
+  var v = sessionStorage.getItem('amleht_gate_qivalis');
+  if(v){
+    var d = JSON.parse(v);
+    if((Date.now()-d.ts)/60000 < SESSION_MINUTES){
+      startTour();
+    }
+  }
+})();
 </script>
 
 </body>
