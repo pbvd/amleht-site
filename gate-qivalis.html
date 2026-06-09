@@ -412,6 +412,15 @@ var PANELS = [
 
 var current = 0;
 
+// Track genuine user activation. A real gesture (key/pointer/touch) sets this
+// before any pip is built; an automated refresh never does. Used to decide
+// whether a pip may auto-unmute — unmuting without user activation trips the
+// browser autoplay policy and pauses the clip (the refresh-failure bug).
+var userActivated = false;
+['pointerdown','keydown','touchstart'].forEach(function(evt){
+  window.addEventListener(evt, function(){ userActivated = true; }, { once:true, capture:true });
+});
+
 // Check session
 (function(){
   var v = sessionStorage.getItem('amleht_gate_qivalis');
@@ -452,9 +461,17 @@ function startTour(){
   document.getElementById('gate-screen').style.display='none';
   document.getElementById('tour-shell').style.display='block';
   buildDots();
-  // Honour ?panel=N URL param (used by Back-to-Tour from fictief-window dashboard).
-  var qp = new URLSearchParams(window.location.search);
-  var startPanel = parseInt(qp.get('panel'), 10);
+  // Restore tour position on load/refresh. Priority: URL hash (#panel=N, written
+  // on every navigation) > ?panel=N (Back-to-Tour from the fictief-window
+  // dashboard) > panel 0. Without this a mid-tour refresh always reset to 0.
+  var startPanel = NaN;
+  var hashMatch = (window.location.hash || '').match(/panel=(\d+)/);
+  if (hashMatch) {
+    startPanel = parseInt(hashMatch[1], 10);
+  } else {
+    var qp = new URLSearchParams(window.location.search);
+    startPanel = parseInt(qp.get('panel'), 10);
+  }
   if (!isNaN(startPanel) && startPanel >= 0 && startPanel < PANELS.length) {
     showPanel(startPanel);
   } else {
@@ -504,6 +521,10 @@ function updateNav(i){
 function showPanel(i){
   current = i;
   var panel = PANELS[i];
+
+  // Persist tour position so a refresh restores this panel, not panel 0.
+  // replaceState (not location.hash=) avoids polluting browser history.
+  try { history.replaceState(null, '', '#panel=' + i); } catch(e) {}
 
   // Hide all
   document.getElementById('welcome-panel').style.display='none';
@@ -647,12 +668,30 @@ function showPip(panelIndex) {
   pip.appendChild(unmuteBtn);
   pip.appendChild(closeBtn);
   document.body.appendChild(pip);
-  video.play().catch(function(e){
-    console.warn('pip autoplay blocked:', e);
-  });
-  video.addEventListener('playing', function() {
-    video.muted = false;
-  }, { once: true });
+
+  function syncUnmuteBtn(){
+    if(video.muted){ unmuteBtn.textContent='🔇'; unmuteBtn.title='Click to unmute'; }
+    else { unmuteBtn.textContent='🔊'; unmuteBtn.title='Click to mute'; }
+  }
+  // Wait for canplay before play() so we never trigger playback on an unready
+  // element. Auto-unmute ONLY when entry was user-initiated (sticky activation);
+  // on a gesture-less refresh the clip stays muted — unmuting without activation
+  // would trip the autoplay policy and pause it. The 🔊 button unmutes by hand.
+  function startPlayback(){
+    video.play().then(function(){
+      if(userActivated){ video.muted = false; }
+      syncUnmuteBtn();
+    }).catch(function(e){
+      console.warn('pip autoplay blocked:', e);
+      syncUnmuteBtn();
+    });
+  }
+  if(video.readyState >= 3){
+    startPlayback();
+  } else {
+    video.addEventListener('canplay', startPlayback, { once: true });
+  }
+  syncUnmuteBtn();
 }
 
 function removePip() {
