@@ -624,15 +624,15 @@ body{
       </defs>
 
       <!-- Zone glows -->
-      <ellipse id="paris-glow" cx="88" cy="230" rx="78" ry="70" fill="url(#parisGlow)" class="zone-glow"/>
-      <ellipse id="finland-glow" cx="612" cy="230" rx="78" ry="70" fill="url(#finlandGlow)" class="zone-glow"/>
+      <ellipse id="paris-glow" cx="48" cy="230" rx="78" ry="70" fill="url(#parisGlow)" class="zone-glow"/>
+      <ellipse id="finland-glow" cx="652" cy="230" rx="78" ry="70" fill="url(#finlandGlow)" class="zone-glow"/>
       <ellipse id="biere-glow" cx="350" cy="448" rx="92" ry="56" fill="url(#biereGlow)" class="zone-glow"/>
 
       <!-- Zone labels -->
-      <text x="88" y="222" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#B8952A" letter-spacing="2" opacity="0.7">PARIS</text>
-      <text x="88" y="234" text-anchor="middle" font-family="JetBrains Mono" font-size="6.5" fill="#B8952A" opacity="0.5">Zone FR · Nebius France</text>
-      <text x="612" y="222" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#4A7FD4" letter-spacing="2" opacity="0.7">HELSINKI</text>
-      <text x="612" y="234" text-anchor="middle" font-family="JetBrains Mono" font-size="6.5" fill="#4A7FD4" opacity="0.5">Zone FI · Nebius Finland</text>
+      <text x="48" y="222" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#B8952A" letter-spacing="2" opacity="0.7">PARIS</text>
+      <text x="48" y="234" text-anchor="middle" font-family="JetBrains Mono" font-size="6.5" fill="#B8952A" opacity="0.5">Zone FR · Nebius France</text>
+      <text x="652" y="222" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#4A7FD4" letter-spacing="2" opacity="0.7">HELSINKI</text>
+      <text x="652" y="234" text-anchor="middle" font-family="JetBrains Mono" font-size="6.5" fill="#4A7FD4" opacity="0.5">Zone FI · Nebius Finland</text>
       <text x="350" y="440" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#666666" letter-spacing="2" opacity="0.7">BIERE</text>
       <text x="350" y="452" text-anchor="middle" font-family="JetBrains Mono" font-size="6.5" fill="#666666" opacity="0.5">Deutsche Telekom T Cloud Public</text>
       <text x="350" y="464" text-anchor="middle" font-family="JetBrains Mono" font-size="6.5" fill="#666666" opacity="0.5">* Zone DE · Planned Q4 2026</text>
@@ -727,8 +727,8 @@ body{
 <script>
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const CX=350, CY=225, RX=230, RY=155;
-const PARIS     = {x:88,  y:230};
-const FINLAND   = {x:612, y:230};
+const PARIS     = {x:48,  y:230};
+const FINLAND   = {x:652, y:230};
 const BIERE     = {x:350, y:448}; // Zone DE — planned Q4 2026, no live traffic
 
 const BANKS = [
@@ -744,7 +744,7 @@ const BANKS = [
   {id:9,  roman:'X',    name:'Bank X',    cloud:'Azure',   cc:'#0078D4'},
   {id:10, roman:'XI',   name:'Bank XI',   cloud:'GCP',     cc:'#34A853'},
   {id:11, roman:'XII',  name:'Bank XII',  cloud:'Equinix', cc:'#E52222'},
-  {id:12, roman:'FNV',  name:'Fictief NV',cloud:'Nebius · Zone FI', cc:'#B8952A', fictief:true},
+  {id:12, roman:'FNV',  name:'Fictief NV',cloud:'Leafcloud · Amsterdam', cc:'#B8952A', fictief:true},
 ];
 
 // Compute positions: FNV at bottom (90°), banks I-XII from top (270°) clockwise
