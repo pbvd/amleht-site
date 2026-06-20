@@ -397,17 +397,13 @@ var PASSPHRASE = 'qivalis';
 var SESSION_MINUTES = 60;
 var DASHBOARD = 'https://amleht.eu/demo/interactive/fictief-window.html';
 
+// NOTE (FW-1 2026-06-20): three iframe panels removed — their bodies were
+// non-PUBLIC (Appia/KfW RESTRICTED, Gethsemane + SIG-112 DFNS INTERNAL) and
+// have been removed from the public site (HEAD). To restore, re-home those
+// bodies behind real host auth (Caddy basic_auth) and re-add the panels —
+// see FW-2/FW-3 restore list. PANEL_CLIPS below remapped to match.
 var PANELS = [
   { type: 'welcome', label: 'Welcome' },
-  { type: 'iframe',  label: 'KfW Answer',
-    url: 'https://amleht.eu/demos/operation-appia/operation-appia-demo.html',
-    intro: 'The KfW Question — Answered' },
-  { type: 'iframe',  label: 'Consortium Integrity',
-    url: 'https://amleht.eu/demos/operation-gethsemane/operation-gethsemane.html',
-    intro: 'The Adversarial Member Question — Answered' },
-  { type: 'iframe',  label: 'Custody Stack',
-    url: 'https://amleht.eu/documents/SIG-112-dfns-strategic-partner.html',
-    intro: 'The Custody Question — Answered' },
   { type: 'transition', label: 'Live System' },
   { type: 'whatnext', label: 'What Comes Next' },
   { type: 'dashboard', label: 'Window to the World' }
@@ -569,12 +565,12 @@ var CLIP_URLS = {
   "4a": "/demo/heygen-clips/clip-4-v5-coming-soon.mp4"
 };
 
+// Remapped for the reduced PANELS (FW-1 2026-06-20). Index order is now
+// welcome(0) · transition(1) · whatnext(2) · dashboard(3). Clips 1/2/3
+// (Appia/Gethsemane/DFNS narration) dropped with their removed iframe panels.
 var PANEL_CLIPS = {
-  0: '0',   // Infrastructure Update — two-pillar EN-GB (2026-06-01)
-  1: '1',   // Operation Appia (v4)
-  2: '2',   // Operation Gethsemane (v4) — two sovereign zones live + Zone DE planned Q4 2026
-  3: '3',   // DFNS custody (v3)
-  4: '4a'   // Coming Soon (v4) — Zone DE · SAP RISE · Agent Twenty · Qivalis private network
+  0: '0',   // Welcome — Infrastructure Update (two-pillar EN-GB)
+  1: '4a'   // Live System transition — Coming Soon (Zone DE · SAP RISE · Agent Twenty · Qivalis private network)
 };
 
 // AUTOFIRE RELOCATED (2026-06-07): the keyless autofire trigger no longer
